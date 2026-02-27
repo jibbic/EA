@@ -1,0 +1,819 @@
+# Exempel: Komplett Systemdokumentation
+# Detta är ett realistiskt exempel på ett komplett dokumenterat system
+
+system:
+  
+  # ==========================================================================
+  # GRUNDLÄGGANDE INFORMATION
+  # ==========================================================================
+  
+  basic_info:
+    id: "app-customer-portal"
+    name: "Customer Self-Service Portal"
+    description: |
+      Web-baserad kundportal där kunder kan:
+      - Logga in och se sin profil
+      - Se orderhistorik och fakturor
+      - Skapa och följa supportärenden
+      - Uppdatera kontaktinformation
+      - Hantera prenumerationer
+      
+      Kritiskt system för kundinteraktion med 50,000 aktiva användare.
+    
+    system_type: business_application
+    aliases:
+      - "KundPortal"
+      - "Customer Portal"
+      - "Self-service"
+    version: "3.2.1"
+    deployment_date: "2024-06-15"
+    lifecycle_status: production
+  
+  # ==========================================================================
+  # KRITIKALITET OCH KLASSIFICERING
+  # ==========================================================================
+  
+  classification:
+    criticality: critical  # Från BIA
+    
+    data_classification: confidential  # Highest data in system
+    contains_personal_data: true
+    contains_sensitive_personal_data: false
+    
+    # Business Impact (från BIA 2025-10-15)
+    recovery_time_objective: "4h"
+    recovery_point_objective: "1h"
+    
+    financial_impact_per_hour: "15000 EUR"  # Lost sales + reputation
+    regulatory_impact: "high"  # GDPR, NIS 2
+    reputational_impact: "critical"  # Customer-facing
+
+  # ==========================================================================
+  # ANSVAR OCH ÄGANDE
+  # ==========================================================================
+  
+  ownership:
+    business_owner:
+      person_id: "person-001"
+      name: "Anna Andersson"
+      email: "anna.andersson@company.com"
+      organizational_unit: "org-customer-experience"
+      role: "Director of Customer Experience"
+    
+    technical_custodian:
+      person_id: "person-020"
+      name: "Erik Eriksson"
+      email: "erik.eriksson@company.com"
+      organizational_unit: "org-it-operations"
+      role: "IT Manager"
+    
+    backup_contacts:
+      - person_id: "person-021"
+        name: "Maria Svensson"
+        role: "Senior DevOps Engineer"
+      
+      - person_id: "person-002"
+        name: "Johan Johansson"
+        role: "Backup Business Owner"
+    
+    responsible_team: "Customer Portal Team (8 members)"
+    escalation_contact: "it-operations-oncall@company.com"
+
+  # ==========================================================================
+  # VERKSAMHETSKOPPLING
+  # ==========================================================================
+  
+  business_context:
+    supports_capabilities:
+      - capability_id: "cap-customer-service"
+        capability_name: "Customer Self-Service"
+        criticality: high
+      
+      - capability_id: "cap-order-management"
+        capability_name: "Order Management"
+        criticality: critical
+    
+    supports_processes:
+      - process_id: "proc-customer-support"
+        process_name: "Handle customer support ticket"
+        dependency_type: "critical"
+        
+      - process_id: "proc-order-tracking"
+        process_name: "Customer order tracking"
+        dependency_type: "critical"
+        
+      - process_id: "proc-invoice-delivery"
+        process_name: "Deliver invoices to customers"
+        dependency_type: "high"
+    
+    user_groups:
+      - group_name: "Customers"
+        user_count: 50000
+        access_type: "Self-service, occasional (avg 2x/week)"
+        authentication: "Username/password + MFA"
+      
+      - group_name: "Customer Service Agents"
+        user_count: 35
+        access_type: "Daily intensive (8h/day)"
+        authentication: "SSO + MFA"
+        permissions: "Extended - can view/edit customer data"
+
+  # ==========================================================================
+  # TEKNISK ARKITEKTUR
+  # ==========================================================================
+  
+  technical_architecture:
+    
+    components:
+      - component_id: "comp-portal-web"
+        name: "Web Frontend"
+        component_type: "frontend"
+        description: "React-baserat SPA (Single Page Application)"
+        technology_stack:
+          - "React 18.2"
+          - "TypeScript 5.0"
+          - "Material-UI 5.x"
+          - "Nginx 1.24 (reverse proxy)"
+        hosted_on: "infra-k8s-web-cluster"
+        replicas: 3
+        criticality: critical
+      
+      - component_id: "comp-portal-api"
+        name: "Backend API"
+        component_type: "backend"
+        description: "REST API för portal functionality"
+        technology_stack:
+          - "Java 17"
+          - "Spring Boot 3.1"
+          - "Spring Security"
+          - "Hibernate ORM"
+        hosted_on: "infra-k8s-app-cluster"
+        replicas: 5
+        criticality: critical
+        
+      - component_id: "comp-portal-db"
+        name: "Portal Database"
+        component_type: "database"
+        description: "PostgreSQL databas för portal data"
+        technology_stack:
+          - "PostgreSQL 14.10"
+        hosted_on: "infra-db-cluster-01"
+        ha_enabled: true
+        criticality: critical
+    
+    infrastructure:
+      hosting_type: hybrid
+      
+      cloud_components:
+        cloud_provider: "AWS"
+        cloud_region: "eu-north-1"
+        cloud_account: "prod-account-123456"
+        
+        services:
+          - service: "EKS (Kubernetes)"
+            purpose: "Container orchestration"
+          - service: "RDS PostgreSQL"
+            purpose: "Managed database"
+          - service: "CloudFront"
+            purpose: "CDN"
+          - service: "S3"
+            purpose: "Static assets, backups"
+      
+      servers:
+        - node_id: "infra-k8s-web-cluster"
+          node_type: "container_platform"
+          platform: "AWS EKS"
+          node_count: 3
+          instance_type: "t3.large"
+          location: "AWS eu-north-1"
+          
+        - node_id: "infra-k8s-app-cluster"
+          node_type: "container_platform"
+          platform: "AWS EKS"
+          node_count: 5
+          instance_type: "t3.xlarge"
+          location: "AWS eu-north-1"
+          
+        - node_id: "infra-db-cluster-01"
+          node_type: "database_cluster"
+          platform: "AWS RDS PostgreSQL"
+          ha_type: "Multi-AZ"
+          primary_instance: "t3.2xlarge"
+          location: "AWS eu-north-1"
+      
+      network:
+        - network_id: "net-aws-vpc-prod"
+          security_zone: "internal"
+          ip_range: "10.0.0.0/16"
+          
+        - network_id: "net-public-dmz"
+          security_zone: "dmz"
+          description: "Public-facing load balancer"
+    
+    technology_platforms:
+      - platform_id: "platform-java-17"
+        name: "Java 17 LTS"
+        version: "17.0.9"
+        support_end_date: "2029-09-30"
+        vendor: "Oracle"
+        
+      - platform_id: "platform-postgresql-14"
+        name: "PostgreSQL 14"
+        version: "14.10"
+        support_end_date: "2026-11-12"
+        vendor: "PostgreSQL Community"
+        
+      - platform_id: "platform-kubernetes"
+        name: "Kubernetes"
+        version: "1.28"
+        support_end_date: "2024-10-28"
+        vendor: "AWS EKS"
+    
+    integrations:
+      - interface_id: "if-portal-to-crm"
+        name: "Integration to CRM System"
+        target_system: "app-crm-salesforce"
+        interface_type: "api"
+        protocol: "REST over HTTPS"
+        authentication_method: "OAuth 2.0 Client Credentials"
+        encryption: true
+        data_classification: "confidential"
+        direction: "bidirectional"
+        frequency: "Real-time"
+        
+      - interface_id: "if-portal-to-erp"
+        name: "Integration to ERP"
+        target_system: "app-erp-system"
+        interface_type: "api"
+        protocol: "REST over HTTPS"
+        authentication_method: "API Key + mTLS"
+        encryption: true
+        data_classification: "confidential"
+        direction: "source_to_target"
+        frequency: "Real-time"
+        
+      - interface_id: "if-portal-to-payment"
+        name: "Payment Gateway Integration"
+        target_system: "ext-stripe-payment"
+        interface_type: "api"
+        protocol: "REST over HTTPS"
+        authentication_method: "API Key (Stripe)"
+        encryption: true
+        data_classification: "confidential"
+        direction: "bidirectional"
+        frequency: "Per transaction"
+        pci_dss_relevant: true
+
+  # ==========================================================================
+  # SÄKERHET
+  # ==========================================================================
+  
+  security:
+    
+    # Authentication & Authorization
+    authentication:
+      method: "OAuth 2.0 + OpenID Connect"
+      identity_provider: "Azure AD B2C"
+      mfa_enabled: true
+      mfa_coverage: "100% of privileged users, optional for customers"
+      mfa_method: "TOTP (Google Authenticator) or SMS"
+      session_timeout: "30 minutes inactivity"
+      password_policy: "Min 12 chars, complexity required, rotation every 90 days"
+    
+    authorization:
+      model: "RBAC (Role-Based Access Control)"
+      roles:
+        - name: "Customer"
+          description: "Standard customer"
+          permissions: ["view_own_data", "update_own_profile", "create_ticket"]
+        - name: "Premium Customer"
+          description: "Premium tier customer"
+          permissions: ["customer_permissions + priority_support"]
+        - name: "Support Agent"
+          description: "Customer support agent"
+          permissions: ["view_customer_data", "update_tickets", "view_orders"]
+        - name: "Support Manager"
+          description: "Support team manager"
+          permissions: ["support_agent_permissions + manage_team"]
+        - name: "System Admin"
+          description: "Full system access"
+          permissions: ["all"]
+          mfa_mandatory: true
+    
+    # Security Controls
+    protected_by_controls:
+      - control_id: "ctrl-waf-01"
+        control_name: "AWS WAF Protection"
+        control_type: "preventive"
+        control_category: "network_security"
+        description: "Web Application Firewall blocks common attacks"
+        
+      - control_id: "ctrl-mfa-01"
+        control_name: "Multi-Factor Authentication"
+        control_type: "preventive"
+        control_category: "access_control"
+        description: "MFA required for privileged access"
+        
+      - control_id: "ctrl-siem-01"
+        control_name: "SIEM Monitoring"
+        control_type: "detective"
+        control_category: "monitoring"
+        description: "All security events logged to Splunk SIEM"
+        
+      - control_id: "ctrl-backup-01"
+        control_name: "Automated Daily Backup"
+        control_type: "corrective"
+        control_category: "backup"
+        description: "Daily backup with tested restore"
+        
+      - control_id: "ctrl-encryption-01"
+        control_name: "TLS Encryption"
+        control_type: "preventive"
+        control_category: "encryption"
+        description: "All traffic encrypted with TLS 1.3"
+        
+      - control_id: "ctrl-patch-01"
+        control_name: "Automated Patch Management"
+        control_type: "preventive"
+        control_category: "patch_management"
+        description: "Monthly patching of all components"
+    
+    # Encryption
+    encryption:
+      at_rest:
+        enabled: true
+        method: "AES-256"
+        key_management: "AWS KMS"
+        encrypted_components:
+          - "Database (RDS encryption)"
+          - "S3 buckets"
+          - "EBS volumes"
+      
+      in_transit:
+        enabled: true
+        method: "TLS 1.3"
+        certificate_authority: "Let's Encrypt"
+        certificate_expiry: "2026-05-15"
+        auto_renewal: true
+    
+    # Security Reviews
+    last_security_review:
+      date: "2026-01-20"
+      type: "Penetration Test + Security Audit"
+      performed_by: "External Security Firm (SecureIT AB)"
+      scope: "Full application and infrastructure"
+      findings:
+        critical: 0
+        high: 1
+        medium: 3
+        low: 8
+      all_critical_high_resolved: true
+      report_location: "SharePoint/Security/Pentests/2026-01-Portal"
+      next_review: "2027-01-20"
+    
+    # Vulnerabilities
+    known_vulnerabilities:
+      - vulnerability_id: "vuln-portal-001"
+        cve_id: null
+        severity: "medium"
+        description: "Missing rate limiting on forgot password endpoint"
+        status: "in_progress"
+        remediation_deadline: "2026-03-15"
+        workaround: "Monitoring for abuse"
+    
+    # Threats
+    threat_landscape:
+      - threat_id: "threat-credential-stuffing"
+        threat_name: "Credential Stuffing Attack"
+        threat_category: "unauthorized_access"
+        likelihood: "high"
+        impact: "high"
+        mitigation_status: "mitigated"
+        mitigated_by:
+          - "ctrl-mfa-01"
+          - "ctrl-waf-01 (rate limiting)"
+
+  # ==========================================================================
+  # DATA
+  # ==========================================================================
+  
+  data:
+    
+    data_objects_processed:
+      - data_object_id: "data-customer-profile"
+        data_name: "Customer Profile"
+        classification: "confidential"
+        personal_data: true
+        data_categories:
+          - "Name, email, phone"
+          - "Address"
+          - "Date of birth"
+        gdpr_legal_basis: "Contract (Art 6.1.b)"
+        
+      - data_object_id: "data-customer-orders"
+        data_name: "Customer Order History"
+        classification: "confidential"
+        personal_data: true
+        data_categories:
+          - "Order details"
+          - "Delivery address"
+          - "Payment information (tokenized)"
+        gdpr_legal_basis: "Contract (Art 6.1.b)"
+        
+      - data_object_id: "data-support-tickets"
+        data_name: "Support Tickets"
+        classification: "internal"
+        personal_data: true
+        data_categories:
+          - "Ticket description"
+          - "Customer communication"
+        gdpr_legal_basis: "Legitimate Interest (Art 6.1.f)"
+    
+    data_stores:
+      - datastore_id: "datastore-portal-db"
+        name: "Portal PostgreSQL Database"
+        store_type: "database"
+        hosting: "infra-db-cluster-01"
+        encryption_at_rest: true
+        backup_configured: true
+        backup_frequency: "Daily full + hourly incremental"
+        backup_retention: "30 days online, 1 year archive"
+        access_controls: true
+        ha_enabled: true
+        
+      - datastore_id: "datastore-portal-s3"
+        name: "Portal S3 Bucket"
+        store_type: "object_storage"
+        cloud_service: "AWS S3"
+        encryption_at_rest: true
+        versioning_enabled: true
+        lifecycle_policy: "Move to Glacier after 90 days"
+    
+    data_flows:
+      - dataflow_id: "flow-portal-crm"
+        name: "Customer data to CRM"
+        source: "app-customer-portal"
+        target: "app-crm-salesforce"
+        data_objects: ["data-customer-profile"]
+        encryption_in_transit: true
+        crosses_trust_boundary: false
+        authentication_required: true
+
+  # ==========================================================================
+  # DRIFT OCH UNDERHÅLL
+  # ==========================================================================
+  
+  operations:
+    
+    availability:
+      target_uptime: "99.5%"  # ~3.6h downtime per month allowed
+      actual_uptime_last_month: "99.7%"
+      maintenance_window: "Sunday 02:00-06:00 CET"
+      support_hours: "Mon-Fri 08:00-17:00, On-call 24/7 for critical issues"
+      on_call_available: true
+      sla_document: "SLA-CustomerPortal-v2.1.pdf"
+    
+    backup:
+      backup_configured: true
+      backup_type: "Daily full backup + hourly incremental"
+      backup_frequency: "Daily at 02:00 CET"
+      backup_location: "AWS S3 eu-north-1 + Glacier eu-west-1"
+      backup_encryption: true
+      last_backup: "2026-02-26T02:00:00Z"
+      last_backup_status: "Success"
+      last_backup_test: "2026-02-15"
+      restore_tested: true
+      average_restore_time: "2 hours (RTO compliant)"
+      backup_retention_policy: "30 days online, 1 year archive"
+    
+    patch_management:
+      patch_schedule: "Monthly, second Sunday of month"
+      last_patched: "2026-02-09"
+      patch_status: "up_to_date"
+      pending_patches: 0
+      emergency_patch_process: "documented in runbook"
+      auto_patching_enabled: true  # For OS and platform
+    
+    monitoring:
+      monitoring_enabled: true
+      monitoring_tools:
+        - "AWS CloudWatch"
+        - "Prometheus + Grafana"
+        - "Splunk (SIEM)"
+        - "PagerDuty (alerting)"
+      
+      monitored_metrics:
+        availability:
+          - metric: "HTTP 200 response rate"
+            threshold: "> 99%"
+            alert: "PagerDuty Critical"
+          
+        performance:
+          - metric: "API response time (p95)"
+            threshold: "< 500ms"
+            alert: "PagerDuty Warning"
+          
+        security:
+          - metric: "Failed login attempts"
+            threshold: "> 100 per minute"
+            alert: "SIEM Alert + PagerDuty"
+      
+      alert_recipients:
+        - "portal-team@company.com"
+        - "on-call" (PagerDuty)
+    
+    change_management:
+      change_process: "ITIL Change Management via ServiceNow"
+      change_approval_required: true
+      change_advisory_board: "IT CAB (meets weekly)"
+      emergency_change_process: "documented, requires CISO approval"
+      deployment_frequency: "Every 2 weeks (sprint releases)"
+      deployment_method: "Blue-Green deployment via CI/CD"
+
+  # ==========================================================================
+  # LEVERANTÖRER
+  # ==========================================================================
+  
+  vendors:
+    
+    primary_vendor:
+      supplier_id: "supplier-aws"
+      name: "Amazon Web Services (AWS)"
+      supplier_type: "cloud_provider"
+      criticality: "critical"
+      contract_end_date: "2027-12-31"
+      support_level: "Business Support 24/7"
+      security_assessment_date: "2025-09-01"
+      security_rating: "approved"
+      nis2_entity: true
+      data_processing_agreement: true
+      dpa_signed_date: "2025-01-15"
+    
+    other_suppliers:
+      - supplier_id: "supplier-stripe"
+        name: "Stripe"
+        supplier_type: "payment_processor"
+        criticality: "high"
+        services: "Payment processing"
+        security_assessment_date: "2025-11-01"
+        security_rating: "approved"
+        pci_dss_certified: true
+        
+      - supplier_id: "supplier-sendgrid"
+        name: "SendGrid"
+        supplier_type: "email_service"
+        criticality: "medium"
+        services: "Transactional email"
+
+  # ==========================================================================
+  # COMPLIANCE
+  # ==========================================================================
+  
+  compliance:
+    
+    applicable_regulations:
+      - "NIS 2 Directive"
+      - "GDPR"
+      - "PCI-DSS (via Stripe tokenization)"
+      - "ISO 27001"
+    
+    compliance_requirements:
+      - requirement_id: "comp-req-nis2-21-2-a"
+        requirement: "Incident handling processes"
+        status: "compliant"
+        evidence:
+          - "Incident response integrated with SIEM"
+          - "24/7 on-call for critical incidents"
+          - "Incident log maintained"
+      
+      - requirement_id: "comp-req-nis2-21-2-b"
+        requirement: "Business continuity and backups"
+        status: "compliant"
+        evidence:
+          - "Daily backups tested monthly"
+          - "RTO/RPO met in tests"
+          - "DR plan documented and tested"
+      
+      - requirement_id: "comp-req-nis2-21-2-g"
+        requirement: "Cryptography and encryption"
+        status: "compliant"
+        evidence:
+          - "TLS 1.3 for all traffic"
+          - "AES-256 encryption at rest"
+          - "Key management via AWS KMS"
+      
+      - requirement_id: "comp-req-nis2-21-2-i"
+        requirement: "Multi-factor authentication"
+        status: "compliant"
+        evidence:
+          - "MFA enabled for all privileged users"
+          - "MFA optional but encouraged for customers"
+      
+      - requirement_id: "comp-req-gdpr-art30"
+        requirement: "Records of processing activities"
+        status: "compliant"
+        evidence:
+          - "Data processing register maintained"
+          - "DPIAs conducted for high-risk processing"
+      
+      - requirement_id: "comp-req-gdpr-art32"
+        requirement: "Security of processing"
+        status: "compliant"
+        evidence:
+          - "Encryption, access control, monitoring implemented"
+          - "Regular security assessments"
+    
+    last_compliance_audit:
+      date: "2025-11-15"
+      auditor: "External Audit Firm (KPMG)"
+      audit_type: "ISO 27001 Surveillance Audit"
+      result: "Compliant - Certificate maintained"
+      findings: "2 minor observations (addressed)"
+      next_audit: "2026-11-15"
+
+  # ==========================================================================
+  # INCIDENTER OCH PROBLEM
+  # ==========================================================================
+  
+  incident_history:
+    
+    - incident_id: "inc-portal-2025-10"
+      date: "2025-10-15"
+      type: "Service outage"
+      severity: "high"
+      duration: "2h 15min"
+      root_cause: "Database connection pool exhaustion due to slow query"
+      impact: "Portal unavailable for all users"
+      affected_users: "~50,000"
+      resolution: "Restarted application, increased connection pool size"
+      preventive_actions:
+        - "Implemented query performance monitoring"
+        - "Set up alerts for connection pool usage"
+        - "Reviewed and optimized slow queries"
+      reported_to_authority: false  # Not significant enough for NIS 2
+    
+    - incident_id: "inc-portal-2025-12"
+      date: "2025-12-03"
+      type: "Security incident - Brute force attack"
+      severity: "medium"
+      duration: "3h (until blocked)"
+      root_cause: "Automated brute force attack from botnet"
+      impact: "No unauthorized access, but degraded performance"
+      resolution: "Blocked attacking IPs via WAF, implemented rate limiting"
+      preventive_actions:
+        - "Enhanced WAF rules"
+        - "Implemented CAPTCHA on login after 3 failed attempts"
+      reported_to_authority: false
+
+  # ==========================================================================
+  # KONTINUITETSPLANERING
+  # ==========================================================================
+  
+  business_continuity:
+    
+    disaster_recovery_plan:
+      plan_exists: true
+      plan_location: "SharePoint/IT/DR-Plans/CustomerPortal-DR-Plan-v3.pdf"
+      last_updated: "2026-01-10"
+      last_tested: "2025-12-15"
+      test_result: "Successful - RTO and RPO met"
+      rto_met_in_test: true  # Restored in 3h 30min (target: 4h)
+      rpo_met_in_test: true  # Data loss: 15min (target: 1h)
+      test_report: "SharePoint/IT/DR-Tests/2025-12-CustomerPortal-Test.pdf"
+    
+    recovery_procedures:
+      - step: "Declare disaster and activate DR plan"
+        responsible: "Incident Manager"
+        estimated_duration: "15min"
+        
+      - step: "Spin up DR environment in AWS eu-west-1"
+        responsible: "DevOps Team"
+        estimated_duration: "30min"
+        automation: "Terraform scripts"
+        
+      - step: "Restore database from latest backup"
+        responsible: "Database Admin"
+        estimated_duration: "2h"
+        
+      - step: "Deploy latest application version"
+        responsible: "DevOps Team"
+        estimated_duration: "30min"
+        automation: "CI/CD pipeline"
+        
+      - step: "Update DNS to point to DR environment"
+        responsible: "Network Team"
+        estimated_duration: "15min"
+        dns_ttl: "5 minutes"
+        
+      - step: "Verify all critical functions"
+        responsible: "QA Team + Business Owner"
+        estimated_duration: "30min"
+        
+      - step: "Communicate to customers"
+        responsible: "Customer Support Manager"
+        channel: "Email, website banner, social media"
+    
+    alternate_processes:
+      manual_workaround_available: true
+      manual_process_description: |
+        If portal is completely unavailable:
+        1. Customers can call customer support hotline
+        2. Support agents use CRM system directly
+        3. Critical processes (order status, invoice requests) handled manually
+        4. Email used for customer communication
+      manual_process_capacity: "~30% of normal capacity"
+      manual_process_documented: true
+
+  # ==========================================================================
+  # DOKUMENTATION OCH LÄNKAR
+  # ==========================================================================
+  
+  documentation:
+    
+    technical_documentation:
+      - type: "Architecture Diagram"
+        location: "https://wiki.company.com/customer-portal/architecture"
+        last_updated: "2026-01-15"
+      
+      - type: "API Documentation"
+        location: "https://api-docs.company.com/customer-portal"
+        version: "3.2.1"
+      
+      - type: "User Manual"
+        location: "https://help.company.com/customer-portal"
+      
+      - type: "Operations Runbook"
+        location: "https://wiki.company.com/customer-portal/runbook"
+        includes:
+          - "Deployment procedures"
+          - "Troubleshooting guides"
+          - "Rollback procedures"
+          - "Emergency contacts"
+      
+      - type: "Security Documentation"
+        location: "SharePoint/Security/Systems/CustomerPortal"
+        includes:
+          - "Security architecture"
+          - "Threat model"
+          - "Penetration test reports"
+          - "Security incident reports"
+    
+    policies_and_procedures:
+      - "Incident Response Procedure"
+      - "Change Management Procedure"
+      - "Backup and Recovery Procedure"
+      - "Access Control Procedure"
+      - "Data Protection Procedure"
+    
+    related_systems:
+      depends_on:
+        - system_id: "app-azure-ad-b2c"
+          system_name: "Azure AD B2C (Identity Provider)"
+          dependency_type: "critical"
+          failure_impact: "No user authentication possible"
+          
+        - system_id: "app-crm-salesforce"
+          system_name: "Salesforce CRM"
+          dependency_type: "high"
+          failure_impact: "Cannot sync customer data"
+          
+        - system_id: "app-erp-system"
+          system_name: "ERP System"
+          dependency_type: "high"
+          failure_impact: "Cannot fetch order/invoice data"
+          
+        - system_id: "ext-stripe-payment"
+          system_name: "Stripe Payment Gateway"
+          dependency_type: "high"
+          failure_impact: "Cannot process payments"
+      
+      dependents:
+        - system_id: "app-mobile-app"
+          system_name: "Mobile App"
+          dependency_type: "critical"
+          impact_if_this_fails: "Mobile app cannot function"
+          
+        - system_id: "app-analytics"
+          system_name: "Analytics Platform"
+          dependency_type: "low"
+          impact_if_this_fails: "No customer behavior analytics"
+
+  # ==========================================================================
+  # METADATA
+  # ==========================================================================
+  
+  metadata:
+    created_at: "2024-06-01T10:00:00Z"
+    created_by: "person-020"  # Erik Eriksson
+    last_updated: "2026-02-26T14:30:00Z"
+    last_modified_by: "person-021"  # Maria Svensson
+    documentation_version: "3.1"
+    last_review_date: "2026-02-01"
+    next_review_date: "2026-08-01"
+    review_frequency: "Semi-annual"
+    tags:
+      - "customer-facing"
+      - "high-availability"
+      - "gdpr-relevant"
+      - "nis2-critical"
+      - "pci-dss-relevant"

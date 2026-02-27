@@ -1,0 +1,522 @@
+# NIS 2 Compliance Mappings
+# Version: 1.0
+# Mappning mellan metamodellens entiteter och NIS 2-direktiv krav
+
+nis2_directive:
+  reference: "Directive (EU) 2022/2555"
+  implementation_date: "2024-10-17"
+  
+# ============================================================================
+# ARTIKEL 21: Cybersäkerhetsriskhanteringsåtgärder
+# ============================================================================
+
+article_21_cybersecurity_risk_management:
+  title: "Cybersäkerhetsriskhanteringsåtgärder"
+  
+  requirements:
+    
+    - id: "NIS2-21.1"
+      requirement: "Policies för riskanalys och informationssystemsäkerhet"
+      description: "Entiteter ska ha policies för riskanalys och säkerhet för informationssystem"
+      
+      mapped_entities:
+        - entity: Policy
+          attributes:
+            - policy_type: [security_policy, data_policy]
+            - status: [active]
+          mandatory: true
+          
+        - entity: RiskAssessment
+          attributes:
+            - assessment_date: required
+            - methodology: required
+          mandatory: true
+          
+      evidence_requirements:
+        - "Dokumenterade säkerhetspolicyer"
+        - "Riskbedömningsmetodik"
+        - "Genomförda riskbedömningar (senaste 12 månader)"
+        - "Risk register med identifierade risker"
+        
+    - id: "NIS2-21.2.a"
+      requirement: "Hantering av incidenter"
+      description: "Policies och procedurer för att hantera cybersäkerhetsincidenter"
+      
+      mapped_entities:
+        - entity: SecurityIncident
+          attributes:
+            - status: all_statuses
+            - detected_date: required
+            - incident_type: required
+          mandatory: true
+          
+        - entity: Policy
+          attributes:
+            - policy_type: [security_policy]
+            - name: "Incident Response Policy"
+          mandatory: true
+          
+      evidence_requirements:
+        - "Incident response policy"
+        - "Incident response plan"
+        - "Incident log (historik)"
+        - "Incident response team dokumentation"
+        
+    - id: "NIS2-21.2.b"
+      requirement: "Business continuity och krishantering och incidentrespons"
+      description: "Kapacitet att hantera kris och säkerställa verksamhetskontinuitet"
+      
+      mapped_entities:
+        - entity: BusinessProcess
+          attributes:
+            - recovery_time_objective: required
+            - recovery_point_objective: required
+            - criticality: [critical, high]
+          mandatory: true
+          
+        - entity: ApplicationSystem
+          attributes:
+            - criticality: [critical, high]
+          mandatory: true
+          
+      evidence_requirements:
+        - "Business continuity plan"
+        - "Disaster recovery plan"
+        - "RTO/RPO dokumentation för kritiska processer"
+        - "Testresultat från BCP/DR-tester"
+        
+    - id: "NIS2-21.2.c"
+      requirement: "Supply chain säkerhet"
+      description: "Hantera säkerhetsrisker i leveranskedjor"
+      
+      mapped_entities:
+        - entity: Supplier
+          attributes:
+            - security_assessment_date: required
+            - security_rating: required
+            - criticality: all
+          mandatory: true
+          
+        - entity: ApplicationSystem
+          attributes:
+            - vendor: required_if_external
+          mandatory: false
+          
+      evidence_requirements:
+        - "Leverantörsinventering"
+        - "Säkerhetsbedömningar av leverantörer"
+        - "Leverantörskontrakt med säkerhetskrav"
+        - "Supply chain risk assessment"
+        
+    - id: "NIS2-21.2.d"
+      requirement: "Säkerhet vid förvärv, utveckling och underhåll"
+      description: "Säkerhetsåtgärder i hela livscykeln för system och tjänster"
+      
+      mapped_entities:
+        - entity: ApplicationSystem
+          attributes:
+            - lifecycle_status: all
+            - last_security_review: required
+          mandatory: true
+          
+        - entity: TechnologyPlatform
+          attributes:
+            - support_end_date: required
+            - version: required
+          mandatory: true
+          
+      evidence_requirements:
+        - "Secure development lifecycle policy"
+        - "Change management process"
+        - "Security review dokumentation"
+        - "Patch management process"
+        
+    - id: "NIS2-21.2.e"
+      requirement: "Policies och procedurer för bedömning av säkerhetsåtgärder"
+      description: "Bedöma effektiviteten av cybersäkerhetsriskhanteringsåtgärder"
+      
+      mapped_entities:
+        - entity: SecurityControl
+          attributes:
+            - last_tested: required
+            - effectiveness: required
+            - implementation_status: [implemented, verified]
+          mandatory: true
+          
+      evidence_requirements:
+        - "Security control testing policy"
+        - "Testresultat för säkerhetskontroller"
+        - "Effectiveness assessment reports"
+        - "Gap analysis documentation"
+        
+    - id: "NIS2-21.2.f"
+      requirement: "Grundläggande cyberhygienpraxis och cybersäkerhetsutbildning"
+      description: "Implementera cyberhygien och utbildning för personal"
+      
+      mapped_entities:
+        - entity: Policy
+          attributes:
+            - policy_type: [security_policy]
+            - name: ["Security Awareness Policy", "Training Policy"]
+          mandatory: true
+          
+        - entity: Person
+          attributes:
+            - roles: required
+          mandatory: false
+          
+      evidence_requirements:
+        - "Security awareness program"
+        - "Training records"
+        - "Phishing simulation results"
+        - "Security guidelines för användare"
+        
+    - id: "NIS2-21.2.g"
+      requirement: "Kryptografi och kryptering"
+      description: "Policies och procedurer för användning av kryptografi"
+      
+      mapped_entities:
+        - entity: DataFlow
+          attributes:
+            - encryption_in_transit: must_be_true_for_sensitive
+          mandatory: true
+          
+        - entity: DataStore
+          attributes:
+            - encryption_at_rest: must_be_true_for_sensitive
+          mandatory: true
+          
+      evidence_requirements:
+        - "Encryption policy"
+        - "Encryption inventory"
+        - "Key management procedures"
+        - "Encryption standards documentation"
+        
+    - id: "NIS2-21.2.h"
+      requirement: "Personalsäkerhet, åtkomstkontroll och tillgångshantering"
+      description: "Policies för HR-säkerhet, åtkomstkontroll och tillgångshantering"
+      
+      mapped_entities:
+        - entity: Person
+          attributes:
+            - roles: required
+          mandatory: true
+          
+        - entity: SecurityControl
+          attributes:
+            - control_category: [access_control]
+          mandatory: true
+          
+        - entity: ApplicationSystem
+          attributes:
+            - owner: required
+            - custodian: required
+          mandatory: true
+          
+      evidence_requirements:
+        - "Access control policy"
+        - "Asset inventory"
+        - "Access review records"
+        - "HR security screening procedures"
+        
+    - id: "NIS2-21.2.i"
+      requirement: "Multi-faktor autentisering eller kontinuerlig autentisering"
+      description: "Säkra autentiseringslösningar för kritiska system"
+      
+      mapped_entities:
+        - entity: ApplicationInterface
+          attributes:
+            - authentication_method: should_include_mfa
+          mandatory: true
+          
+        - entity: SecurityControl
+          attributes:
+            - control_category: [access_control]
+            - name: must_include_mfa_controls
+          mandatory: true
+          
+      evidence_requirements:
+        - "MFA implementation dokumentation"
+        - "Authentication policy"
+        - "MFA coverage report"
+        
+    - id: "NIS2-21.2.j"
+      requirement: "Säkrad röst-, video- och textkommunikation"
+      description: "Säkra kommunikationslösningar inom organisationen"
+      
+      mapped_entities:
+        - entity: ApplicationSystem
+          attributes:
+            - system_type: [business_application]
+            - name: communication_systems
+          mandatory: false
+          
+      evidence_requirements:
+        - "Kommunikationssystems säkerhetskonfiguration"
+        - "Encryption för kommunikation"
+        
+    - id: "NIS2-21.2.k"
+      requirement: "Säkrad nödkommunikation"
+      description: "Säkerställa kommunikation under kriser"
+      
+      mapped_entities:
+        - entity: BusinessProcess
+          attributes:
+            - name: emergency_communication_process
+          mandatory: true
+          
+      evidence_requirements:
+        - "Emergency communication plan"
+        - "Backup communication methods"
+
+# ============================================================================
+# ARTIKEL 23: Rapportering av incidenter
+# ============================================================================
+
+article_23_incident_reporting:
+  title: "Rapportering av incidenter"
+  
+  requirements:
+    
+    - id: "NIS2-23.1"
+      requirement: "Tidig varning vid signifikant incident"
+      description: "Rapportera signifikanta incidenter inom 24 timmar till behörig myndighet"
+      
+      mapped_entities:
+        - entity: SecurityIncident
+          attributes:
+            - severity: [critical, high]
+            - detected_date: required
+            - reported_to_authority: must_be_true
+          mandatory: true
+          
+      evidence_requirements:
+        - "Incident rapporteringsprocess"
+        - "Rapporter till myndighet"
+        - "Incident severity classification"
+        
+    - id: "NIS2-23.2"
+      requirement: "Incidentanmälan inom 72 timmar"
+      description: "Fullständig incidentrapport inom 72 timmar"
+      
+      mapped_entities:
+        - entity: SecurityIncident
+          attributes:
+            - severity: [critical, high]
+            - description: required_detailed
+          mandatory: true
+          
+      evidence_requirements:
+        - "Detaljerad incidentrapport"
+        - "Initial bedömning av incident"
+        - "Åtgärder vidtagna"
+
+# ============================================================================
+# ALLA VIKTIGA TILLGÅNGAR OCH SYSTEM (IMPLICIT KRAV)
+# ============================================================================
+
+asset_inventory_requirements:
+  title: "Inventering och dokumentation av tillgångar"
+  
+  requirements:
+    
+    - id: "NIS2-INV-1"
+      requirement: "Komplett inventering av IT-tillgångar"
+      description: "Organisation måste ha full översikt över alla IT-system och komponenter"
+      
+      mapped_entities:
+        - entity: ApplicationSystem
+          attributes:
+            - all_attributes: required
+          mandatory: true
+          
+        - entity: InfrastructureNode
+          attributes:
+            - all_attributes: required
+          mandatory: true
+          
+        - entity: Network
+          attributes:
+            - all_attributes: required
+          mandatory: true
+          
+      evidence_requirements:
+        - "Komplett tillgångsinventering"
+        - "Systemdokumentation"
+        - "Nätverksdiagram"
+        - "Configuration Management Database (CMDB)"
+        
+    - id: "NIS2-INV-2"
+      requirement: "Identifiering av kritiska tillgångar"
+      description: "Identifiera och klassificera kritiska tillgångar för verksamheten"
+      
+      mapped_entities:
+        - entity: ApplicationSystem
+          attributes:
+            - criticality: [critical, high]
+          mandatory: true
+          
+        - entity: BusinessProcess
+          attributes:
+            - criticality: [critical, high]
+          mandatory: true
+          
+        - entity: BusinessCapability
+          attributes:
+            - criticality: [critical, high]
+          mandatory: true
+          
+      evidence_requirements:
+        - "Business Impact Analysis (BIA)"
+        - "Kritikalitetsklassificering"
+        - "Dependencies dokumentation"
+
+# ============================================================================
+# COMPLIANCE MATURITY NIVÅER
+# ============================================================================
+
+compliance_maturity_model:
+  description: "Mognadsnivåer för NIS 2 compliance"
+  
+  levels:
+    
+    - level: 1
+      name: "Initial/Ad-hoc"
+      description: "Ingen systematisk dokumentation eller processer"
+      characteristics:
+        - "Sporadisk dokumentation"
+        - "Ingen central inventering"
+        - "Reaktiv säkerhetshantering"
+        
+    - level: 2
+      name: "Repeatable"
+      description: "Grundläggande dokumentation finns men inte komplett"
+      characteristics:
+        - "Grundläggande inventering av system"
+        - "Vissa säkerhetskontroller dokumenterade"
+        - "Initial riskbedömning genomförd"
+        
+    - level: 3
+      name: "Defined"
+      description: "Dokumenterade processer och god täckning"
+      characteristics:
+        - "Komplett systemdokumentation"
+        - "Standardiserade processer"
+        - "Dokumenterade säkerhetskontroller"
+        - "Regelbundna riskbedömningar"
+        - "NIS 2 compliance uppnådd"
+        
+    - level: 4
+      name: "Managed"
+      description: "Mätning och kontinuerlig förbättring"
+      characteristics:
+        - "KPIer för säkerhet mäts"
+        - "Automatiserad compliance-rapportering"
+        - "Kontinuerlig monitoring"
+        
+    - level: 5
+      name: "Optimizing"
+      description: "Kontinuerlig optimering och proaktiv säkerhet"
+      characteristics:
+        - "Prediktiv säkerhetsanalys"
+        - "Automatiserad threat intelligence"
+        - "Kontinuerlig förbättring baserat på data"
+
+# ============================================================================
+# MINIMAL COMPLIANCE CHECKLIST
+# ============================================================================
+
+minimal_compliance_requirements:
+  description: "Minimikrav för att uppfylla NIS 2"
+  
+  checklist:
+    
+    business_layer:
+      - item: "Identifiera alla kritiska affärsprocesser"
+        entity: BusinessProcess
+        mandatory: true
+        
+      - item: "Dokumentera RTO/RPO för kritiska processer"
+        entity: BusinessProcess
+        attributes: [recovery_time_objective, recovery_point_objective]
+        mandatory: true
+        
+      - item: "Tilldela ägare för alla system och processer"
+        entity: Person, OrganizationalUnit
+        mandatory: true
+        
+    application_layer:
+      - item: "Inventera alla applikationssystem"
+        entity: ApplicationSystem
+        mandatory: true
+        
+      - item: "Klassificera kritikalitet för alla system"
+        entity: ApplicationSystem
+        attributes: [criticality]
+        mandatory: true
+        
+      - item: "Dokumentera systemägare och förvaltare"
+        entity: ApplicationSystem
+        attributes: [owner, custodian]
+        mandatory: true
+        
+      - item: "Senaste säkerhetsgenomgång dokumenterad"
+        entity: ApplicationSystem
+        attributes: [last_security_review]
+        mandatory: true
+        
+    technology_layer:
+      - item: "Inventera all infrastruktur"
+        entity: InfrastructureNode
+        mandatory: true
+        
+      - item: "Dokumentera patchstatus"
+        entity: InfrastructureNode
+        attributes: [last_patched, patch_status]
+        mandatory: true
+        
+      - item: "Dokumentera nätverkssegmentering"
+        entity: Network
+        attributes: [security_zone, firewall_protected]
+        mandatory: true
+        
+    security_layer:
+      - item: "Implementera och dokumentera säkerhetskontroller"
+        entity: SecurityControl
+        mandatory: true
+        minimum_count: 10
+        
+      - item: "Genomför årlig riskbedömning"
+        entity: RiskAssessment
+        mandatory: true
+        frequency: annual
+        
+      - item: "Dokumentera sårbarhetshantering"
+        entity: Vulnerability
+        mandatory: true
+        
+      - item: "Incidenthanteringsprocess"
+        entity: SecurityIncident, Policy
+        mandatory: true
+        
+    data_layer:
+      - item: "Klassificera datatyper"
+        entity: DataObject
+        attributes: [classification]
+        mandatory: true
+        
+      - item: "Dokumentera kryptering"
+        entity: DataStore, DataFlow
+        attributes: [encryption_at_rest, encryption_in_transit]
+        mandatory: true
+        
+    governance_layer:
+      - item: "Cybersäkerhetspolicy"
+        entity: Policy
+        mandatory: true
+        minimum_count: 1
+        
+      - item: "Leverantörsbedömningar"
+        entity: Supplier
+        attributes: [security_assessment_date, security_rating]
+        mandatory: true

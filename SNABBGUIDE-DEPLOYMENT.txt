@@ -1,0 +1,112 @@
+╔════════════════════════════════════════════════════════════════╗
+║                                                                ║
+║    🚀 SNABBGUIDE: DEPLOYA TILL NETLIFY VIA GITHUB             ║
+║                                                                ║
+╚════════════════════════════════════════════════════════════════╝
+
+📋 CHECKLIST - Har du detta?
+  □ GitHub-konto (skapa på github.com)
+  □ Netlify-konto (skapa på netlify.com)
+  □ Git installerat (kör: git --version)
+     → Om inte: https://git-scm.com/download/win
+
+
+🎯 STEG 1: SKAPA GITHUB REPOSITORY
+=====================================
+1. Gå till: https://github.com/new
+2. Repository name: nis2-ea-framework
+3. Välj: Public
+4. ⚠️ VIKTIGT: Markera INTE "Add a README"
+5. Klicka: "Create repository"
+
+
+🎯 STEG 2: PUSHA TILL GITHUB
+=====================================
+Öppna PowerShell i C:\NIS2-EA-Framework\ och kör:
+
+  cd C:\NIS2-EA-Framework
+  git init
+  git add .
+  git commit -m "Initial commit: NIS 2 EA Framework"
+  git branch -M main
+  git remote add origin https://github.com/DITT-ANVÄNDARNAMN/nis2-ea-framework.git
+  git push -u origin main
+
+⚠️ BYT UT "DITT-ANVÄNDARNAMN" mot ditt GitHub-användarnamn!
+
+💡 TIP: Om auth-fel, använd Personal Access Token som lösenord:
+   GitHub → Settings → Developer settings → Personal access tokens
+
+
+🎯 STEG 3: DEPLOYA MED NETLIFY
+=====================================
+1. Gå till: https://app.netlify.com
+2. Logga in (eller skapa konto - gratis!)
+3. Klicka: "Add new site" → "Import an existing project"
+4. Välj: "Deploy with GitHub"
+5. Auktorisera Netlify
+6. Välj: "nis2-ea-framework" repository
+7. Netlify detekterar automatiskt inställningarna:
+   ✓ Base directory: webapp
+   ✓ Build command: npm run build
+   ✓ Publish directory: dist
+8. Klicka: "Deploy site"
+
+⏱️ Vänta 2-3 minuter medan Netlify bygger...
+
+
+🎉 KLART!
+=====================================
+Du får en URL typ: https://sparkly-biscuit-123abc.netlify.app
+
+Vill ändra namnet?
+→ Site settings → Change site name → nis2-ea-demo
+→ Ny URL: https://nis2-ea-demo.netlify.app
+
+
+📝 UPPDATERA SENARE
+=====================================
+När du gjort ändringar:
+
+  cd C:\NIS2-EA-Framework
+  git add .
+  git commit -m "Uppdaterad funktionalitet"
+  git push
+
+Netlify deployar automatiskt! 🎉
+
+
+⚡ SNABB DEPLOYMENT (utan Git)
+=====================================
+Vill du deploya DIREKT utan GitHub?
+
+1. cd C:\NIS2-EA-Framework\webapp
+2. npm run build
+3. Gå till: https://app.netlify.com/drop
+4. Dra dist/ mappen dit
+5. KLART!
+
+   → Nackdel: Ingen auto-deploy vid uppdateringar
+
+
+🆘 HJÄLP?
+=====================================
+Problem? Kolla DEPLOYMENT.md för utförlig guide och felsökning.
+
+Vanliga fel:
+  • "git not found" → Installera Git
+  • "Permission denied" → Använd Personal Access Token
+  • "Build failed" → Kontrollera att netlify.toml finns i root
+
+
+💰 KOSTNAD
+=====================================
+Helt GRATIS med Netlify Free tier:
+  ✓ Obegränsad bandwidth
+  ✓ 100 GB / månad
+  ✓ 300 build-minuter / månad
+  ✓ Automatisk HTTPS
+  ✓ Custom domain support
+
+
+Lycka till! 🚀

@@ -1,0 +1,478 @@
+# NIS 2 Enterprise Architecture Metamodell
+# Version: 1.0
+# Datum: 2026-02-26
+
+metamodel:
+  name: "NIS2 EA Framework Metamodel"
+  version: "1.0"
+  description: "Metamodell för NIS 2-kompatibel systemdokumentation baserad på EA-principer"
+  
+  # ============================================================================
+  # BUSINESS ARCHITECTURE LAYER
+  # ============================================================================
+  
+  business_layer:
+    description: "Verksamhetsskiktet beskriver organisationens verksamhet, processer och förmågor"
+    
+    entities:
+      
+      BusinessCapability:
+        description: "En förmåga eller kapacitet som organisationen har"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - criticality: enum [critical, high, medium, low]
+          - owner: reference(OrganizationalUnit)
+          - status: enum [active, planned, retired]
+        nis2_relevance: "Kritiska förmågor måste identifieras för riskbedömning"
+        
+      BusinessProcess:
+        description: "En strukturerad uppsättning aktiviteter som skapar värde"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - process_owner: reference(Person)
+          - criticality: enum [critical, high, medium, low]
+          - recovery_time_objective: duration
+          - recovery_point_objective: duration
+        nis2_relevance: "Kritiska processer måste ha dokumenterade RTO/RPO för business continuity"
+        
+      OrganizationalUnit:
+        description: "En organisatorisk enhet (avdelning, team, etc.)"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - parent_unit: reference(OrganizationalUnit)
+          - head: reference(Person)
+          - responsibilities: list[string]
+        nis2_relevance: "Ansvar för system och säkerhet måste vara tydligt tilldelat"
+        
+      Person:
+        description: "En individ med roller och ansvar"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - email: string
+          - roles: list[reference(Role)]
+          - organizational_unit: reference(OrganizationalUnit)
+        nis2_relevance: "Identifiera ansvariga för kritiska system"
+        
+      Role:
+        description: "En roll med specifika ansvarsområden"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - responsibilities: list[string]
+          - required_competencies: list[string]
+        nis2_relevance: "Roller och ansvar för säkerhetshantering"
+
+  # ============================================================================
+  # APPLICATION ARCHITECTURE LAYER
+  # ============================================================================
+  
+  application_layer:
+    description: "Applikationsskiktet beskriver IT-system och applikationer"
+    
+    entities:
+      
+      ApplicationSystem:
+        description: "Ett IT-system eller applikation"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - system_type: enum [business_application, infrastructure_service, 
+                               integration_platform, database, other]
+          - criticality: enum [critical, high, medium, low]
+          - owner: reference(OrganizationalUnit)
+          - custodian: reference(Person)
+          - vendor: reference(Supplier)
+          - lifecycle_status: enum [planning, development, production, 
+                                    maintenance, retirement]
+          - version: string
+          - deployment_date: date
+          - last_security_review: date
+          - data_classification: enum [public, internal, confidential, secret]
+        nis2_relevance: "Alla system med kritiska funktioner måste dokumenteras"
+        
+      ApplicationComponent:
+        description: "En komponent inom ett applikationssystem"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - parent_system: reference(ApplicationSystem)
+          - component_type: enum [frontend, backend, api, microservice, 
+                                  database, queue, cache, other]
+          - technology_stack: list[string]
+          - criticality: enum [critical, high, medium, low]
+        nis2_relevance: "Komponenter i kritiska system måste dokumenteras"
+        
+      ApplicationInterface:
+        description: "Ett gränssnitt mellan applikationer eller komponenter"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - source: reference(ApplicationSystem|ApplicationComponent)
+          - target: reference(ApplicationSystem|ApplicationComponent)
+          - interface_type: enum [api, file_transfer, database, message_queue, 
+                                 email, other]
+          - protocol: string
+          - authentication_method: string
+          - encryption: boolean
+          - data_classification: enum [public, internal, confidential, secret]
+        nis2_relevance: "Gränssnitt är kritiska för att förstå attackytor"
+
+  # ============================================================================
+  # TECHNOLOGY ARCHITECTURE LAYER
+  # ============================================================================
+  
+  technology_layer:
+    description: "Teknologiskiktet beskriver infrastruktur och plattformar"
+    
+    entities:
+      
+      InfrastructureNode:
+        description: "En fysisk eller virtuell infrastrukturkomponent"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - node_type: enum [physical_server, virtual_machine, container, 
+                            network_device, storage_device, other]
+          - location: reference(Location)
+          - hosting_type: enum [on_premise, cloud, hybrid]
+          - cloud_provider: string
+          - operating_system: string
+          - os_version: string
+          - criticality: enum [critical, high, medium, low]
+          - last_patched: date
+          - patch_status: enum [up_to_date, pending, overdue]
+        nis2_relevance: "Infrastruktur måste vara inventerad och patchhantering dokumenterad"
+        
+      Network:
+        description: "Ett nätverk eller nätverkssegment"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - network_type: enum [lan, wan, dmz, management, production, other]
+          - ip_range: string
+          - vlan_id: string
+          - security_zone: enum [internet, dmz, internal, restricted, management]
+          - firewall_protected: boolean
+        nis2_relevance: "Nätverkssegmentering är en säkerhetskontroll enligt NIS 2"
+        
+      TechnologyPlatform:
+        description: "En teknologiplattform eller ramverk"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - platform_type: enum [operating_system, database_platform, 
+                                middleware, container_platform, cloud_platform]
+          - vendor: reference(Supplier)
+          - version: string
+          - support_end_date: date
+          - license_model: string
+        nis2_relevance: "Teknologiplattformar och deras support-status måste spåras"
+        
+      Location:
+        description: "En fysisk plats där teknologi är lokaliserad"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - address: string
+          - country: string
+          - location_type: enum [data_center, office, cloud_region, other]
+          - physical_security_level: enum [high, medium, low]
+        nis2_relevance: "Lokalisering av data och system är relevant för compliance"
+
+  # ============================================================================
+  # SECURITY ARCHITECTURE LAYER
+  # ============================================================================
+  
+  security_layer:
+    description: "Säkerhetsskiktet beskriver säkerhetskontroller, hot och sårbarheter"
+    
+    entities:
+      
+      SecurityControl:
+        description: "En säkerhetskontroll eller säkerhetsåtgärd"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - control_type: enum [preventive, detective, corrective, administrative]
+          - control_category: enum [access_control, encryption, monitoring, 
+                                   backup, patch_management, network_security, 
+                                   incident_response, training, other]
+          - implementation_status: enum [planned, partial, implemented, verified]
+          - owner: reference(Person)
+          - last_tested: date
+          - effectiveness: enum [effective, partially_effective, ineffective, not_tested]
+        nis2_relevance: "NIS 2 kräver implementering och dokumentation av säkerhetskontroller"
+        
+      ThreatScenario:
+        description: "Ett identifierat hotscenario"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - threat_category: enum [malware, ransomware, phishing, ddos, 
+                                  insider_threat, supply_chain, physical, other]
+          - likelihood: enum [very_high, high, medium, low, very_low]
+          - impact: enum [critical, high, medium, low]
+          - threat_sources: list[string]
+        nis2_relevance: "Riskbedömning är obligatoriskt enligt NIS 2"
+        
+      Vulnerability:
+        description: "En identifierad sårbarhet"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - cve_id: string
+          - cvss_score: float
+          - severity: enum [critical, high, medium, low]
+          - affected_asset: reference(ApplicationSystem|InfrastructureNode)
+          - status: enum [open, in_progress, mitigated, accepted, closed]
+          - discovered_date: date
+          - remediation_deadline: date
+        nis2_relevance: "Sårbarhetshantering är en kärnkomponent i NIS 2"
+        
+      SecurityIncident:
+        description: "En säkerhetsincident"
+        attributes:
+          - id: string (UUID)
+          - title: string
+          - description: string
+          - incident_type: enum [malware, unauthorized_access, data_breach, 
+                                dos, policy_violation, other]
+          - severity: enum [critical, high, medium, low]
+          - status: enum [detected, investigating, contained, resolved, closed]
+          - detected_date: datetime
+          - resolved_date: datetime
+          - affected_systems: list[reference(ApplicationSystem|InfrastructureNode)]
+          - reported_to_authority: boolean
+        nis2_relevance: "Incidentrapportering är obligatoriskt enligt NIS 2"
+        
+      ComplianceRequirement:
+        description: "Ett compliance-krav från NIS 2 eller annan reglering"
+        attributes:
+          - id: string (UUID)
+          - requirement_id: string
+          - name: string
+          - description: string
+          - source: enum [nis2, gdpr, iso27001, other]
+          - category: string
+          - compliance_status: enum [compliant, partially_compliant, 
+                                    non_compliant, not_assessed]
+          - evidence: list[string]
+          - last_assessment: date
+        nis2_relevance: "Spåra compliance-status för NIS 2-krav"
+
+  # ============================================================================
+  # DATA ARCHITECTURE LAYER
+  # ============================================================================
+  
+  data_layer:
+    description: "Dataskiktet beskriver data och dataflöden"
+    
+    entities:
+      
+      DataObject:
+        description: "Ett dataobjekt eller datatyp"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - data_category: enum [personal_data, financial_data, technical_data, 
+                                operational_data, other]
+          - classification: enum [public, internal, confidential, secret]
+          - personal_data: boolean
+          - sensitive_personal_data: boolean
+          - retention_period: duration
+          - legal_basis: string
+        nis2_relevance: "Dataskydd och dataskyddsåtgärder är en del av NIS 2"
+        
+      DataStore:
+        description: "En datalagringsplats"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - store_type: enum [database, file_system, object_storage, backup, archive]
+          - hosting: reference(InfrastructureNode)
+          - encryption_at_rest: boolean
+          - backup_configured: boolean
+          - backup_frequency: duration
+          - access_controls: boolean
+        nis2_relevance: "Säker datalagring är en säkerhetskontroll i NIS 2"
+        
+      DataFlow:
+        description: "Ett dataflöde mellan system eller komponenter"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - source: reference(ApplicationSystem|ApplicationComponent|DataStore)
+          - target: reference(ApplicationSystem|ApplicationComponent|DataStore)
+          - data_objects: list[reference(DataObject)]
+          - encryption_in_transit: boolean
+          - crosses_trust_boundary: boolean
+          - authentication_required: boolean
+        nis2_relevance: "Dataflöden måste dokumenteras för att förstå risker"
+
+  # ============================================================================
+  # GOVERNANCE & COMPLIANCE LAYER
+  # ============================================================================
+  
+  governance_layer:
+    description: "Styrning och compliance-perspektivet"
+    
+    entities:
+      
+      Policy:
+        description: "En policy eller regel"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - policy_type: enum [security_policy, access_policy, data_policy, 
+                              operational_policy, other]
+          - owner: reference(Person)
+          - approved_by: reference(Person)
+          - approval_date: date
+          - review_frequency: duration
+          - last_review: date
+          - status: enum [draft, approved, active, retired]
+        nis2_relevance: "Policyer för cybersäkerhet krävs enligt NIS 2"
+        
+      Supplier:
+        description: "En extern leverantör"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - supplier_type: enum [software_vendor, cloud_provider, 
+                                managed_service_provider, hardware_vendor, other]
+          - criticality: enum [critical, high, medium, low]
+          - contract_end_date: date
+          - security_assessment_date: date
+          - security_rating: enum [approved, conditional, not_approved]
+          - nis2_entity: boolean
+        nis2_relevance: "Supply chain security är en viktig del av NIS 2"
+        
+      RiskAssessment:
+        description: "En riskbedömning"
+        attributes:
+          - id: string (UUID)
+          - name: string
+          - description: string
+          - scope: list[reference(ApplicationSystem|BusinessProcess)]
+          - assessment_date: date
+          - assessor: reference(Person)
+          - methodology: string
+          - identified_risks: list[reference(ThreatScenario)]
+          - risk_level: enum [critical, high, medium, low]
+          - mitigation_plan: string
+        nis2_relevance: "Regelbundna riskbedömningar är obligatoriska enligt NIS 2"
+
+# ============================================================================
+# RELATIONSHIP TYPES
+# ============================================================================
+
+relationships:
+  description: "Definierade relationstyper mellan entiteter"
+  
+  types:
+    - name: supports
+      description: "En entitet stödjer en annan"
+      valid_from: [ApplicationSystem, TechnologyPlatform, InfrastructureNode]
+      valid_to: [BusinessProcess, BusinessCapability]
+      
+    - name: depends_on
+      description: "En entitet är beroende av en annan"
+      valid_from: [ApplicationSystem, ApplicationComponent, BusinessProcess]
+      valid_to: [ApplicationSystem, InfrastructureNode, Supplier]
+      
+    - name: implements
+      description: "En entitet implementerar en annan"
+      valid_from: [ApplicationSystem, ApplicationComponent]
+      valid_to: [BusinessCapability, BusinessProcess]
+      
+    - name: hosted_on
+      description: "En entitet körs på en annan"
+      valid_from: [ApplicationSystem, ApplicationComponent]
+      valid_to: [InfrastructureNode, TechnologyPlatform]
+      
+    - name: protects
+      description: "En säkerhetskontroll skyddar en tillgång"
+      valid_from: [SecurityControl]
+      valid_to: [ApplicationSystem, InfrastructureNode, DataObject, Network]
+      
+    - name: mitigates
+      description: "En kontroll eller åtgärd mitigerar ett hot eller sårbarhet"
+      valid_from: [SecurityControl]
+      valid_to: [ThreatScenario, Vulnerability]
+      
+    - name: threatens
+      description: "Ett hot riktar sig mot en tillgång"
+      valid_from: [ThreatScenario]
+      valid_to: [ApplicationSystem, InfrastructureNode, BusinessProcess]
+      
+    - name: affects
+      description: "En sårbarhet påverkar en tillgång"
+      valid_from: [Vulnerability]
+      valid_to: [ApplicationSystem, InfrastructureNode, TechnologyPlatform]
+      
+    - name: stores
+      description: "En datalagring innehåller data"
+      valid_from: [DataStore]
+      valid_to: [DataObject]
+      
+    - name: processes
+      description: "Ett system processar data"
+      valid_from: [ApplicationSystem, ApplicationComponent]
+      valid_to: [DataObject]
+      
+    - name: owns
+      description: "Ägarskap av en entitet"
+      valid_from: [Person, OrganizationalUnit]
+      valid_to: [ApplicationSystem, BusinessProcess, Policy]
+      
+    - name: complies_with
+      description: "En entitet uppfyller ett krav"
+      valid_from: [SecurityControl, Policy, ApplicationSystem]
+      valid_to: [ComplianceRequirement]
+
+# ============================================================================
+# METADATA
+# ============================================================================
+
+metadata:
+  governance:
+    - attribute: created_at
+      type: datetime
+      required: true
+    - attribute: updated_at
+      type: datetime
+      required: true
+    - attribute: created_by
+      type: reference(Person)
+      required: true
+    - attribute: last_modified_by
+      type: reference(Person)
+      required: true
+    - attribute: documentation_url
+      type: url
+      required: false
+    - attribute: tags
+      type: list[string]
+      required: false
