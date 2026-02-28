@@ -1,1156 +1,501 @@
-// Livsmedelsverket Enterprise Architecture - Sample Data
-// Baserad på offentlig information om Livsmedelsverkets uppdrag och organisation
-// ArchiMate 3.1 compliant data model
+// Livsmedelsverket Enterprise Architecture - Komplett Exempeldata
+// Version 2.0 - ~70 applikationer med 3-nivåers process- och capability-modell
+// ArchiMate 3.1 compliant
 
 const sampleData = {
   entities: [
     // ========================================================================
-    // STRATEGY LAYER - Goals & Drivers
-    // ========================================================================
-    {
-      id: 'goal-001',
-      entityType: 'Goal',
-      name: 'Säker mat och bra dricksvatten',
-      description: 'Övergripande mål att säkerställa att mat och dricksvatten är säkert för Sveriges befolkning'
-    },
-    {
-      id: 'goal-002',
-      entityType: 'Goal',
-      name: 'Hållbar livsmedelskonsumtion',
-      description: 'Främja hållbara matvanor som är bra för både hälsa och miljö'
-    },
-    {
-      id: 'goal-003',
-      entityType: 'Goal',
-      name: 'Effektiv myndighetskontroll',
-      description: 'Genomföra riskbaserad och effektiv kontroll av livsmedelsföretag'
-    },
-    {
-      id: 'goal-004',
-      entityType: 'Goal',
-      name: 'Stark krisberedskap',
-      description: 'Snabb och effektiv hantering av livsmedelskriser och utbrott'
-    },
-    {
-      id: 'driver-001',
-      entityType: 'Driver',
-      name: 'EU-lagstiftning',
-      description: 'Krav från EU:s livsmedelslagstiftning och förordningar'
-    },
-    {
-      id: 'driver-002',
-      entityType: 'Driver',
-      name: 'Folkhälsokrav',
-      description: 'Ökad medvetenhet om matens påverkan på folkhälsan'
-    },
-    {
-      id: 'driver-003',
-      entityType: 'Driver',
-      name: 'Digitalisering',
-      description: 'Krav på automatisering och digitala tjänster från företag och konsumenter'
-    },
-    {
-      id: 'principle-001',
-      entityType: 'Principle',
-      name: 'Riskbaserad kontroll',
-      description: 'Kontrollen ska fokusera på de områden där riskerna är störst'
-    },
-    {
-      id: 'principle-002',
-      entityType: 'Principle',
-      name: 'Öppenhet och transparens',
-      description: 'Information om livsmedelssäkerhet ska vara tillgänglig för allmänheten'
-    },
-    {
-      id: 'principle-003',
-      entityType: 'Principle',
-      name: 'Vetenskaplig grund',
-      description: 'Beslut ska baseras på bästà tillgängliga vetenskapliga underlag'
-    },
-
-    // ========================================================================
-    // BUSINESS LAYER - Capabilities (3+ nivåer)
+    // STRATEGY LAYER
     // ========================================================================
     
-    // Level 1: Strategiska förmågor
-    {
-      id: 'cap-l1-001',
-      entityType: 'Capability',
-      name: 'Riskvärdering och Riskhantering',
-      description: 'Förmåga att identifiera, värdera och hantera risker i livsmedelskedjan',
-      level: 1,
-      parentId: null
-    },
-    {
-      id: 'cap-l1-002',
-      entityType: 'Capability',
-      name: 'Kontroll och Tillsyn',
-      description: 'Förmåga att utföra kontroll och tillsyn av livsmedelsaktörer',
-      level: 1,
-      parentId: null
-    },
-    {
-      id: 'cap-l1-003',
-      entityType: 'Capability',
-      name: 'Tillståndsgivning och Registrering',
-      description: 'Förmåga att hantera tillstånd och registreringar för livsmedelsverksamheter',
-      level: 1,
-      parentId: null
-    },
-    {
-      id: 'cap-l1-004',
-      entityType: 'Capability',
-      name: 'Konsumentinformation',
-      description: 'Förmåga att informera och utbilda konsumenter om mat och hälsa',
-      level: 1,
-      parentId: null
-    },
-    {
-      id: 'cap-l1-005',
-      entityType: 'Capability',
-      name: 'Kost och Näringsrekommendationer',
-      description: 'Förmåga att ta fram och sprida näringsrekommendationer',
-      level: 1,
-      parentId: null
-    },
-    {
-      id: 'cap-l1-006',
-      entityType: 'Capability',
-      name: 'Krisberedskap och Krishantering',
-      description: 'Förmåga att hantera livsmedelskriser och utbrott',
-      level: 1,
-      parentId: null
-    },
-    {
-      id: 'cap-l1-007',
-      entityType: 'Capability',
-      name: 'Internationellt Samarbete',
-      description: 'Förmåga att samarbeta internationellt inom livsmedelssäkerhet',
-      level: 1,
-      parentId: null
-    },
-    {
-      id: 'cap-l1-008',
-      entityType: 'Capability',
-      name: 'Laboratorieverksamhet',
-      description: 'Förmåga att utföra analyser och provtagning',
-      level: 1,
-      parentId: null
-    },
-
-    // Level 2: Taktiska förmågor under Riskvärdering
-    {
-      id: 'cap-l2-001',
-      entityType: 'Capability',
-      name: 'Kemisk Riskvärdering',
-      description: 'Värdera risker från kemiska ämnen i livsmedel',
-      level: 2,
-      parentId: 'cap-l1-001'
-    },
-    {
-      id: 'cap-l2-002',
-      entityType: 'Capability',
-      name: 'Mikrobiologisk Riskvärdering',
-      description: 'Värdera risker från mikroorganismer och patogener',
-      level: 2,
-      parentId: 'cap-l1-001'
-    },
-    {
-      id: 'cap-l2-003',
-      entityType: 'Capability',
-      name: 'Allergiriskvärdering',
-      description: 'Värdera risker relaterade till allergener i livsmedel',
-      level: 2,
-      parentId: 'cap-l1-001'
-    },
-    {
-      id: 'cap-l2-004',
-      entityType: 'Capability',
-      name: 'Vetenskaplig Utvärdering',
-      description: 'Granska och utvärdera vetenskaplig litteratur och studier',
-      level: 2,
-      parentId: 'cap-l1-001'
-    },
-
-    // Level 2: Taktiska förmågor under Kontroll och Tillsyn
-    {
-      id: 'cap-l2-010',
-      entityType: 'Capability',
-      name: 'Planering av Kontroll',
-      description: 'Planera och prioritera kontrollverksamhet riskbaserat',
-      level: 2,
-      parentId: 'cap-l1-002'
-    },
-    {
-      id: 'cap-l2-011',
-      entityType: 'Capability',
-      name: 'Genomförande av Kontroll',
-      description: 'Utföra inspektioner och kontroller på plats',
-      level: 2,
-      parentId: 'cap-l1-002'
-    },
-    {
-      id: 'cap-l2-012',
-      entityType: 'Capability',
-      name: 'Provtagning och Analys',
-      description: 'Ta prover och analysera livsmedel',
-      level: 2,
-      parentId: 'cap-l1-002'
-    },
-    {
-      id: 'cap-l2-013',
-      entityType: 'Capability',
-      name: 'Hantering av Avvikelser',
-      description: 'Hantera brister och bristande efterlevnad',
-      level: 2,
-      parentId: 'cap-l1-002'
-    },
-    {
-      id: 'cap-l2-014',
-      entityType: 'Capability',
-      name: 'Uppföljning och Efterkontroll',
-      description: 'Följa upp åtgärder och utföra efterkontroller',
-      level: 2,
-      parentId: 'cap-l1-002'
-    },
-
-    // Level 2: Taktiska förmågor under Tillståndsgivning
-    {
-      id: 'cap-l2-020',
-      entityType: 'Capability',
-      name: 'Registrering av Livsmedelsföretag',
-      description: 'Registrera nya livsmedelsföretagare',
-      level: 2,
-      parentId: 'cap-l1-003'
-    },
-    {
-      id: 'cap-l2-021',
-      entityType: 'Capability',
-      name: 'Godkännande av Anläggningar',
-      description: 'Godkänna anläggningar för specifika verksamheter',
-      level: 2,
-      parentId: 'cap-l1-003'
-    },
-    {
-      id: 'cap-l2-022',
-      entityType: 'Capability',
-      name: 'Hantering av Ansökningar',
-      description: 'Ta emot och behandla olika typer av ansökningar',
-      level: 2,
-      parentId: 'cap-l1-003'
-    },
-
-    // Level 2: Taktiska förmågor under Konsumentinformation
-    {
-      id: 'cap-l2-030',
-      entityType: 'Capability',
-      name: 'Webbkommunikation',
-      description: 'Publicera information på webbplatsen',
-      level: 2,
-      parentId: 'cap-l1-004'
-    },
-    {
-      id: 'cap-l2-031',
-      entityType: 'Capability',
-      name: 'Kampanjer och Utbildning',
-      description: 'Genomföra informationskampanjer och utbildningsinsatser',
-      level: 2,
-      parentId: 'cap-l1-004'
-    },
-    {
-      id: 'cap-l2-032',
-      entityType: 'Capability',
-      name: 'Hantering av Konsumentfrågor',
-      description: 'Besvara frågor från allmänheten',
-      level: 2,
-      parentId: 'cap-l1-004'
-    },
-
-    // Level 2: Taktiska förmågor under Krisberedskap
-    {
-      id: 'cap-l2-040',
-      entityType: 'Capability',
-      name: 'Utbrottsutredning',
-      description: 'Utreda matförgiftningsutbrott och smittspridning',
-      level: 2,
-      parentId: 'cap-l1-006'
-    },
-    {
-      id: 'cap-l2-041',
-      entityType: 'Capability',
-      name: 'Återkallelser och Vanningar',
-      description: 'Hantera återkallelser av livsmedel',
-      level: 2,
-      parentId: 'cap-l1-006'
-    },
-    {
-      id: 'cap-l2-042',
-      entityType: 'Capability',
-      name: 'Krishantering och Samordning',
-      description: 'Samordna krishantering med andra myndigheter',
-      level: 2,
-      parentId: 'cap-l1-006'
-    },
-
-    // Level 3: Operativa förmågor under Kemisk Riskvärdering
-    {
-      id: 'cap-l3-001',
-      entityType: 'Capability',
-      name: 'Tungmetallanalys',
-      description: 'Analysera och värdera risker från tungmetaller (bly, kadmium, kvicksilver)',
-      level: 3,
-      parentId: 'cap-l2-001'
-    },
-    {
-      id: 'cap-l3-002',
-      entityType: 'Capability',
-      name: 'Bekämpningsmedelsrester',
-      description: 'Utvärdera rester av bekämpningsmedel i livsmedel',
-      level: 3,
-      parentId: 'cap-l2-001'
-    },
-    {
-      id: 'cap-l3-003',
-      entityType: 'Capability',
-      name: 'Processkontaminanter',
-      description: 'Värdera risker från ämnen som bildas vid tillverkning (t.ex. akrylamid)',
-      level: 3,
-      parentId: 'cap-l2-001'
-    },
-    {
-      id: 'cap-l3-004',
-      entityType: 'Capability',
-      name: 'Tillsatsämnesutvärdering',
-      description: 'Utvärdera säkerheten för livsmedelstillsatser',
-      level: 3,
-      parentId: 'cap-l2-001'
-    },
-
-    // Level 3: Operativa förmågor under Mikrobiologisk Riskvärdering
-    {
-      id: 'cap-l3-010',
-      entityType: 'Capability',
-      name: 'Salmonellakontroll',
-      description: 'Värdera och övervaka salmonellarisker',
-      level: 3,
-      parentId: 'cap-l2-002'
-    },
-    {
-      id: 'cap-l3-011',
-      entityType: 'Capability',
-      name: 'Campylobacterövervakning',
-      description: 'Övervaka campylobacter i livsmedelskedjan',
-      level: 3,
-      parentId: 'cap-l2-002'
-    },
-    {
-      id: 'cap-l3-012',
-      entityType: 'Capability',
-      name: 'Listeriakontroll',
-      description: 'Hantera listeria-risker i redo-to-eat produkter',
-      level: 3,
-      parentId: 'cap-l2-002'
-    },
-    {
-      id: 'cap-l3-013',
-      entityType: 'Capability',
-      name: 'Virusövervakning',
-      description: 'Övervaka virus i livsmedel (t.ex. norovirus)',
-      level: 3,
-      parentId: 'cap-l2-002'
-    },
-
-    // Level 3: Operativa förmågor under Genomförande av Kontroll
-    {
-      id: 'cap-l3-020',
-      entityType: 'Capability',
-      name: 'Restauranginspektion',
-      description: 'Utföra kontroll av restauranger och storhushåll',
-      level: 3,
-      parentId: 'cap-l2-011'
-    },
-    {
-      id: 'cap-l3-021',
-      entityType: 'Capability',
-      name: 'Slakteriinspektion',
-      description: 'Kontrollera slakterier och kött',
-      level: 3,
-      parentId: 'cap-l2-011'
-    },
-    {
-      id: 'cap-l3-022',
-      entityType: 'Capability',
-      name: 'Butikskontroll',
-      description: 'Inspektera livsmedelsbutiker',
-      level: 3,
-      parentId: 'cap-l2-011'
-    },
-    {
-      id: 'cap-l3-023',
-      entityType: 'Capability',
-      name: 'Livsmedelsindustriinspektion',
-      description: 'Kontrollera livsmedelstillverkande industrier',
-      level: 3,
-      parentId: 'cap-l2-011'
-    },
-    {
-      id: 'cap-l3-024',
-      entityType: 'Capability',
-      name: 'Importkontroll',
-      description: 'Kontrollera importerade livsmedel vid gränsen',
-      level: 3,
-      parentId: 'cap-l2-011'
-    },
+    // Goals
+    { id: 'goal-001', entityType: 'Goal', name: 'Säker mat och bra dricksvatten', description: 'Säkerställa säker mat och dricksvatten för Sveriges befolkning' },
+    { id: 'goal-002', entityType: 'Goal', name: 'Hållbar livsmedelskonsumtion', description: 'Främja hållbara matvanor' },
+    { id: 'goal-003', entityType: 'Goal', name: 'Effektiv myndighetskontroll', description: 'Riskbaserad och effektiv kontroll' },
+    { id: 'goal-004', entityType: 'Goal', name: 'Stark krisberedskap', description: 'Hantera livsmedelskriser effektivt' },
+    { id: 'goal-005', entityType: 'Goal', name: 'Djurskydd och djurhälsa', description: 'Säkerställa gott djurskydd' },
+    { id: 'goal-006', entityType: 'Goal', name: 'Vetenskapligt baserad verksamhet', description: 'Bygga på vetenskap och forskning' },
+    
+    // Drivers
+    { id: 'driver-001', entityType: 'Driver', name: 'EU-lagstiftning', description: 'Krav från EU-förordningar' },
+    { id: 'driver-002', entityType: 'Driver', name: 'Folkhälsokrav', description: 'Krav på livsmedelssäkerhet' },
+    { id: 'driver-003', entityType: 'Driver', name: 'Digitalisering', description: 'Krav på digitala tjänster' },
+    { id: 'driver-004', entityType: 'Driver', name: 'Klimat och miljö', description: 'Minskad miljöpåverkan' },
+    { id: 'driver-005', entityType: 'Driver', name: 'NIS2-direktivet', description: 'Cybersäkerhetskrav' },
+    
+    // Principles
+    { id: 'principle-001', entityType: 'Principle', name: 'Risk based approach', description: 'Fokusera på högst risk' },
+    { id: 'principle-002', entityType: 'Principle', name: 'Öppenhet och transparens', description: 'Tillgänglig information' },
+    { id: 'principle-003', entityType: 'Principle', name: 'Vetenskaplig grund', description: 'Evidensbaserade beslut' },
+    { id: 'principle-004', entityType: 'Principle', name: 'Digital först', description: 'Digitala tjänster som standard' },
+    { id: 'principle-005', entityType: 'Principle', name: 'Säkerhet och integritet', description: 'Skydda data enligt NIS2' },
 
     // ========================================================================
-    // BUSINESS LAYER - Business Processes (3+ nivåer)
+    // CAPABILITIES - Level 0 (Domäner)
+    // ========================================================================
+    { id: 'cap-l0-001', entityType: 'Capability', name: 'Livsmedelssäkerhet', description: 'Säker mat från jord till bord', level: 0 },
+    { id: 'cap-l0-002', entityType: 'Capability', name: 'Dricksvattensäkerhet', description: 'Säkert dricksvatten', level: 0 },
+    { id: 'cap-l0-003', entityType: 'Capability', name: 'Djurskydd och Djurhälsa', description: 'Övervaka djurskydd', level: 0 },
+    { id: 'cap-l0-004', entityType: 'Capability', name: 'Näring och Hälsa', description: 'Främja hälsosamma matvanor', level: 0 },
+    { id: 'cap-l0-005', entityType: 'Capability', name: 'Krisberedskap', description: 'Hantera livsmedelskriser', level: 0 },
+    { id: 'cap-l0-006', entityType: 'Capability', name: 'Vetenskap och Innovation', description: 'Forskning och utveckling', level: 0 },
+    { id: 'cap-l0-007', entityType: 'Capability', name: 'Verksamhetsstöd', description: 'IT, Ekonomi, HR support', level: 0 },
+
+    // ========================================================================
+    // CAPABILITIES - Level 1 (Funktionella områden)
+    // ========================================================================
+    { id: 'cap-l1-001', entityType: 'Capability', name: 'Riskvärdering', description: 'Identifiera och värdera risker', level: 1, parentId: 'cap-l0-001' },
+    { id: 'cap-l1-002', entityType: 'Capability', name: 'Kontroll och Tillsyn', description: 'Kontrollera livsmedelsföretag', level: 1, parentId: 'cap-l0-001' },
+    { id: 'cap-l1-003', entityType: 'Capability', name: 'Tillståndsgivning', description: 'Hantera tillstånd', level: 1, parentId: 'cap-l0-001' },
+    { id: 'cap-l1-004', entityType: 'Capability', name: 'Provtagning och Analys', description: 'Laboratorieverksamhet', level: 1, parentId: 'cap-l0-001' },
+    { id: 'cap-l1-005', entityType: 'Capability', name: 'Import/Export-kontroll', description: 'Gränskontroll', level: 1, parentId: 'cap-l0-001' },
+    { id: 'cap-l1-006', entityType: 'Capability', name: 'Utbrottshantering', description: 'Hantera matförgiftningsutbrott', level: 1, parentId: 'cap-l0-005' },
+    { id: 'cap-l1-007', entityType: 'Capability', name: 'Zoonosövervakning', description: 'Övervaka djursjukdomar', level: 1, parentId: 'cap-l0-003' },
+    { id: 'cap-l1-008', entityType: 'Capability', name: 'Dricksvattenkontroll', description: 'Kontrollera dricksvatten', level: 1, parentId: 'cap-l0-002' },
+    { id: 'cap-l1-009', entityType: 'Capability', name: 'Konsumentinformation', description: 'Informera om matsäkerhet', level: 1, parentId: 'cap-l0-004' },
+    { id: 'cap-l1-010', entityType: 'Capability', name: 'Regelutveckling', description: 'Utveckla föreskrifter', level: 1, parentId: 'cap-l0-001' },
+    { id: 'cap-l1-011', entityType: 'Capability', name: 'Matvaneforskning', description: 'Forska om matvanor', level: 1, parentId: 'cap-l0-006' },
+    { id: 'cap-l1-012', entityType: 'Capability', name: 'IT-drift och Support', description: 'Driva IT-system', level: 1, parentId: 'cap-l0-007' },
+    { id: 'cap-l1-013', entityType: 'Capability', name: 'Ekonomiadministration', description: 'Hantera ekonomi', level: 1, parentId: 'cap-l0-007' },
+    { id: 'cap-l1-014', entityType: 'Capability', name: 'HR och Kompetens', description: 'Personaladministration', level: 1, parentId: 'cap-l0-007' },
+    { id: 'cap-l1-015', entityType: 'Capability', name: 'Kemisk analys', description: 'Kemiska laboratorieanalyser', level: 1, parentId: 'cap-l0-006' },
+    { id: 'cap-l1-016', entityType: 'Capability', name: 'Mikrobiologisk analys', description: 'Mikrobiologiska laboratorieanalyser', level: 1, parentId: 'cap-l0-006' },
+    
+    // ========================================================================
+    // CAPABILITIES - Level 2 (Specifika förmågor)
+    // ========================================================================
+    { id: 'cap-l2-001', entityType: 'Capability', name: 'Riskklassning av företag', description: 'Klassificera företag efter risk', level: 2, parentId: 'cap-l1-001' },
+    { id: 'cap-l2-002', entityType: 'Capability', name: 'Planering av oannonserade kontroller', description: 'Planera kontroller', level: 2, parentId: 'cap-l1-002' },
+    { id: 'cap-l2-003', entityType: 'Capability', name: 'Dokumentation av kontroll', description: 'Dokumentera kontrollresultat', level: 2, parentId: 'cap-l1-002' },
+    { id: 'cap-l2-004', entityType: 'Capability', name: 'Provtagning vid kontroll', description: 'Ta prover vid kontroller', level: 2, parentId: 'cap-l1-004' },
+    { id: 'cap-l2-005', entityType: 'Capability', name: 'RASFF-rapportering', description: 'Rapportera till EU:s varningssystem', level: 2, parentId: 'cap-l1-006' },
+    { id: 'cap-l2-006', entityType: 'Capability', name: 'Spårbarhet i livsmedelskedjan', description: 'Spåra produkter', level: 2, parentId: 'cap-l1-006' },
+    { id: 'cap-l2-007', entityType: 'Capability', name: 'Veterinärcertifiering', description: 'Certifiera export', level: 2, parentId: 'cap-l1-005' },
+    { id: 'cap-l2-008', entityType: 'Capability', name: 'Importkontroll vid gräns', description: 'Kontrollera import', level: 2, parentId: 'cap-l1-005' },
+    { id: 'cap-l2-009', entityType: 'Capability', name: 'Vattenprovtagning', description: 'Ta dricksvatt enprover', level: 2, parentId: 'cap-l1-008' },
+    { id: 'cap-l2-010', entityType: 'Capability', name: 'Kostundersökningar', description: 'Undersöka matvanor', level: 2, parentId: 'cap-l1-011' },
+    { id: 'cap-l2-011', entityType: 'Capability', name: 'Näringsdeklarationer', description: 'Granska näringsinnehåll', level: 2, parentId: 'cap-l1-009' },
+    { id: 'cap-l2-012', entityType: 'Capability', name: 'Salmonellaövervakning', description: 'Övervaka salmonella', level: 2, parentId: 'cap-l1-007' },
+
+    // ========================================================================
+    // BUSINESS PROCESSES - Level  1 (Huvudprocesser)
+    // ========================================================================
+    { id: 'proc-l1-001', entityType: 'BusinessProcess', name: 'Livsmedelskontroll', description: 'Huvudprocess för kontroll av livsmedelsföretag', level: 1 },
+    { id: 'proc-l1-002', entityType: 'BusinessProcess', name: 'Tillståndshantering', description: 'Hantera tillstånd och godkännanden', level: 1 },
+    { id: 'proc-l1-003', entityType: 'BusinessProcess', name: 'Riskbedömning', description: 'Bedöma risker i livsmedelskedjan', level: 1 },
+    { id: 'proc-l1-004', entityType: 'BusinessProcess', name: 'Utbrottsutredning', description: 'Utreda och hantera matförgiftningsutbrott', level: 1 },
+    { id: 'proc-l1-005', entityType: 'BusinessProcess', name: 'Laboratorieanalys', description: 'Analysera prover', level: 1 },
+    { id: 'proc-l1-006', entityType: 'BusinessProcess', name: 'Import/Export-handläggning', description: 'Hantera import och export', level: 1 },
+    { id: 'proc-l1-007', entityType: 'BusinessProcess', name: 'Dricksvattentillsyn', description: 'Övervaka dricksvattenproduktion', level: 1 },
+    { id: 'proc-l1-008', entityType: 'BusinessProcess', name: 'Konsumentvägledning', description: 'Vägleda konsumenter', level: 1 },
+    { id: 'proc-l1-009', entityType: 'BusinessProcess', name: 'Regelgivning', description: 'Ta fram föreskrifter', level: 1 },
+    { id: 'proc-l1-010', entityType: 'BusinessProcess', name: 'Forskning och Utvärdering', description: 'Bedriva forskning', level: 1 },
+    
+    // ========================================================================
+    // BUSINESS PROCESSES - Level 2 (Delprocesser)
+    // ========================================================================
+    { id: 'proc-l2-001', entityType: 'BusinessProcess', name: 'Planera kontroll', description: 'Planera årlig kontroll', level: 2, parentId: 'proc-l1-001' },
+    { id: 'proc-l2-002', entityType: 'BusinessProcess', name: 'Genomföra platsbesök', description: 'Besöka livsmedelsföretag', level: 2, parentId: 'proc-l1-001' },
+    { id: 'proc-l2-003', entityType: 'BusinessProcess', name: 'Dokumentera avvikelse', description: 'Dokumentera brister', level: 2, parentId: 'proc-l1-001' },
+    { id: 'proc-l2-004', entityType: 'BusinessProcess', name: 'Fatta åtgärdsbeslut', description: 'Besluta om sanktioner', level: 2, parentId: 'proc-l1-001' },
+    { id: 'proc-l2-005', entityType: 'BusinessProcess', name: 'Mottaga ansökan', description: 'Registrera tillståndsansökan', level: 2, parentId: 'proc-l1-002' },
+    { id: 'proc-l2-006', entityType: 'BusinessProcess', name: 'Granska ansökan', description: 'Bedöma ansökan', level: 2, parentId: 'proc-l1-002' },
+    { id: 'proc-l2-007', entityType: 'BusinessProcess', name: 'Fatta tillståndsbeslut', description: 'Besluta om tillstånd', level: 2, parentId: 'proc-l1-002' },
+    { id: 'proc-l2-008', entityType: 'BusinessProcess', name: 'Identifiera fara', description: 'Identifiera potentiella faror', level: 2, parentId: 'proc-l1-003' },
+    { id: 'proc-l2-009', entityType: 'BusinessProcess', name: 'Värdera risk', description: 'Kvantifiera risk', level: 2, parentId: 'proc-l1-003' },
+    { id: 'proc-l2-010', entityType: 'BusinessProcess', name: 'Motta utbrottslarm', description: 'Ta emot larm om matförgiftning', level: 2, parentId: 'proc-l1-004' },
+    { id: 'proc-l2-011', entityType: 'BusinessProcess', name: 'Epidemiologisk utredning', description: 'Utreda orsak', level: 2, parentId: 'proc-l1-004' },
+    { id: 'proc-l2-012', entityType: 'BusinessProcess', name: 'Rapportera till RASFF', description: 'Rapportera till EU', level: 2, parentId: 'proc-l1-004' },
+    { id: 'proc-l2-013', entityType: 'BusinessProcess', name: 'Ta prov', description: 'Provtagning i fält', level: 2, parentId: 'proc-l1-005' },
+    { id: 'proc-l2-014', entityType: 'BusinessProcess', name: 'Analysera prov', description: 'Laboratorieanalys', level: 2, parentId: 'proc-l1-005' },
+    { id: 'proc-l2-015', entityType: 'BusinessProcess', name: 'Rapportera resultat', description: 'Rapportera analysresultat', level: 2, parentId: 'proc-l1-005' },
+    { id: 'proc-l2-016', entityType: 'BusinessProcess', name: 'Gränskontroll', description: 'Kontrollera vid gräns', level: 2, parentId: 'proc-l1-006' },
+    { id: 'proc-l2-017', entityType: 'BusinessProcess', name: 'Utfärda exportcertifikat', description: 'Certifiera export', level: 2, parentId: 'proc-l1-006' },
+    { id: 'proc-l2-018', entityType: 'BusinessProcess', name: 'Inspektera vattenverk', description: 'Kontrollera dricksvatten', level: 2, parentId: 'proc-l1-007' },
+    { id: 'proc-l2-019', entityType: 'BusinessProcess', name: 'Publicera kostråd', description: 'Ge kostråd', level: 2, parentId: 'proc-l1-008' },
+    { id: 'proc-l2-020', entityType: 'BusinessProcess', name: 'Besvara konsumentfrågor', description: 'Svara på frågor', level: 2, parentId: 'proc-l1-008' },
+    
+    // ========================================================================
+    // BUSINESS PROCESSES - Level 3 (Aktiviteter)
+    // ========================================================================
+    { id: 'proc-l3-001', entityType: 'BusinessProcess', name: 'Hämta företagsdata', description: 'Hämta info från register', level: 3, parentId: 'proc-l2-001' },
+    { id: 'proc-l3-002', entityType: 'BusinessProcess', name: 'Riskklassa företag', description: 'Klassificera enligt riskklass', level: 3, parentId: 'proc-l2-001' },
+    { id: 'proc-l3-003', entityType: 'BusinessProcess', name: 'Boka kontrolltillfälle', description: 'Schemalägga besök', level: 3, parentId: 'proc-l2-002' },
+    { id: 'proc-l3-004', entityType: 'BusinessProcess', name: 'Genomföra intervju', description: 'Intervjua företagare', level: 3, parentId: 'proc-l2-002' },
+    { id: 'proc-l3-005', entityType: 'BusinessProcess', name: 'Inspektera lokaler', description: 'Granska lokaler', level: 3, parentId: 'proc-l2-002' },
+    { id: 'proc-l3-006', entityType: 'BusinessProcess', name: 'Ta livsmedelprov', description: 'Provta produkter', level: 3, parentId: 'proc-l2-002' },
+    { id: 'proc-l3-007', entityType: 'BusinessProcess', name: 'Registrera avvikelse i system', description: 'Dokumentera i IT-system', level: 3, parentId: 'proc-l2-003' },
+    { id: 'proc-l3-008', entityType: 'BusinessProcess', name: 'Fotografera avvikelse', description: 'Ta foto', level: 3, parentId: 'proc-l2-003' },
+    { id: 'proc-l3-009', entityType: 'BusinessProcess', name: 'Skicka provförpackning', description: 'Skicka prov till lab', level: 3, parentId: 'proc-l2-013' },
+    { id: 'proc-l3-010', entityType: 'BusinessProcess', name: 'Mikrobiologisk analys', description: 'Analysera mikrober', level: 3, parentId: 'proc-l2-014' },
+    { id: 'proc-l3-011', entityType: 'BusinessProcess', name: 'Kemisk analys', description: 'Analysera kemikalier', level: 3, parentId: 'proc-l2-014' },
+    { id: 'proc-l3-012', entityType: 'BusinessProcess', name: 'Godkänna analysresultat', description: 'Kvalitetssäkra resultat', level: 3, parentId: 'proc-l2-015' },
+
+    // ========================================================================
+    // APPLICATION LAYER - ~70 Applikationer
     // ========================================================================
     
-    // Level 1: Huvudprocesser
-    {
-      id: 'proc-l1-001',
-      entityType: 'BusinessProcess',
-      name: 'Kontrollprocess',
-      description: 'Övergripande process för planering, genomförande och uppföljning av kontroller',
-      level: 1,
-      parentId: null
-    },
-    {
-      id: 'proc-l1-002',
-      entityType: 'BusinessProcess',
-      name: 'Tillståndsprocess',
-      description: 'Process för hantering av tillstånd och registreringar',
-      level: 1,
-      parentId: null
-    },
-    {
-      id: 'proc-l1-003',
-      entityType: 'BusinessProcess',
-      name: 'Riskvärderingsprocess',
-      description: 'Process för vetenskaplig riskvärdering',
-      level: 1,
-      parentId: null
-    },
-    {
-      id: 'proc-l1-004',
-      entityType: 'BusinessProcess',
-      name: 'Krisrespons',
-      description: 'Process för hantering av livsmedelskriser',
-      level: 1,
-      parentId: null
-    },
+    // === KONTROLL & TILLSYN (15 appar) ===
+    { id: 'app-001', entityType: 'ApplicationComponent', name: 'eKontroll', description: 'Huvudsystem för livsmedelskontroll', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-002', entityType: 'ApplicationComponent', name: 'Företagsregistret', description: 'Register över livsmedelsföretag', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-003', entityType: 'ApplicationComponent', name: 'Avvikelsehantering', description: 'Hantera kontroll avvikelser', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-004', entityType: 'ApplicationComponent', name: 'Riskklassificering', description: 'Klassificera företag efter risk', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-005', entityType: 'ApplicationComponent', name: 'Mobil Kontroll-app', description: 'Mobilapp för inspektörer', criticality: 'medium', lifecycle: 'operational', vendor: 'Appva' },
+    { id: 'app-006', entityType: 'ApplicationComponent', name: 'Kontrollplan', description: 'Planering av årlig kontroll', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-007', entityType: 'ApplicationComponent', name: 'Dokumenthantering Kontroll', description: 'Dokumentarkiv för kontroller', criticality: 'medium', lifecycle: 'operational', vendor: 'Microsoft' },
+    { id: 'app-008', entityType: 'ApplicationComponent', name: 'Sanktionsregister', description: 'Register över sanktioner', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-009', entityType: 'ApplicationComponent', name: 'Djurskyddskontroll', description: 'System för djurskyddskontroller', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-010', entityType: 'ApplicationComponent', name: 'GIS Kartverktyg', description: 'Geografisk visualisering', criticality: 'low', lifecycle: 'operational', vendor: 'ESRI' },
+    { id: 'app-011', entityType: 'ApplicationComponent', name: 'Mötesbokning Företag', description: 'Företag bokar kontrolltid', criticality: 'low', lifecycle: 'development', vendor: 'Verksintern' },
+    { id: 'app-012', entityType: 'ApplicationComponent', name: 'Webbaserad Egenkontroll', description: 'Portal för företag', criticality: 'medium', lifecycle: 'operational', vendor: 'Sunet' },
+    { id: 'app-013', entityType: 'ApplicationComponent', name: 'Analysresultat-portal', description: 'Visa analysresultat för företag', criticality: 'low', lifecycle: 'operational', vendor: 'Sunet' },
+    { id: 'app-014', entityType: 'ApplicationComponent', name: 'Statistik och Rapportering', description: 'BI-verktyg för kontrolldata', criticality: 'medium', lifecycle: 'operational', vendor: 'Microsoft' },
+    { id: 'app-015', entityType: 'ApplicationComponent', name: 'Klagomålshantering', description: 'Hantera klagomål från konsumenter', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
 
-    // Level 2: Delprocesser under Kontrollprocess
-    {
-      id: 'proc-l2-001',
-      entityType: 'BusinessProcess',
-      name: 'Kontrollplanering',
-      description: 'Planera och prioritera kontrollverksamhet för kommande period',
-      level: 2,
-      parentId: 'proc-l1-001'
-    },
-    {
-      id: 'proc-l2-002',
-      entityType: 'BusinessProcess',
-      name: 'Platskontroll',
-      description: 'Genomföra fysisk inspektion hos företag',
-      level: 2,
-      parentId: 'proc-l1-001'
-    },
-    {
-      id: 'proc-l2-003',
-      entityType: 'BusinessProcess',
-      name: 'Dokumentkontroll',
-      description: 'Granska dokument och rutiner',
-      level: 2,
-      parentId: 'proc-l1-001'
-    },
-    {
-      id: 'proc-l2-004',
-      entityType: 'BusinessProcess',
-      name: 'Avvikelsehantering',
-      description: 'Hantera identifierade brister',
-      level: 2,
-      parentId: 'proc-l1-001'
-    },
-    {
-      id: 'proc-l2-005',
-      entityType: 'BusinessProcess',
-      name: 'Rapportering',
-      description: 'Rapportera kontrollresultat internt och till EU',
-      level: 2,
-      parentId: 'proc-l1-001'
-    },
+    // === KRISBEREDSKAP & UTBROTT (8 appar) ===
+    { id: 'app-016', entityType: 'ApplicationComponent', name: 'RASFF Sverige', description: 'EU:s snabbvarslingssystem', criticality: 'critical', lifecycle: 'operational', vendor: 'EU Commission' },
+    { id: 'app-017', entityType: 'ApplicationComponent', name: 'Utbrottshantering', description: 'System för utbrottsutredningar', criticality: 'critical', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-018', entityType: 'ApplicationComponent', name: 'Epidemiologisk Databas', description: 'Spåra smittspridning', criticality: 'high', lifecycle: 'operational', vendor: 'Folkhälsomyndigheten' },
+    { id: 'app-019', entityType: 'ApplicationComponent', name: 'Kriskoordination', description: 'Samordna krishantering', criticality: 'critical', lifecycle: 'operational', vendor: 'MSB' },
+    { id: 'app-020', entityType: 'ApplicationComponent', name: 'Återkallelsesystem', description: 'Hantera produktåterkallelser', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-021', entityType: 'ApplicationComponent', name: 'Larmcentral', description: 'Ta emot akuta larm', criticality: 'critical', lifecycle: 'operational', vendor: 'Integrationscentrum' },
+    { id: 'app-022', entityType: 'ApplicationComponent', name: 'Spårbarhetsdatabas', description: 'Spåra livsmedelsprodukter', criticality: 'high', lifecycle: 'operational', vendor: 'GS1' },
+    { id: 'app-023', entityType: 'ApplicationComponent', name: 'Varningspublicering', description: 'Publicera offentliga varningar', criticality: 'high', lifecycle: 'operational',vendor: 'Sunet' },
 
-    // Level 2: Delprocesser under Tillståndsprocess
-    {
-      id: 'proc-l2-010',
-      entityType: 'BusinessProcess',
-      name: 'Ansökan och Registrering',
-      description: 'Ta emot och registrera ansökningar',
-      level: 2,
-      parentId: 'proc-l1-002'
-    },
-    {
-      id: 'proc-l2-011',
-      entityType: 'BusinessProcess',
-      name: 'Handläggning',
-      description: 'Utreda och bedöma ansökan',
-      level: 2,
-      parentId: 'proc-l1-002'
-    },
-    {
-      id: 'proc-l2-012',
-      entityType: 'BusinessProcess',
-      name: 'Beslut och Kommunikation',
-      description: 'Fatta beslut och kommunicera till sökande',
-      level: 2,
-      parentId: 'proc-l1-002'
-    },
+    // === LABORATORIEVERKSAMHET (10 appar) ===
+    { id: 'app-024', entityType: 'ApplicationComponent', name: 'LIMS', description: 'Laboratory Information Management System', criticality: 'high', lifecycle: 'operational', vendor: 'Thermo Fisher' },
+    { id: 'app-025', entityType: 'ApplicationComponent', name: 'Provhantering', description: 'Hantera inkommande prover', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-026', entityType: 'ApplicationComponent', name: 'Mikrobiologi-databas', description: 'Mikrobiologiska analysresultat', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-027', entityType: 'ApplicationComponent', name: 'Kemisk Analys', description: 'System för kemiska analyser', criticality: 'high', lifecycle: 'operational', vendor: 'Waters' },
+    { id: 'app-028', entityType: 'ApplicationComponent', name: 'DNA-sekvensering', description: 'Genanalys av mikroorganismer', criticality: 'medium', lifecycle: 'operational', vendor: 'Illumina' },
+    { id: 'app-029', entityType: 'ApplicationComponent', name: 'Labinstrument Integration', description: 'Integration med  labutrustning', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-030', entityType: 'ApplicationComponent', name: 'Provspårning', description: 'Spåra prover i labbet', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-031', entityType: 'ApplicationComponent', name: 'Kvalitetssäkring Lab', description: 'QA/QC-system för labbet', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-032', entityType: 'ApplicationComponent', name: 'Metoddatabas', description: 'Analysmetoder och procedurer', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-033', entityType: 'ApplicationComponent', name: 'Resultatvalidering', description: 'Validera och godkänna resultat', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
 
-    // Level 3: Aktiviteter under Platskontroll
-    {
-      id: 'proc-l3-001',
-      entityType: 'BusinessProcess',
-      name: 'Förberedelse av Kontroll',
-      description: 'Samla information om företaget och tidigare kontroller',
-      level: 3,
-      parentId: 'proc-l2-002'
-    },
-    {
-      id: 'proc-l3-002',
-      entityType: 'BusinessProcess',
-      name: 'Öppningsmöte',
-      description: 'Inledande möte med företrädare för företaget',
-      level: 3,
-      parentId: 'proc-l2-002'
-    },
-    {
-      id: 'proc-l3-003',
-      entityType: 'BusinessProcess',
-      name: 'Inspektion av Lokaler',
-      description: 'Fysisk genomgång av lokaler och utrustning',
-      level: 3,
-      parentId: 'proc-l2-002'
-    },
-    {
-      id: 'proc-l3-004',
-      entityType: 'BusinessProcess',
-      name: 'Granskning av Egenkontroll',
-      description: 'Kontrollera att företaget har fungerande egenkontroll',
-      level: 3,
-      parentId: 'proc-l2-002'
-    },
-    {
-      id: 'proc-l3-005',
-      entityType: 'BusinessProcess',
-      name: 'Provtagning',
-      description: 'Ta prover för analys',
-      level: 3,
-      parentId: 'proc-l2-002'
-    },
-    {
-      id: 'proc-l3-006',
-      entityType: 'BusinessProcess',
-      name: 'Slutmöte',
-      description: 'Genomgång av iakttagelser med företaget',
-      level: 3,
-      parentId: 'proc-l2-002'
-    },
-    {
-      id: 'proc-l3-007',
-      entityType: 'BusinessProcess',
-      name: 'Upprättande av Kontrollrapport',
-      description: 'Dokumentera kontrollens resultat',
-      level: 3,
-      parentId: 'proc-l2-002'
-    },
+    // === TILLSTÅND & REGISTRERING (5 appar) ===
+    { id: 'app-034', entityType: 'ApplicationComponent', name: 'Tillståndssystemet', description: 'E-tjänst för tillståndsansökningar', criticality: 'high', lifecycle: 'operational', vendor: 'Sunet' },
+    { id: 'app-035', entityType: 'ApplicationComponent', name: 'Ärendehantering', description: 'Handlägga tillståndsärenden', criticality: 'high', lifecycle: 'operational', vendor: 'CGI' },
+    { id: 'app-036', entityType: 'ApplicationComponent', name: 'Anläggningsregister', description: 'Register över godkända anläggningar', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-037', entityType: 'ApplicationComponent', name: 'Beslutsstöd Tillstånd', description: 'Stöd för tillståndsbeslut', criticality: 'medium', lifecycle: 'development', vendor: 'Verksintern' },
+    { id: 'app-038', entityType: 'ApplicationComponent', name: 'Dokumentmall-system', description: 'Mallar för beslut', criticality: 'low', lifecycle: 'operational', vendor: 'Microsoft' },
 
-    // Level 3: Aktiviteter under Avvikelsehantering
-    {
-      id: 'proc-l3-010',
-      entityType: 'BusinessProcess',
-      name: 'Klassificering av Avvikelse',
-      description: 'Bedöma allvarlighetsgrad av brist',
-      level: 3,
-      parentId: 'proc-l2-004'
-    },
-    {
-      id: 'proc-l3-011',
-      entityType: 'BusinessProcess',
-      name: 'Krav på Åtgärder',
-      description: 'Ställa krav på företaget att åtgärda brister',
-      level: 3,
-      parentId: 'proc-l2-004'
-    },
-    {
-      id: 'proc-l3-012',
-      entityType: 'BusinessProcess',
-      name: 'Sanktionsärende',
-      description: 'Överväga föreläggande, förbud eller anmälan',
-      level: 3,
-      parentId: 'proc-l2-004'
-    },
-    {
-      id: 'proc-l3-013',
-      entityType: 'BusinessProcess',
-      name: 'Uppföljning av Åtgärd',
-      description: 'Kontrollera att åtgärd har vidtagits',
-      level: 3,
-      parentId: 'proc-l2-004'
-    },
+    // === IMPORT/EXPORT (6 appar) ===
+    { id: 'app-039', entityType: 'ApplicationComponent', name: 'TRACES', description: 'EU:s system för import/export', criticality: 'critical', lifecycle: 'operational', vendor: 'EU Commission' },
+    { id: 'app-040', entityType: 'ApplicationComponent', name: 'Gränskontroll', description: 'Hantera gränskontroller', criticality: 'high', lifecycle: 'operational', vendor: 'Tullverket' },
+    { id: 'app-041', entityType: 'ApplicationComponent', name: 'Exportcertifikat', description: 'Utfärda exportcertifikat', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-042', entityType: 'ApplicationComponent', name: 'Importtillstånd', description: 'Hantera importtillstånd', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-043', entityType: 'ApplicationComponent', name: 'Veterinärcertifikat', description: 'Certifikat för djurprodukter', criticality: 'high', lifecycle: 'operational', vendor: 'Jordbruksverket' },
+    { id: 'app-044', entityType: 'ApplicationComponent', name: 'Import/Export-statistik', description: 'Statistik över handel', criticality: 'low', lifecycle: 'operational', vendor: 'SCB' },
 
-    // ========================================================================
-    // BUSINESS LAYER - Business Actors & Roles
-    // ========================================================================
-    {
-      id: 'org-001',
-      entityType: 'BusinessActor',
-      name: 'Generaldirektör',
-      description: 'Myndighetschef för Livsmedelsverket'
-    },
-    {
-      id: 'org-002',
-      entityType: 'BusinessActor',
-      name: 'Avdelning Riskvärdering och Forskning',
-      description: 'Ansvarar för vetenskaplig riskvärdering'
-    },
-    {
-      id: 'org-003',
-      entityType: 'BusinessActor',
-      name: 'Avdelning Kontroll',
-      description: 'Ansvarar för kontroll och tillsyn'
-    },
-    {
-      id: 'org-004',
-      entityType: 'BusinessActor',
-      name: 'Avdelning Kost och Måltid',
-      description: 'Tar fram näringsrekommendationer och information'
-    },
-    {
-      id: 'org-005',
-      entityType: 'BusinessActor',
-      name: 'Juridisk Avdelning',
-      description: 'Juridiskt stöd och regelverksutveckling'
-    },
-    {
-      id: 'org-006',
-      entityType: 'BusinessActor',
-      name: 'Kommunikationsavdelning',
-      description: 'Extern och intern kommunikation'
-    },
-    {
-      id: 'org-007',
-      entityType: 'BusinessActor',
-      name: 'IT-avdelning',
-      description: 'IT-stöd och systemförvaltning'
-    },
-    {
-      id: 'org-008',
-      entityType: 'BusinessActor',
-      name: 'Nationellt Centrum för Livsmedel',
-      description: 'Laboratorieverksamhet och provanalys'
-    },
-    {
-      id: 'org-009',
-      entityType: 'BusinessActor',
-      name: 'Region Nord',
-      description: 'Regional kontrollenhet för norra Sverige'
-    },
-    {
-      id: 'org-010',
-      entityType: 'BusinessActor',
-      name: 'Region Syd',
-      description: 'Regional kontrollenhet för södra Sverige'
-    },
-    {
-      id: 'role-001',
-      entityType: 'BusinessRole',
-      name: 'Livsmedelsinspektör',
-      description: 'Utför kontroller hos livsmedelsföretag'
-    },
-    {
-      id: 'role-002',
-      entityType: 'BusinessRole',
-      name: 'Riskbedömare',
-      description: 'Utför vetenskapliga riskvärderingar'
-    },
-    {
-      id: 'role-003',
-      entityType: 'BusinessRole',
-      name: 'Handläggare Tillstånd',
-      description: 'Hanterar tillståndsärenden'
-    },
+    // === DRICKSVATTEN (4 appar) ===
+    { id: 'app-045', entityType: 'ApplicationComponent', name: 'Dricksvattendatabas', description: 'Register över vattenverk', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-046', entityType: 'ApplicationComponent', name: 'Vattenprovtagning', description: 'Hantera vattenprovtagning', criticality: 'high', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-047', entityType: 'ApplicationComponent', name: 'Vattenkvalitetsrapportering', description: 'Rapportera vattenkvalitet', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-048', entityType: 'ApplicationComponent', name: 'Vattenverk-GIS', description: 'Kartlägg vattenverk', criticality: 'low', lifecycle: 'operational', vendor: 'ESRI' },
 
-    // ========================================================================
-    // APPLICATION LAYER
-    // ========================================================================
+    // === KOMMUNIKATION & INFORMATION (7 appar) ===
+    { id: 'app-049', entityType: 'ApplicationComponent', name: 'Livsmedelsverket.se', description: 'Huvudwebbplats', criticality: 'high', lifecycle: 'operational', vendor: 'Episerver' },
+    { id: 'app-050', entityType: 'ApplicationComponent', name: 'Hitta Rätt App', description: 'Konsumentapp för märkning', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-051', entityType: 'ApplicationComponent', name: 'Nyhetsbrev-system', description: 'Skicka nyhetsbrev', criticality: 'low', lifecycle: 'operational', vendor: 'MailChimp' },
+    { id: 'app-052', entityType: 'ApplicationComponent', name: 'CMS Webbpublicering', description: 'Content Management System', criticality: 'high', lifecycle: 'operational', vendor: 'Episerver' },
+    { id: 'app-053', entityType: 'ApplicationComponent', name: 'Pressmeddelanden', description: 'Publicera pressmeddelanden', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-054', entityType: 'ApplicationComponent', name: 'Sociala Medier-verktyg', description: 'Hantera sociala medier', criticality: 'low', lifecycle: 'operational', vendor: 'Hootsuite' },
+    { id: 'app-055', entityType: 'ApplicationComponent', name: 'Kostdatabasen WebAPI', description: 'API för näringsdata', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+
+    // === FORSKNING & VETENSKAP (5 appar) ===
+    { id: 'app-056', entityType: 'ApplicationComponent', name: 'Riksmaten', description: 'Nationell kostundersökning', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-057', entityType: 'ApplicationComponent', name: 'Livsmedelsdata', description: 'Databas över livsmedel', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-058', entityType: 'ApplicationComponent', name: 'Forskningsdatabas', description: 'Forskningsprojekt och publikationer', criticality: 'low', lifecycle: 'operational', vendor: 'Alfresco' },
+    { id: 'app-059', entityType: 'ApplicationComponent', name: 'Biobank-system', description: 'Hantera biologiska prover', criticality: 'medium', lifecycle: 'operational', vendor: 'Verksintern' },
+    { id: 'app-060', entityType: 'ApplicationComponent', name: 'Statistikportal', description: 'Publicera statistik', criticality: 'low', lifecycle: 'operational', vendor: 'Tableau' },
+
+    // === ADMINISTRATION & VERKSAMHETSSTÖD (10 appar) ===
+    { id: 'app-061', entityType: 'ApplicationComponent', name: 'Agresso Ekonomi', description: 'Ekonomisystem', criticality: 'critical', lifecycle: 'operational', vendor: 'Unit4' },
+    { id: 'app-062', entityType: 'ApplicationComponent', name: 'HR-system Primula', description: 'Personal- och lönesystem', criticality: 'critical', lifecycle: 'operational', vendor: 'PIR' },
+    { id: 'app-063', entityType: 'ApplicationComponent', name: 'Office 365', description: 'Kontorspaket', criticality: 'high', lifecycle: 'operational', vendor: 'Microsoft' },
+    { id: 'app-064', entityType: 'ApplicationComponent', name: 'SharePoint', description: 'Intranät och samarbete', criticality: 'high', lifecycle: 'operational', vendor: 'Microsoft' },
+    { id: 'app-065', entityType: 'ApplicationComponent', name: 'Exchange Email', description: 'E-postsystem', criticality: 'critical', lifecycle: 'operational', vendor: 'Microsoft' },
+    { id: 'app-066', entityType: 'ApplicationComponent', name: 'Teams', description: 'Samarbetsplattform', criticality: 'high', lifecycle: 'operational', vendor: 'Microsoft' },
+    { id: 'app-067', entityType: 'ApplicationComponent', name: 'TimeLog', description: 'Tidsrapportering', criticality: 'medium', lifecycle: 'operational', vendor: 'TimeLog' },
+    { id: 'app-068', entityType: 'ApplicationComponent', name: 'Rekryteringssystem', description: 'Hantera rekrytering', criticality: 'medium', lifecycle: 'operational', vendor: 'Visma' },
+    { id: 'app-069', entityType: 'ApplicationComponent', name: 'Utbildningsplattform', description: 'Intern utbildning', criticality: 'low', lifecycle: 'operational', vendor: 'Cornerstone' },
+    { id: 'app-070', entityType: 'ApplicationComponent', name: 'IT-Servicedesk', description: 'IT-support och incidenthantering', criticality: 'high', lifecycle: 'operational', vendor: 'ServiceNow' },
     
-    // Kärnverksamhetssystem
-    {
-      id: 'app-001',
-      entityType: 'ApplicationComponent',
-      name: 'KLASSA',
-      description: 'KontrolLApplikation för SVA och SLV - Kontrollsystem för livsmedelskontrollen',
-      criticality: 'critical',
-      vendor: 'Jordbruksverket',
-      technical_health: 6,
-      business_value: 9,
-      cost_per_year: 3500000
-    },
-    {
-      id: 'app-002',
-      entityType: 'ApplicationComponent',
-      name: 'Företagsregistret',
-      description: 'Register över registrerade och godkända livsmedelsföretag',
-      criticality: 'critical',
-      technical_health: 5,
-      business_value: 9,
-      cost_per_year: 1200000
-    },
-    {
-      id: 'app-003',
-      entityType: 'ApplicationComponent',
-      name: 'Ärendehanteringssystem',
-      description: 'System för hantering av tillstånd, registreringar och ärenden',
-      criticality: 'high',
-      vendor: 'Inhouse',
-      technical_health: 4,
-      business_value: 8,
-      cost_per_year: 2800000
-    },
-    {
-      id: 'app-004',
-      entityType: 'ApplicationComponent',
-      name: 'LIMS (Laboratory Information Management System)',
-      description: 'Laboratoriedatasystem för provhantering och analysresultat',
-      criticality: 'high',
-      vendor: 'Thermo Scientific',
-      version: '11.2',
-      eol_date: '2027-12-31',
-      technical_health: 7,
-      business_value: 8,
-      cost_per_year: 1800000
-    },
-    {
-      id: 'app-005',
-      entityType: 'ApplicationComponent',
-      name: 'RASFF Portal',
-      description: 'System för rapportering till EU:s snabbvarningssystem för livsmedel',
-      criticality: 'critical',
-      vendor: 'EU Kommissionen',
-      technical_health: 7,
-      business_value: 9,
-      cost_per_year: 150000
-    },
-    {
-      id: 'app-006',
-      entityType: 'ApplicationComponent',
-      name: 'Webbplats och CMS',
-      description: 'Livsmedelsverkets publika webbplats med information till allmänheten',
-      criticality: 'high',
-      vendor: 'Episerver',
-      version: '12',
-      technical_health: 7,
-      business_value: 8,
-      cost_per_year: 900000
-    },
-    {
-      id: 'app-007',
-      entityType: 'ApplicationComponent',
-      name: 'Myndighetens Kontrollkvalitetssystem (MKK)',
-      description: 'System för att säkerställa kvalitet och likformighet i kontrollverksamheten',
-      criticality: 'medium',
-      technical_health: 5,
-      business_value: 7,
-      cost_per_year: 600000
-    },
-    {
-      id: 'app-008',
-      entityType: 'ApplicationComponent',
-      name: 'EFSA Föredatarapporteringssystem',
-      description: 'System för rapportering av kontrolldata till EFSA (European Food Safety Authority)',
-      criticality: 'high',
-      technical_health: 6,
-      business_value: 8,
-      cost_per_year: 400000
-    },
-    {
-      id: 'app-009',
-      entityType: 'ApplicationComponent',
-      name: 'Riskbedömningsdatabas',
-      description: 'Databas med vetenskapliga underlag och riskbedömningar',
-      criticality: 'medium',
-      technical_health: 5,
-      business_value: 7,
-      cost_per_year: 500000
-    },
-    {
-      id: 'app-010',
-      entityType: 'ApplicationComponent',
-      name: 'Digitala Undersökningar',
-      description: 'Plattform för matvanor och konsumentundersökningar',
-      criticality: 'low',
-      vendor: 'Netigate',
-      technical_health: 8,
-      business_value: 6,
-      cost_per_year: 250000
-    },
-
-    // Stödsystem
-    {
-      id: 'app-011',
-      entityType: 'ApplicationComponent',
-      name: 'Agresso/Unit4 ERP',
-      description: 'Ekonomisystem för redovisning och ekonomistyrning',
-      criticality: 'high',
-      vendor: 'Unit4',
-      version: '8.5',
-      eol_date: '2026-06-30',
-      technical_health: 4,
-      business_value: 8,
-      cost_per_year: 1500000
-    },
-    {
-      id: 'app-012',
-      entityType: 'ApplicationComponent',
-      name: 'Primula',
-      description: 'Personal- och lönesystem',
-      criticality: 'high',
-      vendor: 'Evry',
-      technical_health: 6,
-      business_value: 7,
-      cost_per_year: 800000
-    },
-    {
-      id: 'app-013',
-      entityType: 'ApplicationComponent',
-      name: 'Microsoft 365',
-      description: 'Office-paket, e-post och samarbetsverktyg',
-      criticality: 'critical',
-      vendor: 'Microsoft',
-      technical_health: 8,
-      business_value: 9,
-      cost_per_year: 2400000
-    },
-    {
-      id: 'app-014',
-      entityType: 'ApplicationComponent',
-      name: 'SharePoint',
-      description: 'Intranät och dokumenthantering',
-      criticality: 'high',
-      vendor: 'Microsoft',
-      version: 'Online',
-      technical_health: 7,
-      business_value: 7,
-      cost_per_year: 600000
-    },
-    {
-      id: 'app-015',
-      entityType: 'ApplicationComponent',
-      name: 'ePhorte',
-      description: 'Diarium och ärendehanteringssystem',
-      criticality: 'critical',
-      vendor: 'Tieto',
-      version: '5.8',
-      technical_health: 5,
-      business_value: 9,
-      cost_per_year: 1200000
-    },
-
-    // ========================================================================
-    // TECHNOLOGY LAYER
-    // ========================================================================
-    {
-      id: 'tech-001',
-      entityType: 'SystemSoftware',
-      name: 'Windows Server 2019',
-      description: 'Operativsystem för servrar',
-      vendor: 'Microsoft',
-      version: '2019',
-      eol_date: '2029-01-09',
-      technical_health: 7
-    },
-    {
-      id: 'tech-002',
-      entityType: 'SystemSoftware',
-      name: 'SQL Server 2019',
-      description: 'Databasplattform',
-      vendor: 'Microsoft',
-      version: '2019',
-      eol_date: '2030-01-08',
-      technical_health: 8
-    },
-    {
-      id: 'tech-003',
-      entityType: 'SystemSoftware',
-      name: 'Oracle Database 19c',
-      description: 'Databasplattform för vissa affärskritiska system',
-      vendor: 'Oracle',
-      version: '19c',
-      eol_date: '2027-03-31',
-      technical_health: 6
-    },
-    {
-      id: 'tech-004',
-      entityType: 'SystemSoftware',
-      name: 'Red Hat Enterprise Linux 8',
-      description: 'Linux-operativsystem',
-      vendor: 'Red Hat',
-      version: '8',
-      eol_date: '2029-05-31',
-      technical_health: 8
-    },
-    {
-      id: 'tech-005',
-      entityType: 'Node',
-      name: 'VMware vSphere Cluster',
-      description: 'Virtualiseringsplattform',
-      vendor: 'VMware',
-      version: '7.0',
-      eol_date: '2027-10-15',
-      technical_health: 7
-    },
-    {
-      id: 'tech-006',
-      entityType: 'Node',
-      name: 'Azure Cloud Services',
-      description: 'Molnplattform för vissa tjänster',
-      vendor: 'Microsoft',
-      technical_health: 9
-    },
-    {
-      id: 'tech-007',
-      entityType: 'Equipment',
-      name: 'Datacenter Uppsala',
-      description: 'Primärt datacenter',
-      location: 'Uppsala'
-    },
-    {
-      id: 'tech-008',
-      entityType: 'Equipment',
-      name: 'Backup Datacenter Stockholm',
-      description: 'Sekundärt datacenter för backup och DR',
-      location: 'Stockholm'
-    },
-    {
-      id: 'tech-009',
-      entityType: 'SystemSoftware',
-      name: 'F5 Load Balancer',
-      description: 'Lastbalanserare för webbapplikationer',
-      vendor: 'F5 Networks',
-      version: '16.0',
-      eol_date: '2026-12-31',
-      technical_health: 5
-    },
-    {
-      id: 'tech-010',
-      entityType: 'SystemSoftware',
-      name: 'Fortinet Firewall',
-      description: 'Brandvägg och säkerhetslösning',
-      vendor: 'Fortinet',
-      version: 'FortiOS 7.0',
-      technical_health: 8
-    },
+    // === INTEGRATION & INFRASTRUKTUR ===
+    { id: 'app-071', entityType: 'ApplicationComponent', name: 'Enterprise Service Bus', description: 'Integrationslager', criticality: 'critical', lifecycle: 'operational', vendor: 'MuleSoft' },
+    { id: 'app-072', entityType: 'ApplicationComponent', name: 'API Gateway', description: 'API-hantering', criticality: 'high', lifecycle: 'operational', vendor: 'Azure' },
 
     // ========================================================================
     // DATA OBJECTS
     // ========================================================================
-    {
-      id: 'data-001',
-      entityType: 'DataObject',
-      name: 'Livsmedelsföretagsregister',
-      description: 'Register över alla registrerade och godkända livsmedelsföretag i Sverige'
-    },
-    {
-      id: 'data-002',
-      entityType: 'DataObject',
-      name: 'Kontrolldata',
-      description: 'Data från genomförda kontroller och inspektioner'
-    },
-    {
-      id: 'data-003',
-      entityType: 'DataObject',
-      name: 'Analysresultat',
-      description: 'Resultat från laboratorieanalyser'
-    },
-    {
-      id: 'data-004',
-      entityType: 'DataObject',
-      name: 'Riskbedömningar',
-      description: 'Vetenskapliga riskbedömningar och utvärderingar'
-    },
-    {
-      id: 'data-005',
-      entityType: 'DataObject',
-      name: 'Tillståndsärenden',
-      description: 'Ansökningar och beslut om tillstånd'
-    },
-    {
-      id: 'data-006',
-      entityType: 'DataObject',
-      name: 'Näringsdata',
-      description: 'Data om näringsvärden och livsmedelskonsumtion'
-    },
-    {
-      id: 'data-007',
-      entityType: 'DataObject',
-      name: 'RASFF-notifieringar',
-      description: 'Varningar och information från EU:s snabbvarningssystem'
-    },
-    {
-      id: 'data-008',
-      entityType: 'DataObject',
-      name: 'Zoonos- och residudata',
-      description: 'Data från övervakning av zoonoser och restämnen'
-    },
+    { id: 'data-001', entityType: 'DataObject', name: 'Företagsregister', description: 'Register över alla livsmedelsföretag' },
+    { id: 'data-002', entityType: 'DataObject', name: 'Kontrollprotokoll', description: 'Protokoll från kontroller' },
+    { id: 'data-003', entityType: 'DataObject', name: 'Analysresultat', description: 'Laboratorieanalysresultat' },
+    { id: 'data-004', entityType: 'DataObject', name: 'Tillståndsbeslut', description: 'Underlag för tillståndsbeslut' },
+    { id: 'data-005', entityType: 'DataObject', name: 'Avvikelseregister', description: 'Dokumenterade avvikelser' },
+    { id: 'data-006', entityType: 'DataObject', name: 'Provdatabas', description: 'Register över tagna prover' },
+    { id: 'data-007', entityType: 'DataObject', name: 'Utbrottsdata', description: 'Epidemiologiska data från utbrott' },
+    { id: 'data-008', entityType: 'DataObject', name: 'Import/Export-data', description: 'Data om gränsöverskridande handel' },
+    { id: 'data-009', entityType: 'DataObject', name: 'Zoonosdata', description: 'Övervakning av djursjukdomar' },
+    { id: 'data-010', entityType: 'DataObject', name: 'Dricksvattendata', description: 'Kvalitetsdata för dricksvatten' },
+    { id: 'data-011', entityType: 'DataObject', name: 'Kostdata', description: 'Data from kostundersökningar' },
+    { id: 'data-012', entityType: 'DataObject', name: 'Näringsdata', description: 'Näringsinnehåll i livsmedel' },
 
     // ========================================================================
-    // PROJECTS & INITIATIVES
+    // TECHNOLOGY LAYER
     // ========================================================================
-    {
-      id: 'proj-001',
-      entityType: 'WorkPackage',
-      name: 'Digital Kontrollplattform 2.0',
-      description: 'Modernisering av KLASSA till molnbaserad plattform',
-      status: 'in-progress',
-      start_date: '2026-01-15',
-      end_date: '2027-12-31',
-      budget: 15000000
-    },
-    {
-      id: 'proj-002',
-      entityType: 'WorkPackage',
-      name: 'Utbyte av ERP-system',
-      description: 'Ersätta Agresso med nytt modernt ERP-system',
-      status: 'planning',
-      start_date: '2026-06-01',
-      end_date: '2027-12-31',
-      budget: 12000000
-    },
-    {
-      id: 'proj-003',
-      entityType: 'WorkPackage',
-      name: 'AI för Riskprediktion',
-      description: 'Implementera AI/ML för att förutsäga risker i livsmedelskedjan',
-      status: 'planning',
-      start_date: '2026-09-01',
-      end_date: '2028-03-31',
-      budget: 8000000
-    },
-    {
-      id: 'proj-004',
-      entityType: 'WorkPackage',
-      name: 'Självservice för Företag',
-      description: 'Webbportal där företag kan registrera sig och rapportera egenkontrollen',
-      status: 'in-progress',
-      start_date: '2025-10-01',
-      end_date: '2026-12-31',
-      budget: 6000000
-    },
-    {
-      id: 'proj-005',
-      entityType: 'WorkPackage',
-      name: 'Cloudmigrering',
-      description: 'Flytta on-prem system till Azure',
-      status: 'in-progress',
-      start_date: '2026-03-01',
-      end_date: '2028-06-30',
-      budget: 20000000
-    }
+    { id: 'tech-001', entityType: 'Node', name: 'Azure Cloud Platform', description: 'Molnplattform', provider: 'Microsoft' },
+    { id: 'tech-002', entityType: 'Node', name: 'On-Prem Datacenter Uppsala', description: 'Lokalt datacenter', location: 'Uppsala' },
+    { id: 'tech-003', entityType: 'Node', name: 'SQL Server Databas-cluster', description: 'Databasserver', vendor: 'Microsoft' },
+    { id: 'tech-004', entityType: 'Node', name: 'PostgreSQL Databas', description: 'Open source-databas' },
+    { id: 'tech-005', entityType: 'Node', name: 'Azure App Services', description: 'PaaS för webbappar' },
+    { id: 'tech-006', entityType: 'Node', name: 'Azure Kubernetes Service', description: 'Containerorkestrering' },
+    { id: 'tech-007', entityType: 'SystemSoftware', name: 'Windows Server 2022', description: 'Serveroperativsystem' },
+    { id: 'tech-008', entityType: 'SystemSoftware', name: 'Linux Ubuntu Server', description: 'Serveroperativsystem' },
+    { id: 'tech-009', entityType: 'CommunicationNetwork', name: 'Sunet', description: 'Statligt nätverksinfrastuktur' },
+    { id: 'tech-010', entityType: 'CommunicationNetwork', name: 'VPN-tunnel', description: 'Säker anslutning' },
+
+    // ========================================================================
+    // ORGANIZATION
+    // ========================================================================
+    { id: 'org-001', entityType: 'BusinessActor', name: 'Livsmedelsverket', description: 'Hela myndigheten' },
+    { id: 'org-002', entityType: 'BusinessActor', name: 'Avdelning Risk- och nyttovärdering', description: 'Vetenskaplig avdelning' },
+    { id: 'org-003', entityType: 'BusinessActor', name: 'Avdelning Livsmedels- och handelskontroll', description: 'Kontrollverksamhet' },
+    { id: 'org-004', entityType: 'BusinessActor', name: 'Avdelning Krisberedskap', description: 'Krishantering' },
+    { id: 'org-005', entityType: 'BusinessActor', name: 'Nationellt laboratorium', description: 'Laboratorieenhet' },
+    { id: 'org-006', entityType: 'BusinessActor', name: 'Avdelning Kommunikation', description: 'Kommunikationsavdelning' },
+    { id: 'org-007', entityType: 'BusinessActor', name: 'IT-avdelningen', description: 'IT-drift och utveckling' },
+    { id: 'org-008', entityType: 'BusinessActor', name: 'HR-avdelningen', description: 'Personalavdelning' },
+    { id: 'org-009', entityType: 'BusinessActor', name: 'Ekonomiavdelningen', description: 'Ekonomiadministration' },
+    
+    // ROLES
+    { id: 'role-001', entityType: 'BusinessRole', name: 'Livsmedelsinspektör', description: 'Utför livsmedelskontroller' },
+    { id: 'role-002', entityType: 'BusinessRole', name: 'Riskbedömare', description: 'Bedömer risker' },
+    { id: 'role-003', entityType: 'BusinessRole', name: 'Laboratorieanalytiker', description: 'Utför laboratorieanalyser' },
+    { id: 'role-004', entityType: 'BusinessRole', name: 'Utbrottsutredare', description: 'Utreder matförgiftningar' },
+    { id: 'role-005', entityType: 'BusinessRole', name: 'Tillståndshandläggare', description: 'Handlägger tillstånd' },
+    { id: 'role-006', entityType: 'BusinessRole', name: 'Import/Export-handläggare', description: 'Hanterar gränskontroll' },
+    { id: 'role-007', entityType: 'BusinessRole', name: 'Kommunikatör', description: 'Ansvarar för extern kommunikation' },
+    { id: 'role-008', entityType: 'BusinessRole', name: 'Forskare', description: 'Bedriver forskning' },
+    { id: 'role-009', entityType: 'BusinessRole', name: 'IT-arkitekt', description: 'Designar IT-arkitektur' },
+    { id: 'role-010', entityType: 'BusinessRole', name: 'Systemförvaltare', description: 'Förvaltar IT-system' },
+
+    // ========================================================================
+    // PROJECTS & WORK PACKAGES
+    // ========================================================================
+    { id: 'proj-001', entityType: 'WorkPackage', name: 'eKontroll 2.0', description: 'Uppdatera kontrollsystem', status: 'in-progress', start_date: '2025-01-01', end_date: '2026-12-31', budget: 15000000 },
+    { id: 'proj-002', entityType: 'WorkPackage', name: 'Mobil-först', description: 'Mobilappar för inspektörer', status: 'planned', start_date: '2026-06-01', end_date: '2027-12-31', budget: 8000000 },
+    { id: 'proj-003', entityType: 'WorkPackage', name: 'AI Risk-analys', description: 'AI för riskbedömning', status: 'planned', start_date: '2026-09-01', end_date: '2028-12-31', budget: 12000000 },
+    { id: 'proj-004', entityType: 'WorkPackage', name: 'LIMS-uppgradering', description: 'Nytt laboratoriesystem', status: 'in-progress', start_date: '2025-06-01', end_date: '2026-06-30', budget: 10000000 },
+    { id: 'proj-005', entityType: 'WorkPackage', name: 'Cloud-migrering', description: 'Flytta till Azure', status: 'in-progress', start_date: '2024-03-01', end_date: '2027-12-31', budget: 25000000 },
+    { id: 'proj-006', entityType: 'WorkPackage', name: 'NIS2-compliance', description: 'Uppfylla NIS2-krav', status: 'in-progress', start_date: '2025-01-01', end_date: '2026-10-17', budget: 18000000 },
+    { id: 'proj-007', entityType: 'WorkPackage', name: 'Digital Först-strategi', description: 'Digitalisera alla tjänster', status: 'planned', start_date: '2026-01-01', end_date: '2029-12-31', budget: 40000000 },
+    { id: 'proj-008', entityType: 'WorkPackage', name: 'Integration Platform', description: 'Gemensam integrationsplattform', status: 'in-progress', start_date: '2025-03-01', end_date: '2026-12-31', budget: 12000000 }
   ],
 
   // ========================================================================
-  // RELATIONSHIPS
+  // RELATIONSHIPS - Omfattande relationsnät
   // ========================================================================
   relationships: [
-    // Goals realizes drivers
+    // Goals realize drivers
     { source: 'goal-001', target: 'driver-001', type: 'realization' },
     { source: 'goal-002', target: 'driver-002', type: 'realization' },
     { source: 'goal-003', target: 'driver-003', type: 'realization' },
-
+    { source: 'goal-004', target: 'driver-001', type: 'realization' },
+    { source: 'goal-006', target: 'driver-002', type: 'realization' },
+    
     // Principles support goals
     { source: 'principle-001', target: 'goal-003', type: 'influence' },
     { source: 'principle-002', target: 'goal-001', type: 'influence' },
-    { source: 'principle-003', target: 'goal-001', type: 'influence' },
-
-    // Capabilities realize goals
-    { source: 'cap-l1-001', target: 'goal-001', type: 'realization' },
-    { source: 'cap-l1-002', target: 'goal-003', type: 'realization' },
-    { source: 'cap-l1-003', target: 'goal-003', type: 'realization' },
-    { source: 'cap-l1-004', target: 'goal-002', type: 'realization' },
-    { source: 'cap-l1-006', target: 'goal-004', type: 'realization' },
-
+    { source: 'principle-003', target: 'goal-006', type: 'influence' },
+    { source: 'principle-004', target: 'goal-003', type: 'influence' },
+    { source: 'principle-005', target: 'driver-005', type: 'realization' },
+    
+    // Capabilities realize goals (L0 -> goals)
+    { source: 'cap-l0-001', target: 'goal-001', type: 'realization' },
+    { source: 'cap-l0-002', target: 'goal-001', type: 'realization' },
+    { source: 'cap-l0-003', target: 'goal-005', type: 'realization' },
+    { source: 'cap-l0-004', target: 'goal-002', type: 'realization' },
+    { source: 'cap-l0-005', target: 'goal-004', type: 'realization' },
+    { source: 'cap-l0-006', target: 'goal-006', type: 'realization' },
+    
     // Processes realize capabilities
     { source: 'proc-l1-001', target: 'cap-l1-002', type: 'realization' },
     { source: 'proc-l1-002', target: 'cap-l1-003', type: 'realization' },
     { source: 'proc-l1-003', target: 'cap-l1-001', type: 'realization' },
     { source: 'proc-l1-004', target: 'cap-l1-006', type: 'realization' },
-
-    // Business actors assigned to processes
+    { source: 'proc-l1-005', target: 'cap-l1-004', type: 'realization' },
+    { source: 'proc-l1-006', target: 'cap-l1-005', type: 'realization' },
+    { source: 'proc-l1-007', target: 'cap-l1-008', type: 'realization' },
+    { source: 'proc-l1-008', target: 'cap-l1-009', type: 'realization' },
+    { source: 'proc-l1-009', target: 'cap-l1-010', type: 'realization' },
+    { source: 'proc-l1-010', target: 'cap-l1-011', type: 'realization' },
+    
+    // Organizations perform processes
     { source: 'org-003', target: 'proc-l1-001', type: 'assignment' },
+    { source: 'org-003', target: 'proc-l1-002', type: 'assignment' },
     { source: 'org-002', target: 'proc-l1-003', type: 'assignment' },
-    { source: 'role-001', target: 'proc-l2-002', type: 'assignment' },
+    { source: 'org-004', target: 'proc-l1-004', type: 'assignment' },
+    { source: 'org-005', target: 'proc-l1-005', type: 'assignment' },
+    { source: 'org-003', target: 'proc-l1-006', type: 'assignment' },
+    { source: 'org-006', target: 'proc-l1-008', type: 'assignment' },
+    { source: 'org-002', target: 'proc-l1-010', type: 'assignment' },
+    
+    // Roles perform processes
+    { source: 'role-001', target: 'proc-l1-001', type: 'assignment' },
     { source: 'role-002', target: 'proc-l1-003', type: 'assignment' },
-    { source: 'role-003', target: 'proc-l1-002', type: 'assignment' },
-
-    // Applications support processes
+    { source: 'role-003', target: 'proc-l1-005', type: 'assignment' },
+    { source: 'role-004', target: 'proc-l1-004', type: 'assignment' },
+    { source: 'role-005', target: 'proc-l1-002', type: 'assignment' },
+    { source: 'role-006', target: 'proc-l1-006', type: 'assignment' },
+    
+    // Applications support processes - KONTROLL
     { source: 'app-001', target: 'proc-l1-001', type: 'serving' },
     { source: 'app-002', target: 'proc-l1-001', type: 'serving' },
-    { source: 'app-003', target: 'proc-l1-002', type: 'serving' },
-    { source: 'app-004', target: 'proc-l2-012', type: 'serving' },
-    { source: 'app-005', target: 'proc-l1-004', type: 'serving' },
-    { source: 'app-006', target: 'cap-l1-004', type: 'serving' },
-    { source: 'app-007', target: 'proc-l2-001', type: 'serving' },
-    { source: 'app-008', target: 'proc-l2-005', type: 'serving' },
-    { source: 'app-009', target: 'proc-l1-003', type: 'serving' },
-    { source: 'app-015', target: 'proc-l1-002', type: 'serving' },
-
-    // Applications used by actors
-    { source: 'role-001', target: 'app-001', type: 'assignment' },
-    { source: 'role-002', target: 'app-009', type: 'assignment' },
-    { source: 'role-003', target: 'app-003', type: 'assignment' },
-
+    { source: 'app-003', target: 'proc-l2-003', type: 'serving' },
+    { source: 'app-004', target: 'proc-l2-001', type: 'serving' },
+    { source: 'app-005', target: 'proc-l2-002', type: 'serving' },
+    { source: 'app-006', target: 'proc-l2-001', type: 'serving' },
+    { source: 'app-008', target: 'proc-l2-004', type: 'serving' },
+    { source: 'app-009', target: 'proc-l1-001', type: 'serving' },
+    { source: 'app-010', target: 'proc-l1-001', type: 'serving' },
+    { source: 'app-014', target: 'proc-l1-001', type: 'serving' },
+    { source: 'app-015', target: 'proc-l1-008', type: 'serving' },
+    
+    // Applications support processes - KRIS
+    { source: 'app-016', target: 'proc-l2-012', type: 'serving' },
+    { source: 'app-017', target: 'proc-l1-004', type: 'serving' },
+    { source: 'app-018', target: 'proc-l2-011', type: 'serving' },
+    { source: 'app-019', target: 'proc-l1-004', type: 'serving' },
+    { source: 'app-020', target: 'proc-l1-004', type: 'serving' },
+    { source: 'app-021', target: 'proc-l2-010', type: 'serving' },
+    { source: 'app-022', target: 'proc-l2-006', type: 'serving' },
+    { source: 'app-023', target: 'proc-l1-008', type: 'serving' },
+    
+    // Applications support processes - LAB
+    { source: 'app-024', target: 'proc-l1-005', type: 'serving' },
+    { source: 'app-025', target: 'proc-l2-013', type: 'serving' },
+    { source: 'app-026', target: 'proc-l3-010', type: 'serving' },
+    { source: 'app-027', target: 'proc-l3-011', type: 'serving' },
+    { source: 'app-028', target: 'proc-l2-014', type: 'serving' },
+    { source: 'app-030', target: 'proc-l2-013', type: 'serving' },
+    { source: 'app-031', target: 'proc-l2-015', type: 'serving' },
+    { source: 'app-033', target: 'proc-l3-012', type: 'serving' },
+    
+    // Applications support processes - TILLSTÅND
+    { source: 'app-034', target: 'proc-l1-002', type: 'serving' },
+    { source: 'app-035', target: 'proc-l2-005', type: 'serving' },
+    { source: 'app-035', target: 'proc-l2-006', type: 'serving' },
+    { source: 'app-035', target: 'proc-l2-007', type: 'serving' },
+    { source: 'app-036', target: 'proc-l1-002', type: 'serving' },
+    
+    // Applications support processes - IMPORT/EXPORT
+    { source: 'app-039', target: 'proc-l1-006', type: 'serving' },
+    { source: 'app-040', target: 'proc-l2-016', type: 'serving' },
+    { source: 'app-041', target: 'proc-l2-017', type: 'serving' },
+    { source: 'app-042', target: 'proc-l1-006', type: 'serving' },
+    { source: 'app-043', target: 'proc-l2-017', type: 'serving' },
+    
+    // Applications support processes - VATTEN
+    { source: 'app-045', target: 'proc-l1-007', type: 'serving' },
+    { source: 'app-046', target: 'proc-l2-018', type: 'serving' },
+    { source: 'app-047', target: 'proc-l1-007', type: 'serving' },
+    
+    // Applications support processes - KOMMUNIKATION
+    { source: 'app-049', target: 'proc-l1-008', type: 'serving' },
+    { source: 'app-050', target: 'proc-l1-008', type: 'serving' },
+    { source: 'app-052', target: 'proc-l2-019', type: 'serving' },
+    { source: 'app-053', target: 'proc-l1-008', type: 'serving' },
+    { source: 'app-055', target: 'proc-l1-008', type: 'serving' },
+    
+    // Applications support processes - FORSKNING
+    { source: 'app-056', target: 'proc-l1-010', type: 'serving' },
+    { source: 'app-057', target: 'proc-l1-010', type: 'serving' },
+    { source: 'app-058', target: 'proc-l1-010', type: 'serving' },
+    { source: 'app-060', target: 'proc-l1-010', type: 'serving' },
+    
     // Applications access data
     { source: 'app-001', target: 'data-002', type: 'access' },
     { source: 'app-002', target: 'data-001', type: 'access' },
     { source: 'app-003', target: 'data-005', type: 'access' },
-    { source: 'app-004', target: 'data-003', type: 'access' },
-    { source: 'app-005', target: 'data-007', type: 'access' },
-    { source: 'app-009', target: 'data-004', type: 'access' },
-
-    // Technology supports applications
-    { source: 'tech-002', target: 'app-001', type: 'realization' },
-    { source: 'tech-002', target: 'app-002', type: 'realization' },
-    { source: 'tech-003', target: 'app-003', type: 'realization' },
-    { source: 'tech-002', target: 'app-004', type: 'realization' },
-    { source: 'tech-006', target: 'app-006', type: 'realization' },
-    { source: 'tech-006', target: 'app-013', type: 'realization' },
-    { source: 'tech-005', target: 'tech-001', type: 'realization' },
-    { source: 'tech-007', target: 'tech-005', type: 'assignment' },
-
+    { source: 'app-004', target: 'data-001', type: 'access' },
+    { source: 'app-005', target: 'data-002', type: 'access' },
+    { source: 'app-016', target: 'data-007', type: 'access' },
+    { source: 'app-017', target: 'data-007', type: 'access' },
+    { source: 'app-024', target: 'data-003', type: 'access' },
+    { source: 'app-024', target: 'data-006', type: 'access' },
+    { source: 'app-034', target: 'data-004', type: 'access' },
+    { source: 'app-035', target: 'data-004', type: 'access' },
+    { source: 'app-039', target: 'data-008', type: 'access' },
+    { source: 'app-045', target: 'data-010', type: 'access' },
+    { source: 'app-056', target: 'data-011', type: 'access' },
+    { source: 'app-057', target: 'data-012', type: 'access' },
+    
+    // Technology supports applications - Azure
+    { source: 'tech-001', target: 'app-001', type: 'assignment' },
+    { source: 'tech-001', target: 'app-005', type: 'assignment' },
+    { source: 'tech-001', target: 'app-016', type: 'assignment' },
+    { source: 'tech-001', target: 'app-034', type: 'assignment' },
+    { source: 'tech-001', target: 'app-049', type: 'assignment' },
+    { source: 'tech-001', target: 'app-050', type: 'assignment' },
+    { source: 'tech-001', target: 'app-055', type: 'assignment' },
+    { source: 'tech-005', target: 'app-001', type: 'realization' },
+    { source: 'tech-006', target: 'app-071', type: 'realization' },
+    { source: 'tech-006', target: 'app-072', type: 'realization' },
+    
+    // Technology supports applications - OnPrem
+    { source: 'tech-002', target: 'app-002', type: 'assignment' },
+    { source: 'tech-002', target: 'app-024', type: 'assignment' },
+    { source: 'tech-002', target: 'app-035', type: 'assignment' },
+    { source: 'tech-002', target: 'app-061', type: 'assignment' },
+    { source: 'tech-002', target: 'app-062', type: 'assignment' },
+    { source: 'tech-003', target: 'app-001', type: 'realization' },
+    { source: 'tech-003', target: 'app-024', type: 'realization' },
+    { source: 'tech-003', target: 'app-061', type: 'realization' },
+    { source: 'tech-004', target: 'app-002', type: 'realization' },
+    
+    // Data flows between applications
+    { source: 'app-001', target: 'app-071', type: 'flow' },
+    { source: 'app-002', target: 'app-001', type: 'flow' },
+    { source: 'app-003', target: 'app-001', type: 'flow' },
+    { source: 'app-005', target: 'app-001', type: 'flow' },
+    { source: 'app-024', target: 'app-001', type: 'flow' },
+    { source: 'app-016', target: 'app-017', type: 'flow' },
+    { source: 'app-017', target: 'app-023', type: 'flow' },
+    { source: 'app-034', target: 'app-035', type: 'flow' },
+    { source: 'app-035', target: 'app-002', type: 'flow' },
+    { source: 'app-039', target: 'app-040', type: 'flow' },
+    { source: 'app-049', target: 'app-052', type: 'flow' },
+    { source: 'app-071', target: 'app-039', type: 'flow' },
+    { source: 'app-071', target: 'app-016', type: 'flow' },
+    { source: 'app-071', target: 'app-061', type: 'flow' },
+    { source: 'app-071', target: 'app-062', type: 'flow' },
+    
     // Projects realize applications/capabilities
     { source: 'proj-001', target: 'app-001', type: 'realization' },
-    { source: 'proj-002', target: 'app-011', type: 'realization' },
-    { source: 'proj-003', target: 'cap-l1-001', type: 'realization' },
-    { source: 'proj-004', target: 'cap-l1-003', type: 'realization' },
-    { source: 'proj-005', target: 'tech-006', type: 'realization' },
-
-    // Data flows between applications
-    { source: 'app-001', target: 'app-005', type: 'flow' },
-    { source: 'app-001', target: 'app-008', type: 'flow' },
-    { source: 'app-004', target: 'app-001', type: 'flow' },
-    { source: 'app-002', target: 'app-001', type: 'flow' },
-    { source: 'app-003', target: 'app-002', type: 'flow' }
+    { source: 'proj-002', target: 'app-005', type: 'realization' },
+    { source: 'proj-002', target: 'app-050', type: 'realization' },
+    { source: 'proj-003', target: 'app-004', type: 'realization' },
+    { source: 'proj-004', target: 'app-024', type: 'realization' },
+    { source: 'proj-005', target: 'tech-001', type: 'realization' },
+    { source: 'proj-006', target: 'cap-l0-007', type: 'influence' },
+    { source: 'proj-007', target: 'principle-004', type: 'realization' },
+    { source: 'proj-008', target: 'app-071', type: 'realization' },
+    { source: 'proj-008', target: 'app-072', type: 'realization' }
   ],
 
   resourceAllocations: [
-    { projectId: 'proj-001', resourceId: 'org-007', allocation: 80, role: 'Projektledare' },
-    { projectId: 'proj-001', resourceId: 'org-003', allocation: 40, role: 'Verksamhetsexpert' },
-    { projectId: 'proj-002', resourceId: 'org-007', allocation: 60, role: 'Teknisk ledning' },
-    { projectId: 'proj-003', resourceId: 'org-002', allocation: 50, role: 'Forskningsledning' },
-    { projectId: 'proj-004', resourceId: 'org-006', allocation: 30, role: 'Kommunikation' },
-    { projectId: 'proj-005', resourceId: 'org-007', allocation: 90, role: 'Infrastrukturarkitekt' }
+    { project_id: 'proj-001', resource_id: 'org-007', allocation: 80, role: 'Projektledare' },
+    { project_id: 'proj-001', resource_id: 'org-003', allocation: 40, role: 'Verksamhetsexpert' },
+    { project_id: 'proj-002', resource_id: 'org-007', allocation: 60, role: 'Teknisk ledning' },
+    { project_id: 'proj-003', resource_id: 'org-002', allocation: 50, role: 'AI-specialist' },
+    { project_id: 'proj-004', resource_id: 'org-005', allocation: 70, role: 'Laboratorieexpert' },
+    { project_id: 'proj-005', resource_id: 'org-007', allocation: 90, role: 'Cloud-arkitekt' },
+    { project_id: 'proj-006', resource_id: 'org-007', allocation: 100, role: 'Säkerhetsarkitekt' },
+    { project_id: 'proj-007', resource_id: 'org-001', allocation: 30, role: 'Digitaliseringsstrateg' },
+    { project_id: 'proj-008', resource_id: 'org-007', allocation: 75, role: 'Integrationsarkitekt' }
   ]
 };
 
