@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import { Layers, ChevronRight } from 'lucide-react';
+import HierarchyView from '../components/HierarchyView';
 
 const Perspectives = () => {
   const { perspective } = useParams();
@@ -8,34 +9,46 @@ const Perspectives = () => {
 
   const currentPerspective = perspective || 'business';
   const layer = metamodel.layers.find(
-    l => l.name.toLowerCase() === currentPerspective.toLowerCase()
+    l => l.name.toLowerCase() === currentPerspective.toLowerCase() || 
+       l.id === currentPerspective.toLowerCase()
   );
 
   if (!layer) {
     return <div>Perspektiv hittades inte</div>;
   }
 
+  // Helper function to get entity types for the current layer
+  const getLayerEntityTypes = () => {
+    if (!metamodel.entityTypes) return [];
+    const layerId = layer.id || layer.name.toLowerCase();
+    return metamodel.entityTypes
+      .filter(et => et.layer === layerId)
+      .map(et => et.id);
+  };
+
+  const layerEntityTypes = getLayerEntityTypes();
+
   const perspectiveInfo = {
     business: {
       title: 'Business Architecture',
-      description: 'Affärskapabiliteter, processer och organisationsstruktur',
+      description: 'Affärsprocesser, roller och organisationsstruktur',
       icon: '🏢',
       keyAspects: [
         'Affärsprocesser och aktiviteter',
-        'Organisationsenheter och roller',
-        'Affärskapabiliteter',
-        'RTO/RPO för kritiska processer'
+        'Affärsaktörer och roller',
+        'Affärstjänster och funktioner',
+        'Affärsobjekt och kontrakt'
       ]
     },
     application: {
       title: 'Application Architecture',
-      description: 'Applikationssystem och deras relationer',
+      description: 'Applikationskomponenter, gränssnitt och dataobjekt',
       icon: '💻',
       keyAspects: [
-        'Applikationssystem och komponenter',
-        'Applikationsgränssnitt',
-        'Kritikalitetsklassificering',
-        'Systemägare och ansvar'
+        'Applikationskomponenter och system',
+        'Applikationsgränssnitt och tjänster',
+        'Applikationsfunktioner',
+        'Dataobjekt och klassificering'
       ]
     },
     technology: {
@@ -43,43 +56,54 @@ const Perspectives = () => {
       description: 'Infrastruktur, nätverk och teknologiplattformar',
       icon: '🖥️',
       keyAspects: [
-        'Infrastrukturnoder och servrar',
-        'Nätverk och säkerhetszoner',
-        'Teknologiplattformar',
-        'Fysiska och molnbaserade platser'
+        'Infrastrukturnoder och enheter',
+        'Systemvara och plattformar',
+        'Nätverk och kommunikation',
+        'Teknologitjänster och artefakter'
       ]
     },
-    security: {
-      title: 'Security Architecture',
-      description: 'Säkerhetskontroller, hot och sårbarheter',
-      icon: '🔒',
+    motivation: {
+      title: 'Motivation Architecture',
+      description: 'Mål, krav, intressenter och principer',
+      icon: '🎯',
       keyAspects: [
-        'Säkerhetskontroller enligt NIS 2',
-        'Hotscenarier och sårbarheter',
-        'Säkerhetincidenter',
-        'Riskbedömningar'
+        'Strategiska mål och drivkrafter',
+        'Regulatoriska krav och compliance',
+        'Intressenter och påverkan',
+        'Säkerhetsprinciper och policies'
       ]
     },
-    data: {
-      title: 'Data Architecture',
-      description: 'Dataobjekt, lagring och flöden',
-      icon: '📊',
+    strategy: {
+      title: 'Strategy Architecture',
+      description: 'Kapabiliteter, resurser och värdeströmmar',
+      icon: '📈',
       keyAspects: [
-        'Dataobjekt och klassificering',
-        'Datalagring och databaser',
-        'Dataflöden mellan system',
-        'GDPR-compliance och kryptering'
+        'Affärskapabiliteter och mognad',
+        'Säkerhetskapabiliteter',
+        'Resurstilldelning och budget',
+        'Kapabilitetsplanering'
       ]
     },
-    governance: {
-      title: 'Governance Architecture',
-      description: 'Policyer, leverantörer och compliance',
-      icon: '⚖️',
+    physical: {
+      title: 'Physical Architecture',
+      description: 'Fysiska faciliteter och utrustning',
+      icon: '🏗️',
       keyAspects: [
-        'Säkerhetspolicyer',
-        'Leverantörshantering',
-        'Compliance-krav',
-        'Styrning och ansvar'
+        'Datacenter och faciliteter',
+        'Fysisk utrustning och hårdvara',
+        'Säkerhetszoner och åtkomstkontroll',
+        'Kapacitet och redundans'
+      ]
+    },
+    implementation: {
+      title: 'Implementation & Migration',
+      description: 'Projekt, arbetspaket och gap-analys',
+      icon: '🚀',
+      keyAspects: [
+        'Säkerhetsförbättringsprogram',
+        'Arbetspaket och milstolpar',
+        'Gap-analys och åtgärder',
+        'Projektplanering och budget'
       ]
     }
   };
@@ -160,7 +184,7 @@ const Perspectives = () => {
         </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {layer.entityTypes.map((entityType) => {
+            {layerEntityTypes.map((entityType) => {
               const entityCount = entities[entityType]?.length || 0;
               
               return (
@@ -185,6 +209,9 @@ const Perspectives = () => {
           </div>
         </div>
       </div>
+
+      {/* Hierarchical View */}
+      <HierarchyView entityTypes={layerEntityTypes} />
 
       {/* NIS 2 Relevance */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg shadow p-6 border border-blue-200">

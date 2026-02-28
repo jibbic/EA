@@ -1,7 +1,7 @@
 {
-  "name": "nis2-ea-webapp",
+  "name": "ea-framework-webapp",
   "private": true,
-  "version": "1.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,14 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "cytoscape": "^3.28.1",
+    "cytoscape-cola": "^2.5.1",
+    "cytoscape-dagre": "^2.5.0",
+    "js-yaml": "^4.1.0",
+    "lucide-react": "^0.294.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.0",
-    "js-yaml": "^4.1.0",
-    "cytoscape": "^3.28.1",
-    "cytoscape-cola": "^2.5.1",
-    "lucide-react": "^0.294.0",
-    "recharts": "^2.10.3"
+    "recharts": "^2.10.3",
+    "sql.js": "^1.14.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useData } from '../context/DataContext';
-import { Link } from 'react-router-dom';
-import { Search, Plus, Filter, ChevronRight, X } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { Search, Plus, Filter, ChevronRight, X, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
 import Toast from '../components/Toast';
 
 const EntityBrowser = () => {
   const { metamodel, entities, getAllEntities, addEntity } = useData();
+  const [searchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedLayer, setSelectedLayer] = useState('all');
   const [selectedType, setSelectedType] = useState('all');
@@ -21,14 +22,35 @@ const EntityBrowser = () => {
     owner: ''
   });
 
+  // Read type from URL query parameter on mount
+  useEffect(() => {
+    const typeFromUrl = searchParams.get('type');
+    if (typeFromUrl) {
+      setSelectedType(typeFromUrl);
+    }
+  }, [searchParams]);
+
   const allEntities = getAllEntities();
+
+  // Helper function to get entity types for a layer
+  const getEntityTypesForLayer = (layerId) => {
+    if (!metamodel.entityTypes) return [];
+    return metamodel.entityTypes
+      .filter(et => et.layer === layerId)
+      .map(et => et.id);
+  };
 
   const filteredEntities = allEntities.filter((entity) => {
     const matchesSearch = entity.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       entity.description?.toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesLayer = selectedLayer === 'all' || 
-      metamodel.layers.find(l => l.name === selectedLayer)?.entityTypes.includes(entity.entityType);
+      (() => {
+        const layer = metamodel.layers.find(l => l.name === selectedLayer);
+        if (!layer) return false;
+        const layerTypes = getEntityTypesForLayer(layer.id || layer.name.toLowerCase());
+        return layerTypes.includes(entity.entityType);
+      })();
     
     const matchesType = selectedType === 'all' || entity.entityType === selectedType;
 
@@ -36,12 +58,33 @@ const EntityBrowser = () => {
   });
 
   const getLayerForEntityType = (entityType) => {
-    return metamodel.layers.find(layer => 
-      layer.entityTypes.includes(entityType)
-    );
+    if (!metamodel.entityTypes) return null;
+    const entityTypeDef = metamodel.entityTypes.find(et => et.id === entityType);
+    if (!entityTypeDef) return null;
+    return metamodel.layers.find(layer => layer.id === entityTypeDef.layer || layer.name.toLowerCase() === entityTypeDef.layer);
   };
 
-  const entityTypes = [...new Set(allEntities.map(e => e.entityType))];
+  // Get available entity types based on selected layer
+  const getAvailableEntityTypes = () => {
+    if (selectedLayer === 'all') {
+      return [...new Set(allEntities.map(e => e.entityType))];
+    }
+    
+    const layer = metamodel.layers.find(l => l.name === selectedLayer);
+    if (!layer) return [];
+    
+    const layerTypes = getEntityTypesForLayer(layer.id || layer.name.toLowerCase());
+    return [...new Set(allEntities.map(e => e.entityType))].filter(type => layerTypes.includes(type));
+  };
+
+  const entityTypes = getAvailableEntityTypes();
+
+  // Reset selectedType if it's not available in current layer
+  useEffect(() => {
+    if (selectedType !== 'all' && !entityTypes.includes(selectedType)) {
+      setSelectedType('all');
+    }
+  }, [selectedLayer, entityTypes, selectedType]);
 
   const handleAddEntity = () => {
     if (!newEntity.entityType || !newEntity.name) {
@@ -77,7 +120,7 @@ const EntityBrowser = () => {
     setNewEntity(prev => ({ ...prev, [field]: value }));
   };
 
-  const allEntityTypes = metamodel.layers.flatMap(layer => layer.entityTypes);
+  const allEntityTypes = metamodel.entityTypes ? metamodel.entityTypes.map(et => et.id) : [];
 
   return (
     <div className="space-y-6">
@@ -163,7 +206,7 @@ const EntityBrowser = () => {
               <div className="p-6">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
-                    <div className="flex items-center mb-1">
+                    <div className="flex items-center mb-1 gap-2">
                       <span
                         className="inline-block px-2 py-1 text-xs font-medium rounded"
                         style={{

@@ -1,40 +1,57 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useData } from '../context/DataContext';
 import cytoscape from 'cytoscape';
 import cola from 'cytoscape-cola';
+import EntityQuickView from './EntityQuickView';
+import EntityDetailModal from './EntityDetailModal';
 
 cytoscape.use(cola);
 
-// ArchiMate-inspired styling helper
+// ArchiMate 3.1 styling helper
 const getArchimateStyle = (entityType) => {
   const styles = {
     // Business Layer (Yellow/Beige)
     'BusinessProcess': { shape: 'round-rectangle', color: '#FFF4A3', borderColor: '#F4D03F' },
-    'BusinessCapability': { shape: 'round-rectangle', color: '#FFF4A3', borderColor: '#F4D03F' },
-    'OrganizationalUnit': { shape: 'round-rectangle', color: '#FFF4A3', borderColor: '#F4D03F' },
-    'Person': { shape: 'ellipse', color: '#FFE8A3', borderColor: '#F4D03F' },
+    'BusinessActor': { shape: 'round-rectangle', color: '#FFF4A3', borderColor: '#F4D03F' },
+    'BusinessRole': { shape: 'round-rectangle', color: '#FFE8A3', borderColor: '#F4D03F' },
+    'BusinessFunction': { shape: 'round-rectangle', color: '#FFF4A3', borderColor: '#F4D03F' },
+    'BusinessService': { shape: 'round-rectangle', color: '#FFE8A3', borderColor: '#F4D03F' },
+    'BusinessObject': { shape: 'rectangle', color: '#FFF4A3', borderColor: '#F4D03F' },
+    'Contract': { shape: 'rectangle', color: '#FFE8A3', borderColor: '#F4D03F' },
     
     // Application Layer (Light Blue)
-    'ApplicationSystem': { shape: 'rectangle', color: '#B5E7FE', borderColor: '#5DADE2' },
+    'ApplicationComponent': { shape: 'rectangle', color: '#B5E7FE', borderColor: '#5DADE2' },
+    'ApplicationInterface': { shape: 'ellipse', color: '#B5E7FE', borderColor: '#5DADE2' },
+    'ApplicationFunction': { shape: 'round-rectangle', color: '#B5E7FE', borderColor: '#5DADE2' },
     'ApplicationService': { shape: 'round-rectangle', color: '#B5E7FE', borderColor: '#5DADE2' },
     'DataObject': { shape: 'rectangle', color: '#D6EAF8', borderColor: '#5DADE2' },
     
     // Technology Layer (Green)
-    'InfrastructureNode': { shape: 'rectangle', color: '#C9E7B7', borderColor: '#52BE80' },
+    'Node': { shape: 'rectangle', color: '#C9E7B7', borderColor: '#52BE80' },
+    'Device': { shape: 'rectangle', color: '#C9E7B7', borderColor: '#52BE80' },
+    'SystemSoftware': { shape: 'rectangle', color: '#A9DFBF', borderColor: '#52BE80' },
     'TechnologyService': { shape: 'round-rectangle', color: '#C9E7B7', borderColor: '#52BE80' },
-    'DataStore': { shape: 'barrel', color: '#A9DFBF', borderColor: '#52BE80' },
+    'CommunicationNetwork': { shape: 'round-rectangle', color: '#A9DFBF', borderColor: '#52BE80' },
+    'Artifact': { shape: 'rectangle', color: '#D5F4E6', borderColor: '#52BE80' },
     
-    // Security / Motivation (Light Blue/Purple)
-    'SecurityControl': { shape: 'round-rectangle', color: '#D4E6F1', borderColor: '#3498DB' },
-    'ThreatScenario': { shape: 'round-rectangle', color: '#FADBD8', borderColor: '#E74C3C' },
-    'Vulnerability': { shape: 'round-rectangle', color: '#FADBD8', borderColor: '#E74C3C' },
+    // Motivation Layer (Light Pink/Purple)
+    'Goal': { shape: 'ellipse', color: '#FADBD8', borderColor: '#E74C3C' },
+    'Requirement': { shape: 'rectangle', color: '#FADBD8', borderColor: '#E74C3C' },
+    'Stakeholder': { shape: 'round-rectangle', color: '#F5CBA7', borderColor: '#E67E22' },
+    'Principle': { shape: 'rectangle', color: '#D4E6F1', borderColor: '#3498DB' },
     
-    // Strategy / Governance (Light Gray/Purple)
-    'Policy': { shape: 'rectangle', color: '#E8DAEF', borderColor: '#AF7AC5' },
-    'ComplianceRequirement': { shape: 'rectangle', color: '#E8DAEF', borderColor: '#AF7AC5' },
+    // Strategy Layer (Light Purple)
+    'Capability': { shape: 'round-rectangle', color: '#E8DAEF', borderColor: '#AF7AC5' },
+    'Resource': { shape: 'rectangle', color: '#E8DAEF', borderColor: '#AF7AC5' },
     
-    // Implementation (Pink/Orange)
-    'Supplier': { shape: 'rectangle', color: '#FADBD8', borderColor: '#EC7063' }
+    // Physical Layer (Gray)
+    'Facility': { shape: 'rectangle', color: '#D5DBDB', borderColor: '#797D7F' },
+    'Equipment': { shape: 'rectangle', color: '#D5DBDB', borderColor: '#797D7F' },
+    
+    // Implementation Layer (Orange/Pink)
+    'WorkPackage': { shape: 'rectangle', color: '#FADBD8', borderColor: '#EC7063' },
+    'Deliverable': { shape: 'rectangle', color: '#FDE3CE', borderColor: '#F39C12' },
+    'Gap': { shape: 'round-rectangle', color: '#F5B7B1', borderColor: '#E74C3C' }
   };
   
   return styles[entityType] || { shape: 'ellipse', color: '#E0E0E0', borderColor: '#999999' };
@@ -44,12 +61,26 @@ const EntityGraph = ({ entityId }) => {
   const { getEntityById, relationships, metamodel } = useData();
   const containerRef = useRef(null);
   const cyRef = useRef(null);
+  const [quickViewEntity, setQuickViewEntity] = useState(null);
+  const [quickViewPosition, setQuickViewPosition] = useState(null);
+  const [detailModalEntity, setDetailModalEntity] = useState(null);
 
   useEffect(() => {
     if (!containerRef.current || !entityId) return;
 
     const entity = getEntityById(entityId);
     if (!entity) return;
+
+    // Helper to find layer for entity type in new metamodel structure
+    const getLayerForEntityType = (entityType) => {
+      if (!metamodel.entityTypes) return null;
+      const entityTypeDef = metamodel.entityTypes.find(et => et.id === entityType);
+      if (!entityTypeDef) return null;
+      return metamodel.layers.find(layer => 
+        layer.id === entityTypeDef.layer || 
+        layer.name.toLowerCase() === entityTypeDef.layer
+      );
+    };
 
     // Get all related entities (1 hop)
     const relatedIds = new Set();
@@ -69,9 +100,7 @@ const EntityGraph = ({ entityId }) => {
     const nodes = [];
     
     // Add center entity
-    const centerLayer = metamodel.layers.find(l =>
-      l.entityTypes.includes(entity.entityType)
-    );
+    const centerLayer = getLayerForEntityType(entity.entityType);
     const centerArchimateStyle = getArchimateStyle(entity.entityType);
     nodes.push({
       data: {
@@ -90,9 +119,7 @@ const EntityGraph = ({ entityId }) => {
     relatedIds.forEach(id => {
       const relatedEntity = getEntityById(id);
       if (relatedEntity) {
-        const layer = metamodel.layers.find(l =>
-          l.entityTypes.includes(relatedEntity.entityType)
-        );
+        const layer = getLayerForEntityType(relatedEntity.entityType);
         const archimateStyle = getArchimateStyle(relatedEntity.entityType);
         nodes.push({
           data: {
@@ -193,6 +220,23 @@ const EntityGraph = ({ entityId }) => {
       }
     });
 
+    // Add click handler for nodes
+    cyInstance.on('tap', 'node', (evt) => {
+      const node = evt.target;
+      const nodeEntity = getEntityById(node.id());
+      
+      if (nodeEntity) {
+        // Use actual mouse position from the original event
+        const mouseEvent = evt.originalEvent;
+        
+        setQuickViewEntity(nodeEntity);
+        setQuickViewPosition({
+          x: mouseEvent.clientX,
+          y: mouseEvent.clientY
+        });
+      }
+    });
+
     cyRef.current = cyInstance;
 
     return () => {
@@ -211,11 +255,36 @@ const EntityGraph = ({ entityId }) => {
   }
 
   return (
-    <div
-      ref={containerRef}
-      className="entity-graph-container"
-      style={{ width: '100%', height: '100%', minHeight: '300px' }}
-    />
+    <>
+      <div
+        ref={containerRef}
+        className="entity-graph-container"
+        style={{ width: '100%', height: '100%', minHeight: '300px' }}
+      />
+      
+      {/* Quick view popover */}
+      <EntityQuickView
+        entity={quickViewEntity}
+        position={quickViewPosition}
+        onClose={() => {
+          setQuickViewEntity(null);
+          setQuickViewPosition(null);
+        }}
+        onViewDetails={() => {
+          setDetailModalEntity(quickViewEntity);
+          setQuickViewEntity(null);
+          setQuickViewPosition(null);
+        }}
+      />
+
+      {/* Detail modal */}
+      {detailModalEntity && (
+        <EntityDetailModal
+          entity={detailModalEntity}
+          onClose={() => setDetailModalEntity(null)}
+        />
+      )}
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
-import { ArrowLeft, Edit, Trash2, Network, Plus, X, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Edit, Trash2, Network, Plus, X, AlertTriangle, Shield, CheckCircle, AlertCircle } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import Toast from '../components/Toast';
 import EntityGraph from '../components/EntityGraph';
@@ -200,7 +200,18 @@ const EntityDetail = () => {
     );
   }
 
-  const layer = metamodel.layers.find(l => l.entityTypes.includes(entityType));
+  // Find layer for entity type
+  const getLayerForEntityType = (entityType) => {
+    if (!metamodel.entityTypes) return null;
+    const entityTypeDef = metamodel.entityTypes.find(et => et.id === entityType);
+    if (!entityTypeDef) return null;
+    return metamodel.layers.find(layer => 
+      layer.id === entityTypeDef.layer || 
+      layer.name.toLowerCase() === entityTypeDef.layer
+    );
+  };
+
+  const layer = getLayerForEntityType(entityType);
 
   return (
     <div className="space-y-6">
@@ -283,10 +294,7 @@ const EntityDetail = () => {
       </div>
 
       {/* Network Visualization */}
-      <div className="bg-white rounded-lg shadow">
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex items-center">
-            <Network className="h-5 w-5 text-primary-600 mr-2" />
+      <div className="bg-white rounded-lg shadow">\n        <div className="p-6 border-b border-gray-200">\n          <div className="flex items-center">\n            <Network className="h-5 w-5 text-primary-600 mr-2" />
             <h2 className="text-lg font-semibold text-gray-900">Nätverksvy</h2>
           </div>
           <p className="text-sm text-gray-600 mt-1">

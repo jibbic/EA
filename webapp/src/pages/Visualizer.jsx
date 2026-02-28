@@ -3,6 +3,8 @@ import { useData } from '../context/DataContext';
 import cytoscape from 'cytoscape';
 import cola from 'cytoscape-cola';
 import { ZoomIn, ZoomOut, Maximize2, Download, Filter, X, Search } from 'lucide-react';
+import EntityQuickView from '../components/EntityQuickView';
+import EntityDetailModal from '../components/EntityDetailModal';
 
 // Register the layout
 cytoscape.use(cola);
@@ -12,42 +14,68 @@ const getArchimateStyle = (entityType) => {
   const styles = {
     // Business Layer (Yellow/Beige)
     'BusinessProcess': { shape: 'round-rectangle', color: '#FFF4A3', borderColor: '#F4D03F' },
-    'BusinessCapability': { shape: 'round-rectangle', color: '#FFF4A3', borderColor: '#F4D03F' },
-    'OrganizationalUnit': { shape: 'round-rectangle', color: '#FFF4A3', borderColor: '#F4D03F' },
-    'Person': { shape: 'ellipse', color: '#FFE8A3', borderColor: '#F4D03F' },
+    'BusinessActor': { shape: 'round-rectangle', color: '#FFF4A3', borderColor: '#F4D03F' },
+    'BusinessRole': { shape: 'round-rectangle', color: '#FFE8A3', borderColor: '#F4D03F' },
+    'BusinessFunction': { shape: 'round-rectangle', color: '#FFF4A3', borderColor: '#F4D03F' },
+    'BusinessService': { shape: 'round-rectangle', color: '#FFE8A3', borderColor: '#F4D03F' },
+    'BusinessObject': { shape: 'rectangle', color: '#FFF4A3', borderColor: '#F4D03F' },
+    'Contract': { shape: 'rectangle', color: '#FFE8A3', borderColor: '#F4D03F' },
     
     // Application Layer (Light Blue)
-    'ApplicationSystem': { shape: 'rectangle', color: '#B5E7FE', borderColor: '#5DADE2' },
+    'ApplicationComponent': { shape: 'rectangle', color: '#B5E7FE', borderColor: '#5DADE2' },
+    'ApplicationInterface': { shape: 'ellipse', color: '#B5E7FE', borderColor: '#5DADE2' },
+    'ApplicationFunction': { shape: 'round-rectangle', color: '#B5E7FE', borderColor: '#5DADE2' },
     'ApplicationService': { shape: 'round-rectangle', color: '#B5E7FE', borderColor: '#5DADE2' },
     'DataObject': { shape: 'rectangle', color: '#D6EAF8', borderColor: '#5DADE2' },
     
     // Technology Layer (Green)
-    'InfrastructureNode': { shape: 'rectangle', color: '#C9E7B7', borderColor: '#52BE80' },
+    'Node': { shape: 'rectangle', color: '#C9E7B7', borderColor: '#52BE80' },
+    'Device': { shape: 'rectangle', color: '#C9E7B7', borderColor: '#52BE80' },
+    'SystemSoftware': { shape: 'rectangle', color: '#A9DFBF', borderColor: '#52BE80' },
     'TechnologyService': { shape: 'round-rectangle', color: '#C9E7B7', borderColor: '#52BE80' },
-    'DataStore': { shape: 'barrel', color: '#A9DFBF', borderColor: '#52BE80' },
+    'CommunicationNetwork': { shape: 'round-rectangle', color: '#A9DFBF', borderColor: '#52BE80' },
+    'Artifact': { shape: 'rectangle', color: '#D5F4E6', borderColor: '#52BE80' },
     
-    // Security / Motivation (Light Blue/Purple)
-    'SecurityControl': { shape: 'round-rectangle', color: '#D4E6F1', borderColor: '#3498DB' },
-    'ThreatScenario': { shape: 'round-rectangle', color: '#FADBD8', borderColor: '#E74C3C' },
-    'Vulnerability': { shape: 'round-rectangle', color: '#FADBD8', borderColor: '#E74C3C' },
+    // Motivation Layer (Light Pink/Purple)
+    'Goal': { shape: 'ellipse', color: '#FADBD8', borderColor: '#E74C3C' },
+    'Requirement': { shape: 'rectangle', color: '#FADBD8', borderColor: '#E74C3C' },
+    'Stakeholder': { shape: 'round-rectangle', color: '#F5CBA7', borderColor: '#E67E22' },
+    'Principle': { shape: 'rectangle', color: '#D4E6F1', borderColor: '#3498DB' },
     
-    // Strategy / Governance (Light Gray/Purple)
-    'Policy': { shape: 'rectangle', color: '#E8DAEF', borderColor: '#AF7AC5' },
-    'ComplianceRequirement': { shape: 'rectangle', color: '#E8DAEF', borderColor: '#AF7AC5' },
+    // Strategy Layer (Light Purple)
+    'Capability': { shape: 'round-rectangle', color: '#E8DAEF', borderColor: '#AF7AC5' },
+    'Resource': { shape: 'rectangle', color: '#E8DAEF', borderColor: '#AF7AC5' },
     
-    // Implementation (Pink/Orange)
-    'Supplier': { shape: 'rectangle', color: '#FADBD8', borderColor: '#EC7063' }
+    // Physical Layer (Gray)
+    'Facility': { shape: 'rectangle', color: '#D5DBDB', borderColor: '#797D7F' },
+    'Equipment': { shape: 'rectangle', color: '#D5DBDB', borderColor: '#797D7F' },
+    
+    // Implementation Layer (Orange/Pink)
+    'WorkPackage': { shape: 'rectangle', color: '#FADBD8', borderColor: '#EC7063' },
+    'Deliverable': { shape: 'rectangle', color: '#FDE3CE', borderColor: '#F39C12' },
+    'Gap': { shape: 'round-rectangle', color: '#F5B7B1', borderColor: '#E74C3C' }
   };
   
   return styles[entityType] || { shape: 'ellipse', color: '#E0E0E0', borderColor: '#999999' };
 };
 
 const Visualizer = () => {
-  const { getAllEntities, relationships, metamodel } = useData();
+  const { getAllEntities, relationships, metamodel, getEntityById } = useData();
   const cyRef = useRef(null);
   const containerRef = useRef(null);
   const entityTypeFilterRef = useRef(null);
   const [selectedLayer, setSelectedLayer] = useState('all');
+
+  // Helper to find layer for entity type in new metamodel structure
+  const getLayerForEntityType = (entityType) => {
+    if (!metamodel.entityTypes) return null;
+    const entityTypeDef = metamodel.entityTypes.find(et => et.id === entityType);
+    if (!entityTypeDef) return null;
+    return metamodel.layers.find(layer => 
+      layer.id === entityTypeDef.layer || 
+      layer.name.toLowerCase() === entityTypeDef.layer
+    );
+  };
   const [cy, setCy] = useState(null);
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [selectedEntities, setSelectedEntities] = useState([]);
@@ -55,18 +83,16 @@ const Visualizer = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEntityTypes, setSelectedEntityTypes] = useState([]);
   const [showEntityTypeFilter, setShowEntityTypeFilter] = useState(false);
+  const [quickViewEntity, setQuickViewEntity] = useState(null);
+  const [quickViewPosition, setQuickViewPosition] = useState(null);
+  const [detailModalEntity, setDetailModalEntity] = useState(null);
 
   // Get all unique entity types from metamodel
   const getAllEntityTypes = () => {
-    const types = [];
-    metamodel.layers.forEach(layer => {
-      layer.entityTypes.forEach(type => {
-        if (!types.includes(type)) {
-          types.push(type);
-        }
-      });
-    });
-    return types.sort();
+    if (!metamodel.entityTypes) {
+      return [];
+    }
+    return metamodel.entityTypes.map(et => et.id).sort();
   };
 
   // Close entity type filter dropdown when clicking outside
@@ -145,9 +171,7 @@ const Visualizer = () => {
     let filteredEntities = selectedLayer === 'all'
       ? entitiesToShow
       : entitiesToShow.filter(entity => {
-          const layer = metamodel.layers.find(l => 
-            l.entityTypes.includes(entity.entityType)
-          );
+          const layer = getLayerForEntityType(entity.entityType);
           return layer?.name === selectedLayer;
         });
 
@@ -160,9 +184,7 @@ const Visualizer = () => {
 
     // Create nodes
     const nodes = filteredEntities.map(entity => {
-      const layer = metamodel.layers.find(l =>
-        l.entityTypes.includes(entity.entityType)
-      );
+      const layer = getLayerForEntityType(entity.entityType);
       const archimateStyle = getArchimateStyle(entity.entityType);
 
       return {
@@ -282,10 +304,21 @@ const Visualizer = () => {
       }
     });
 
-    // Add tooltips
+    // Add click handler for nodes
     cyInstance.on('tap', 'node', (evt) => {
       const node = evt.target;
-      console.log('Selected node:', node.data());
+      const nodeEntity = getEntityById(node.id());
+      
+      if (nodeEntity) {
+        // Use actual mouse position from the original event
+        const mouseEvent = evt.originalEvent;
+        
+        setQuickViewEntity(nodeEntity);
+        setQuickViewPosition({
+          x: mouseEvent.clientX,
+          y: mouseEvent.clientY
+        });
+      }
     });
 
     setCy(cyInstance);
@@ -615,9 +648,7 @@ const Visualizer = () => {
                            entity.description?.toLowerCase().includes(searchTerm.toLowerCase());
                   })
                   .map((entity) => {
-                    const layer = metamodel.layers.find(l =>
-                      l.entityTypes.includes(entity.entityType)
-                    );
+                    const layer = getLayerForEntityType(entity.entityType);
                     const isSelected = selectedEntities.includes(entity.id);
 
                     return (
@@ -689,6 +720,29 @@ const Visualizer = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Quick view popover */}
+      <EntityQuickView
+        entity={quickViewEntity}
+        position={quickViewPosition}
+        onClose={() => {
+          setQuickViewEntity(null);
+          setQuickViewPosition(null);
+        }}
+        onViewDetails={() => {
+          setDetailModalEntity(quickViewEntity);
+          setQuickViewEntity(null);
+          setQuickViewPosition(null);
+        }}
+      />
+
+      {/* Detail modal */}
+      {detailModalEntity && (
+        <EntityDetailModal
+          entity={detailModalEntity}
+          onClose={() => setDetailModalEntity(null)}
+        />
       )}
     </div>
   );

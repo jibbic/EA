@@ -1,0 +1,641 @@
+# ArchiMate 3.1 Metamodel with NIS2 Compliance Mapping
+# Version: 1.0
+# Date: 2026-02-27
+
+archimate:
+  version: "3.1"
+  description: "Complete ArchiMate metamodel with NIS2 directive compliance mappings"
+
+  # ============================================================================
+  # BUSINESS LAYER (Yellow/Beige #FFF4C4)
+  # ============================================================================
+  business_layer:
+    color: "#FFF4C4"
+    description: "Business architecture elements"
+    
+    active_structure:
+      - name: "BusinessActor"
+        icon: "user"
+        description: "Organizational entity capable of performing behavior"
+        shape: "rectangle"
+        nis2_required: false
+        nis2_mappings: ["Article 6 - Governance"]
+        
+      - name: "BusinessRole"
+        icon: "user-tag"
+        description: "Named specific behavior of a business actor"
+        shape: "rectangle"
+        nis2_required: true
+        nis2_mappings: ["Article 20 - Governance", "Article 21 - Risk management roles"]
+        
+      - name: "BusinessCollaboration"
+        icon: "users"
+        description: "Aggregate of two or more business roles"
+        shape: "rectangle"
+        nis2_required: false
+        
+      - name: "BusinessInterface"
+        icon: "plug"
+        description: "Point of access where business services are made available"
+        shape: "rectangle"
+        nis2_required: false
+    
+    behavior:
+      - name: "BusinessProcess"
+        icon: "activity"
+        description: "Sequence of business behaviors"
+        shape: "round-rectangle"
+        nis2_required: true
+        nis2_mappings: ["Article 21 - Critical processes", "Article 21.2 - Business continuity"]
+        required_attributes: ["rto", "rpo", "criticality"]
+        
+      - name: "BusinessFunction"
+        icon: "box"
+        description: "Collection of business behavior based on criteria"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "BusinessInteraction"
+        icon: "message-square"
+        description: "Unit of collective business behavior"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "BusinessEvent"
+        icon: "zap"
+        description: "Organizational state change"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "BusinessService"
+        icon: "briefcase"
+        description: "Explicitly defined behavior exposed to environment"
+        shape: "round-rectangle"
+        nis2_required: false
+    
+    passive_structure:
+      - name: "BusinessObject"
+        icon: "file"
+        description: "Concept used within a particular business domain"
+        shape: "rectangle"
+        nis2_required: false
+        
+      - name: "Contract"
+        icon: "file-text"
+        description: "Formal or informal specification of agreement"
+        shape: "rectangle"
+        nis2_required: true
+        nis2_mappings: ["Article 21 - Supply chain security", "Article 28 - Supplier contracts"]
+        required_attributes: ["supplier", "criticality", "review_date"]
+        
+      - name: "Representation"
+        icon: "image"
+        description: "Perceptible form of information"
+        shape: "rectangle"
+        nis2_required: false
+
+  # ============================================================================
+  # APPLICATION LAYER (Light Blue #C9E4F7)
+  # ============================================================================
+  application_layer:
+    color: "#C9E4F7"
+    description: "Application architecture elements"
+    
+    active_structure:
+      - name: "ApplicationComponent"
+        icon: "package"
+        description: "Modular, deployable, and replaceable part"
+        shape: "rectangle"
+        nis2_required: true
+        nis2_mappings: ["Article 21 - IT systems inventory", "Article 23 - Asset register"]
+        required_attributes: ["criticality", "owner", "data_classification"]
+        
+      - name: "ApplicationCollaboration"
+        icon: "git-merge"
+        description: "Aggregate of two or more application components"
+        shape: "rectangle"
+        nis2_required: false
+        
+      - name: "ApplicationInterface"
+        icon: "plug"
+        description: "Point of access for application services"
+        shape: "circle"
+        nis2_required: false
+    
+    behavior:
+      - name: "ApplicationFunction"
+        icon: "cpu"
+        description: "Automated behavior performed by component"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "ApplicationInteraction"
+        icon: "shuffle"
+        description: "Unit of collective application behavior"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "ApplicationProcess"
+        icon: "git-branch"
+        description: "Sequence of application behaviors"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "ApplicationEvent"
+        icon: "bell"
+        description: "Application state change"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "ApplicationService"
+        icon: "cloud"
+        description: "Explicitly defined application behavior"
+        shape: "round-rectangle"
+        nis2_required: false
+    
+    passive_structure:
+      - name: "DataObject"
+        icon: "database"
+        description: "Data structured for automated processing"
+        shape: "rectangle"
+        nis2_required: true
+        nis2_mappings: ["Article 21 - Data protection", "Article 32 - GDPR alignment"]
+        required_attributes: ["classification", "gdpr_relevant", "encryption_required"]
+
+  # ============================================================================
+  # TECHNOLOGY LAYER (Green #C8E6C9)
+  # ============================================================================
+  technology_layer:
+    color: "#C8E6C9"
+    description: "Technology architecture elements"
+    
+    active_structure:
+      - name: "Node"
+        icon: "server"
+        description: "Computational or physical resource"
+        shape: "cube"
+        nis2_required: true
+        nis2_mappings: ["Article 21 - Infrastructure security", "Article 23 - Configuration management"]
+        required_attributes: ["criticality", "location", "patching_status"]
+        
+      - name: "Device"
+        icon: "smartphone"
+        description: "Physical IT resource"
+        shape: "cube"
+        nis2_required: false
+        
+      - name: "SystemSoftware"
+        icon: "hard-drive"
+        description: "Software environment for specific types of components"
+        shape: "cube"
+        nis2_required: true
+        nis2_mappings: ["Article 21 - System hardening", "Article 21.2.e - Patch management"]
+        required_attributes: ["version", "patch_level", "eol_date"]
+        
+      - name: "TechnologyCollaboration"
+        icon: "share-2"
+        description: "Aggregate of two or more technology elements"
+        shape: "cube"
+        nis2_required: false
+        
+      - name: "TechnologyInterface"
+        icon: "link"
+        description: "Point of access for technology services"
+        shape: "circle"
+        nis2_required: false
+        
+      - name: "Path"
+        icon: "git-commit"
+        description: "Link between two or more nodes"
+        shape: "line"
+        nis2_required: false
+        
+      - name: "CommunicationNetwork"
+        icon: "wifi"
+        description: "Physical communication medium"
+        shape: "line"
+        nis2_required: true
+        nis2_mappings: ["Article 21 - Network security", "Article 21.2.c - Network segmentation"]
+        required_attributes: ["security_zone", "encryption", "monitoring"]
+    
+    behavior:
+      - name: "TechnologyFunction"
+        icon: "tool"
+        description: "Collection of technology behavior"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "TechnologyProcess"
+        icon: "repeat"
+        description: "Sequence of technology behaviors"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "TechnologyInteraction"
+        icon: "arrow-right-left"
+        description: "Unit of collective technology behavior"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "TechnologyEvent"
+        icon: "activity"
+        description: "Technology state change"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "TechnologyService"
+        icon: "settings"
+        description: "Explicitly defined technology behavior"
+        shape: "round-rectangle"
+        nis2_required: false
+    
+    passive_structure:
+      - name: "Artifact"
+        icon: "file-code"
+        description: "Physical piece of data"
+        shape: "rectangle"
+        nis2_required: false
+
+  # ============================================================================
+  # MOTIVATION LAYER (Light Green #E8F5E9)
+  # ============================================================================
+  motivation_layer:
+    color: "#E8F5E9"
+    description: "Motivational elements - goals, requirements, principles"
+    
+    elements:
+      - name: "Stakeholder"
+        icon: "user-check"
+        description: "Role of individual, team, or organization"
+        shape: "rectangle"
+        nis2_required: false
+        
+      - name: "Driver"
+        icon: "trending-up"
+        description: "External or internal condition motivating organization"
+        shape: "rectangle"
+        nis2_required: false
+        
+      - name: "Assessment"
+        icon: "clipboard-check"
+        description: "Outcome of analysis of driver state"
+        shape: "rectangle"
+        nis2_required: false
+        
+      - name: "Goal"
+        icon: "target"
+        description: "High-level statement of intent"
+        shape: "ellipse"
+        nis2_required: false
+        
+      - name: "Outcome"
+        icon: "check-circle"
+        description: "End result"
+        shape: "ellipse"
+        nis2_required: false
+        
+      - name: "Principle"
+        icon: "shield"
+        description: "Normative property of implementation"
+        shape: "rectangle"
+        nis2_required: true
+        nis2_mappings: ["Article 21 - Security policies", "Article 20 - Governance framework"]
+        
+      - name: "Requirement"
+        icon: "list-checks"
+        description: "Statement of need"
+        shape: "rectangle"
+        nis2_required: true
+        nis2_mappings: ["Article 21 - Cybersecurity requirements", "NIS2 Compliance requirements"]
+        required_attributes: ["nis2_article", "compliance_status", "evidence"]
+        
+      - name: "Constraint"
+        icon: "shield-alert"
+        description: "Restriction on the way things are realized"
+        shape: "rectangle"
+        nis2_required: false
+        
+      - name: "Meaning"
+        icon: "message-circle"
+        description: "Knowledge or expertise present in representation"
+        shape: "cloud"
+        nis2_required: false
+        
+      - name: "Value"
+        icon: "award"
+        description: "Relative worth, utility or importance"
+        shape: "ellipse"
+        nis2_required: false
+
+  # ============================================================================
+  # STRATEGY LAYER (Light Yellow #FFF9C4)
+  # ============================================================================
+  strategy_layer:
+    color: "#FFF9C4"
+    description: "Strategic elements"
+    
+    elements:
+      - name: "Resource"
+        icon: "box"
+        description: "Asset owned or controlled"
+        shape: "rectangle"
+        nis2_required: false
+        
+      - name: "Capability"
+        icon: "zap"
+        description: "Ability that organization possesses"
+        shape: "rectangle"
+        nis2_required: true
+        nis2_mappings: ["Article 21 - Security capabilities", "Business continuity capabilities"]
+        required_attributes: ["maturity_level", "criticality"]
+        
+      - name: "ValueStream"
+        icon: "git-branch"
+        description: "Sequence of activities creating overall result"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "CourseOfAction"
+        icon: "map"
+        description: "Approach or plan for configuring capabilities"
+        shape: "rectangle"
+        nis2_required: false
+
+  # ============================================================================
+  # PHYSICAL LAYER (Gray #E0E0E0)
+  # ============================================================================
+  physical_layer:
+    color: "#E0E0E0"
+    description: "Physical elements"
+    
+    elements:
+      - name: "Equipment"
+        icon: "box"
+        description: "Physical machine, tool or other equipment"
+        shape: "cube"
+        nis2_required: true
+        nis2_mappings: ["Article 23 - Asset inventory"]
+        required_attributes: ["location", "owner", "criticality"]
+        
+      - name: "Facility"
+        icon: "building"
+        description: "Physical location or environment"
+        shape: "cube"
+        nis2_required: true
+        nis2_mappings: ["Article 21 - Physical security", "Data center locations"]
+        required_attributes: ["location", "security_level", "access_control"]
+        
+      - name: "DistributionNetwork"
+        icon: "network"
+        description: "Physical network transporting materials or energy"
+        shape: "line"
+        nis2_required: false
+        
+      - name: "Material"
+        icon: "package"
+        description: "Tangible physical matter"
+        shape: "rectangle"
+        nis2_required: false
+
+  # ============================================================================
+  # IMPLEMENTATION & MIGRATION LAYER (Pink #FCE4EC)
+  # ============================================================================
+  implementation_layer:
+    color: "#FCE4EC"
+    description: "Implementation and migration elements"
+    
+    elements:
+      - name: "WorkPackage"
+        icon: "folder"
+        description: "Series of actions for achieving goal"
+        shape: "rectangle"
+        nis2_required: false
+        
+      - name: "Deliverable"
+        icon: "package-check"
+        description: "Precisely-defined result of work package"
+        shape: "rectangle"
+        nis2_required: false
+        
+      - name: "ImplementationEvent"
+        icon: "calendar"
+        description: "State change in implementation"
+        shape: "round-rectangle"
+        nis2_required: false
+        
+      - name: "Plateau"
+        icon: "layers"
+        description: "Relatively stable state of architecture"
+        shape: "rectangle"
+        nis2_required: false
+        
+      - name: "Gap"
+        icon: "alert-circle"
+        description: "Difference between two plateaus"
+        shape: "rectangle"
+        nis2_required: false
+
+  # ============================================================================
+  # ARCHIMATE RELATIONSHIPS
+  # ============================================================================
+  relationships:
+    structural:
+      - name: "Composition"
+        symbol: "◆─"
+        description: "Part-of relationship, dependent lifecycle"
+        arrow: "filled-diamond"
+        nis2_usage: "Critical for system decomposition and impact analysis"
+        
+      - name: "Aggregation"
+        symbol: "◇─"
+        description: "Part-of relationship, independent lifecycle"
+        arrow: "hollow-diamond"
+        nis2_usage: "Group related components"
+        
+      - name: "Assignment"
+        symbol: "●─"
+        description: "Allocation of responsibility"
+        arrow: "filled-circle"
+        nis2_usage: "Map ownership and accountability (NIS2 Article 20)"
+        nis2_required: true
+        
+      - name: "Realization"
+        symbol: "─ ─>"
+        description: "Implementation relationship"
+        arrow: "dashed"
+        nis2_usage: "Link requirements to implementation"
+        nis2_required: true
+    
+    dependency:
+      - name: "Serving"
+        symbol: "──>"
+        description: "Service provision"
+        arrow: "solid"
+        nis2_usage: "Map service dependencies for availability analysis"
+        nis2_required: true
+        
+      - name: "Access"
+        symbol: "─○>"
+        description: "Read or write access"
+        arrow: "open-circle"
+        access_types: ["read", "write", "read-write"]
+        nis2_usage: "Data flow and access control (Article 21.2.a - Access control)"
+        nis2_required: true
+        
+      - name: "Influence"
+        symbol: "─ ─>"
+        description: "Effect without dependency"
+        arrow: "dashed"
+        nis2_usage: "Risk and impact relationships"
+    
+    dynamic:
+      - name: "Flow"
+        symbol: "──>"
+        description: "Transfer or exchange"
+        arrow: "solid"
+        nis2_usage: "Data flows, information exchange (GDPR Article 32)"
+        nis2_required: true
+        
+      - name: "Triggering"
+        symbol: "──>"
+        description: "Temporal or causal relationship"
+        arrow: "solid"
+        nis2_usage: "Incident response workflows, process orchestration"
+    
+    other:
+      - name: "Specialization"
+        symbol: "──▷"
+        description: "Generalization relationship"
+        arrow: "hollow-triangle"
+        nis2_usage: "Classify entity types"
+        
+      - name: "Association"
+        symbol: "───"
+        description: "Unspecified relationship"
+        arrow: "none"
+        nis2_usage: "Generic relationships"
+
+# ============================================================================
+# NIS2 DIRECTIVE ARTICLE MAPPINGS
+# ============================================================================
+nis2_compliance:
+  articles:
+    - id: "Article_20"
+      title: "Governance"
+      description: "Management bodies must approve cybersecurity risk management measures"
+      required_elements:
+        - BusinessRole
+        - BusinessActor
+        - Principle
+      required_relationships:
+        - Assignment
+      compliance_checks:
+        - "CISO or equivalent role defined"
+        - "Management approval documented"
+        - "Governance framework established"
+    
+    - id: "Article_21"
+      title: "Cybersecurity risk-management measures"
+      description: "Technical, operational and organizational measures"
+      required_elements:
+        - ApplicationComponent
+        - Node
+        - Requirement
+        - BusinessProcess
+        - DataObject
+        - CommunicationNetwork
+      required_attributes:
+        - criticality
+        - owner
+        - rto
+        - rpo
+      compliance_checks:
+        - "All critical systems identified"
+        - "Risk assessments performed"
+        - "Security controls documented"
+        - "Business continuity plans exist"
+        - "Incident response procedures defined"
+        - "Supply chain security measures"
+        - "Network segmentation implemented"
+        - "Encryption in place"
+        - "Access control configured"
+        - "Multi-factor authentication enabled"
+    
+    - id: "Article_22"
+      title: "Reporting obligations"
+      description: "Incident reporting to authorities"
+      required_elements:
+        - BusinessProcess
+        - ApplicationService
+      required_attributes:
+        - incident_classification
+        - reporting_deadline
+      compliance_checks:
+        - "Incident classification defined"
+        - "Reporting process documented"
+        - "Contact points established"
+    
+    - id: "Article_23"
+      title: "Supervision and enforcement"
+      description: "Documentation and evidence requirements"
+      required_elements:
+        - ApplicationComponent
+        - Node
+        - Equipment
+        - SystemSoftware
+      compliance_checks:
+        - "Complete asset inventory"
+        - "Configuration management"
+        - "Change documentation"
+        - "Audit trails maintained"
+    
+    - id: "Article_28"
+      title: "Supply chain security"
+      description: "Third-party risk management"
+      required_elements:
+        - Contract
+        - BusinessActor
+      required_relationships:
+        - Serving
+      compliance_checks:
+        - "Supplier security requirements"
+        - "Third-party risk assessments"
+        - "Contractual security obligations"
+        - "Supplier monitoring"
+    
+    - id: "Article_32"
+      title: "Correspondence with GDPR"
+      description: "Alignment with data protection requirements"
+      required_elements:
+        - DataObject
+      required_attributes:
+        - gdpr_relevant
+        - data_classification
+        - retention_period
+      compliance_checks:
+        - "Personal data identified"
+        - "Data protection measures"
+        - "Privacy by design"
+        - "Data retention policies"
+
+# Compliance status levels
+compliance_levels:
+  - level: "compliant"
+    color: "#10B981"
+    icon: "check-circle"
+    description: "Fully compliant with required elements"
+    
+  - level: "partial"
+    color: "#F59E0B"
+    icon: "alert-circle"
+    description: "Some required elements missing"
+    
+  - level: "non_compliant"
+    color: "#EF4444"
+    icon: "x-circle"
+    description: "Critical elements missing"
+    
+  - level: "not_applicable"
+    color: "#6B7280"
+    icon: "minus-circle"
+    description: "Requirements not applicable"

@@ -6,6 +6,17 @@ import { Calendar, Filter, Download, ArrowRight, Circle, AlertCircle } from 'luc
 const Roadmap = () => {
   const { getAllEntities, metamodel, resetData } = useData();
   const [selectedLayer, setSelectedLayer] = useState('all');
+
+  // Helper to find layer for entity type in new metamodel structure
+  const getLayerForEntityType = (entityType) => {
+    if (!metamodel.entityTypes) return null;
+    const entityTypeDef = metamodel.entityTypes.find(et => et.id === entityType);
+    if (!entityTypeDef) return null;
+    return metamodel.layers.find(layer => 
+      layer.id === entityTypeDef.layer || 
+      layer.name.toLowerCase() === entityTypeDef.layer
+    );
+  };
   const [selectedEntityTypes, setSelectedEntityTypes] = useState([]);
   const [timelineView, setTimelineView] = useState('year'); // 'year', 'quarter', 'month'
   const [selectedYear, setSelectedYear] = useState(2024); // Start at 2024 to show more data
@@ -69,7 +80,7 @@ const Roadmap = () => {
     const entitiesWithData = allEntities.filter(entity => {
       // Filter by layer
       if (selectedLayer !== 'all') {
-        const layer = metamodel.layers.find(l => l.entityTypes.includes(entity.entityType));
+        const layer = getLayerForEntityType(entity.entityType);
         if (layer?.name !== selectedLayer) return false;
       }
 

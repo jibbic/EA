@@ -1,14 +1,14 @@
-# NIS 2 Enterprise Architecture Web Application
+# Enterprise Architecture Framework - Web Application
 
-En modern, interaktiv webbapplikation för att visualisera och hantera enterprise-arkitektur enligt NIS 2-direktivet.
+En modern, interaktiv webbapplikation för att visualisera och hantera enterprise-arkitektur enligt ArchiMate 3.1.
 
 ## ✨ Funktioner
 
 ### 📊 Dashboard
 - Översikt över alla entiteter och relationer
-- Realtids compliance-status för NIS 2
+- Arkitekturkvalitet och täckningsgrad
 - Snabb navigation till olika perspektiv
-- Statistik och nyckeltal
+- Statistik och nyckeltal per skikt
 
 ### 🔍 Visualisering
 - Interaktiv graf med Cytoscape.js
@@ -16,26 +16,30 @@ En modern, interaktiv webbapplikation för att visualisera och hantera enterpris
 - Filtrera efter arkitekturskikt
 - Exportera som PNG
 - Zoom och panorera för detaljerad utforskning
+- Klickbara noder med QuickView
 
 ### 📁 Entitetshantering
 - Bläddra bland alla entiteter
 - Sök och filtrera efter typ och skikt
 - Detaljvyer för varje entitet
 - Se relationer och beroenden
+- CRUD-operationer för alla ArchiMate-element
 
 ### 🏗️ Arkitekturperspektiv
 - **Business Architecture**: Processer, kapabiliteter, organisation
 - **Application Architecture**: System och komponenter
 - **Technology Architecture**: Infrastruktur och plattformar
-- **Security Architecture**: Kontroller, hot och sårbarheter
-- **Data Architecture**: Dataobjekt och flöden
-- **Governance Architecture**: Policyer och compliance
+- **Motivation Architecture**: Mål, krav och principer
+- **Strategy Architecture**: Kapabiliteter och resurser
+- **Physical Architecture**: Fysisk utrustning
+- **Implementation & Migration**: Projekt och gap-analys
 
-### ✅ NIS 2 Compliance
-- Detaljerad mappning till Artikel 21 (a-k)
-- Visuell compliance-status
-- Identifiera dokumentationsgap
-- Rekommenderade åtgärder
+### 📅 Projekt & Portfölj
+- Projektportföljöversikt med flera vyer
+- Roadmap med tidslinje
+- Budget- och impact-analys
+- Resursplanering med månadsallokering
+- Milstolpar och deliverables
 
 ## 🚀 Komma igång
 
@@ -46,7 +50,7 @@ En modern, interaktiv webbapplikation för att visualisera och hantera enterpris
 
 1. Navigera till webapp-mappen:
 ```powershell
-cd C:\NIS2-EA-Framework\webapp
+cd webapp
 ```
 
 2. Installera beroenden:

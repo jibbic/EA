@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import yaml from 'js-yaml';
 import sampleData from '../data/sampleData';
+import { archimateMetamodel } from '../data/archimateMetamodel.js';
+import * as db from '../utils/database';
 
 const DataContext = createContext();
 
@@ -12,48 +14,18 @@ export const useData = () => {
   return context;
 };
 
-// Transform sampleData to initial metamodel structure
+// Use ArchiMate metamodel as the foundation
 const initialMetamodel = {
-  layers: [
-    {
-      name: 'Business',
-      color: '#FFD93D',
-      entityTypes: ['BusinessCapability', 'BusinessProcess', 'OrganizationalUnit', 'Person', 'Role']
-    },
-    {
-      name: 'Application',
-      color: '#6BCB77',
-      entityTypes: ['ApplicationSystem', 'ApplicationComponent', 'ApplicationInterface']
-    },
-    {
-      name: 'Technology',
-      color: '#4D96FF',
-      entityTypes: ['InfrastructureNode', 'Network', 'TechnologyPlatform', 'Location']
-    },
-    {
-      name: 'Security',
-      color: '#FF6B6B',
-      entityTypes: ['SecurityControl', 'ThreatScenario', 'Vulnerability', 'SecurityIncident', 'RiskAssessment']
-    },
-    {
-      name: 'Data',
-      color: '#9B59B6',
-      entityTypes: ['DataObject', 'DataStore', 'DataFlow']
-    },
-    {
-      name: 'Governance',
-      color: '#95A5A6',
-      entityTypes: ['Policy', 'Supplier', 'ComplianceRequirement']
-    }
-  ],
-  relationshipTypes: sampleData.metamodel.relationshipTypes
+  layers: archimateMetamodel.layers,
+  entityTypes: archimateMetamodel.entityTypes,
+  relationshipTypes: archimateMetamodel.relationshipTypes
 };
 
 // Transform flat entity array to grouped object by type
 const groupEntitiesByType = (entities) => {
   const grouped = {};
   entities.forEach(entity => {
-    const type = entity.type;
+    const type = entity.entityType || entity.type; // Use entityType first, fallback to type
     if (!grouped[type]) {
       grouped[type] = [];
     }
@@ -65,103 +37,103 @@ const groupEntitiesByType = (entities) => {
 // Use sample data from sampleData.js
 const initialEntities = groupEntitiesByType(sampleData.entities);
 const initialRelationships = sampleData.relationships;
+const initialResourceAllocations = sampleData.resourceAllocations || [];
+
+// Data version for cache invalidation
+const DATA_VERSION = '5.0'; // Livsmedelsverket sample data
 
 export const DataProvider = ({ children }) => {
   const [metamodel, setMetamodel] = useState(initialMetamodel);
-  const [entities, setEntities] = useState(() => {
-    // Load from localStorage if available
-    const saved = localStorage.getItem('nis2-entities');
-    return saved ? JSON.parse(saved) : initialEntities;
-  });
-  const [relationships, setRelationships] = useState(() => {
-    // Load from localStorage if available
-    const saved = localStorage.getItem('nis2-relationships');
-    return saved ? JSON.parse(saved) : initialRelationships;
-  });
-  const [nis2Mappings, setNis2Mappings] = useState(null);
+  const [entities, setEntities] = useState({});
+  const [relationships, setRelationships] = useState([]);
+  const [resourceAllocations, setResourceAllocations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [dbInitialized, setDbInitialized] = useState(false);
 
-  // Save entities to localStorage whenever they change
+  // Initialize database and load data
   useEffect(() => {
-    localStorage.setItem('nis2-entities', JSON.stringify(entities));
-  }, [entities]);
+    async function initializeData() {
+      try {
+        setIsLoading(true);
+        
+        // Initialize SQLite database
+        await db.initDatabase();
+        setDbInitialized(true);
 
-  // Save relationships to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('nis2-relationships', JSON.stringify(relationships));
-  }, [relationships]);
+        // Check if database is empty (first run)
+        const stats = db.getDatabaseStats();
+        
+        if (stats.totalEntities === 0) {
+          // First run - import sample data
+          console.log('📦 First run - importing sample data...');
+          db.importData({
+            version: DATA_VERSION,
+            entities: sampleData.entities,
+            relationships: sampleData.relationships,
+            resourceAllocations: sampleData.resourceAllocations
+          });
+        }
 
-  // Load NIS2 mappings
-  useEffect(() => {
-    // In a real app, this would load from the YAML file
-    setNis2Mappings({
-      'Article 21a': {
-        title: 'Risk Analysis and Security Policies',
-        entities: ['RiskAssessment', 'Policy', 'ThreatScenario']
-      },
-      'Article 21b': {
-        title: 'Incident Handling',
-        entities: ['SecurityIncident', 'BusinessProcess']
-      },
-      'Article 21c': {
-        title: 'Business Continuity',
-        entities: ['BusinessProcess', 'ApplicationSystem']
-      },
-      'Article 21d': {
-        title: 'Supply Chain Security',
-        entities: ['Supplier', 'ApplicationSystem', 'InfrastructureNode']
-      },
-      'Article 21e': {
-        title: 'Security in Acquisition',
-        entities: ['Supplier', 'Policy']
-      },
-      'Article 21f': {
-        title: 'Effectiveness of Security Measures',
-        entities: ['SecurityControl', 'RiskAssessment']
-      },
-      'Article 21g': {
-        title: 'Cryptography',
-        entities: ['SecurityControl', 'DataStore', 'DataFlow']
-      },
-      'Article 21h': {
-        title: 'Personnel Security',
-        entities: ['Person', 'Role', 'Policy']
-      },
-      'Article 21i': {
-        title: 'Access Control',
-        entities: ['SecurityControl', 'Person', 'Role']
-      },
-      'Article 21j': {
-        title: 'Asset Management',
-        entities: ['ApplicationSystem', 'InfrastructureNode', 'DataStore']
-      },
-      'Article 21k': {
-        title: 'Authentication',
-        entities: ['SecurityControl', 'ApplicationSystem']
+        // Load data from database
+        refreshData();
+        
+        console.log('✅ Data loaded from SQLite');
+      } catch (error) {
+        console.error('❌ Failed to initialize data:', error);
+      } finally {
+        setIsLoading(false);
       }
-    });
+    }
+
+    initializeData();
   }, []);
 
+  // Refresh data from database
+  const refreshData = () => {
+    try {
+      const entitiesData = db.getEntitiesGroupedByType();
+      const relationshipsData = db.getAllRelationships();
+      
+      setEntities(entitiesData);
+      setRelationships(relationshipsData);
+      
+      // Load resource allocations if needed
+      // Note: This could be optimized to load on-demand
+    } catch (error) {
+      console.error('Failed to refresh data:', error);
+    }
+  };
+
   const addEntity = (entityType, entity) => {
-    setEntities(prev => ({
-      ...prev,
-      [entityType]: [...(prev[entityType] || []), entity]
-    }));
+    try {
+      const entityWithType = { ...entity, entityType };
+      db.addEntity(entityWithType);
+      refreshData();
+    } catch (error) {
+      console.error('Failed to add entity:', error);
+      throw error;
+    }
   };
 
   const updateEntity = (entityType, entityId, updatedEntity) => {
-    setEntities(prev => ({
-      ...prev,
-      [entityType]: prev[entityType].map(e => 
-        e.id === entityId ? updatedEntity : e
-      )
-    }));
+    try {
+      const entityWithType = { ...updatedEntity, entityType };
+      db.updateEntity(entityId, entityWithType);
+      refreshData();
+    } catch (error) {
+      console.error('Failed to update entity:', error);
+      throw error;
+    }
   };
 
   const deleteEntity = (entityType, entityId) => {
-    setEntities(prev => ({
-      ...prev,
-      [entityType]: prev[entityType].filter(e => e.id !== entityId)
-    }));
+    try {
+      db.deleteEntity(entityId);
+      refreshData();
+    } catch (error) {
+      console.error('Failed to delete entity:', error);
+      throw error;
+    }
   };
 
   // Get valid relationship types between two entity types
@@ -171,22 +143,36 @@ export const DataProvider = ({ children }) => {
     }
 
     return metamodel.relationshipTypes.filter(relType => {
-      const validSource = relType.validFrom.includes(sourceEntityType);
-      const validTarget = relType.validTo.includes(targetEntityType);
-      return validSource && validTarget;
+      // Check ArchiMate format (validFrom/validTo arrays)
+      if (relType.validFrom && relType.validTo) {
+        const validSource = relType.validFrom.includes('*') || relType.validFrom.includes(sourceEntityType);
+        const validTarget = relType.validTo.includes('*') || relType.validTo.includes(targetEntityType);
+        return validSource && validTarget;
+      }
+      // Check legacy format (backwards compatibility)
+      if (Array.isArray(relType.validFrom) && Array.isArray(relType.validTo)) {
+        const validSource = relType.validFrom.includes(sourceEntityType);
+        const validTarget = relType.validTo.includes(targetEntityType);
+        return validSource && validTarget;
+      }
+      return true; // If no validation defined, allow all
     });
   };
 
   // Check if a specific relationship is valid according to metamodel
   const isRelationshipValid = (sourceEntityType, targetEntityType, relationshipType) => {
     const validTypes = getValidRelationshipTypes(sourceEntityType, targetEntityType);
-    return validTypes.some(relType => relType.name === relationshipType);
+    return validTypes.some(relType => 
+      relType.name === relationshipType || 
+      relType.id === relationshipType ||
+      relType.name === relationshipType.toLowerCase()
+    );
   };
 
   const addRelationship = (relationship) => {
     // Get source and target entities
-    const sourceEntity = getEntityById(relationship.source);
-    const targetEntity = getEntityById(relationship.target);
+    const sourceEntity = db.getEntityById(relationship.source);
+    const targetEntity = db.getEntityById(relationship.target);
 
     if (!sourceEntity || !targetEntity) {
       throw new Error('Käll- eller målentitet hittades inte');
@@ -201,11 +187,23 @@ export const DataProvider = ({ children }) => {
       );
     }
 
-    setRelationships(prev => [...prev, relationship]);
+    try {
+      db.addRelationship(relationship);
+      refreshData();
+    } catch (error) {
+      console.error('Failed to add relationship:', error);
+      throw error;
+    }
   };
 
   const deleteRelationship = (relationshipId) => {
-    setRelationships(prev => prev.filter(r => r.id !== relationshipId));
+    try {
+      db.deleteRelationship(relationshipId);
+      refreshData();
+    } catch (error) {
+      console.error('Failed to delete relationship:', error);
+      throw error;
+    }
   };
 
   const getAllEntities = () => {
@@ -230,20 +228,26 @@ export const DataProvider = ({ children }) => {
   };
 
   const getComplianceStatus = () => {
-    if (!nis2Mappings) return {};
-    
+    // Generic compliance status based on entity coverage
     const status = {};
-    Object.entries(nis2Mappings).forEach(([article, config]) => {
-      const requiredEntities = config.entities;
-      const existingEntities = requiredEntities.filter(
+    const layers = metamodel.layers;
+    
+    layers.forEach(layer => {
+      const layerTypes = metamodel.entityTypes
+        .filter(et => et.layer === layer.id)
+        .map(et => et.id);
+      
+      const existingEntities = layerTypes.filter(
         entityType => entities[entityType] && entities[entityType].length > 0
       );
       
-      status[article] = {
-        title: config.title,
+      status[layer.name] = {
+        title: layer.name,
         covered: existingEntities.length,
-        total: requiredEntities.length,
-        percentage: Math.round((existingEntities.length / requiredEntities.length) * 100)
+        total: layerTypes.length,
+        percentage: layerTypes.length > 0 
+          ? Math.round((existingEntities.length / layerTypes.length) * 100)
+          : 100
       };
     });
     
@@ -252,22 +256,22 @@ export const DataProvider = ({ children }) => {
 
   // Export all data as JSON
   const exportData = () => {
-    const data = {
-      version: '1.0',
-      exportDate: new Date().toISOString(),
-      entities,
-      relationships
-    };
-    
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `nis2-export-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    try {
+      const data = db.exportData();
+      
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `ea-export-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Failed to export data:', error);
+      throw error;
+    }
   };
 
   // Import data from JSON
@@ -279,8 +283,8 @@ export const DataProvider = ({ children }) => {
         throw new Error('Ogiltig filformat');
       }
       
-      setEntities(data.entities);
-      setRelationships(data.relationships);
+      db.importData(data);
+      refreshData();
       
       return { success: true, message: 'Data importerad' };
     } catch (error) {
@@ -290,17 +294,75 @@ export const DataProvider = ({ children }) => {
 
   // Reset to initial data
   const resetData = () => {
-    setEntities(initialEntities);
-    setRelationships(initialRelationships);
-    localStorage.removeItem('nis2-entities');
-    localStorage.removeItem('nis2-relationships');
+    try {
+      db.clearAllData();
+      db.importData({
+        version: DATA_VERSION,
+        entities: sampleData.entities,
+        relationships: sampleData.relationships,
+        resourceAllocations: sampleData.resourceAllocations
+      });
+      refreshData();
+    } catch (error) {
+      console.error('Failed to reset data:', error);
+      throw error;
+    }
+  };
+
+  // Resource allocation functions
+  const addResourceAllocation = (allocation) => {
+    try {
+      db.addResourceAllocation(allocation);
+      // Note: Could refresh resource allocations here if needed
+    } catch (error) {
+      console.error('Failed to add resource allocation:', error);
+      throw error;
+    }
+  };
+
+  const updateResourceAllocation = (allocationId, updatedAllocation) => {
+    try {
+      db.updateResourceAllocation(allocationId, updatedAllocation);
+    } catch (error) {
+      console.error('Failed to update resource allocation:', error);
+      throw error;
+    }
+  };
+
+  const deleteResourceAllocation = (allocationId) => {
+    try {
+      db.deleteResourceAllocation(allocationId);
+    } catch (error) {
+      console.error('Failed to delete resource allocation:', error);
+      throw error;
+    }
+  };
+
+  const getAllocationsForProject = (projectId) => {
+    try {
+      return db.getAllocationsForProject(projectId);
+    } catch (error) {
+      console.error('Failed to get project allocations:', error);
+      return [];
+    }
+  };
+
+  const getAllocationsForResource = (resourceId) => {
+    try {
+      return db.getAllocationsForResource(resourceId);
+    } catch (error) {
+      console.error('Failed to get resource allocations:', error);
+      return [];
+    }
   };
 
   const value = {
     metamodel,
     entities,
     relationships,
-    nis2Mappings,
+    resourceAllocations,
+    isLoading,
+    dbInitialized,
     addEntity,
     updateEntity,
     deleteEntity,
@@ -314,8 +376,34 @@ export const DataProvider = ({ children }) => {
     isRelationshipValid,
     exportData,
     importData,
-    resetData
+    resetData,
+    refreshData,
+    // Resource allocation functions
+    addResourceAllocation,
+    updateResourceAllocation,
+    deleteResourceAllocation,
+    getAllocationsForProject,
+    getAllocationsForResource
   };
+
+  // Show loading state while initializing
+  if (isLoading) {
+    return (
+      <DataContext.Provider value={value}>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          height: '100vh',
+          flexDirection: 'column',
+          gap: '1rem'
+        }}>
+          <div style={{ fontSize: '2rem' }}>⏳</div>
+          <div>Laddar data från SQLite...</div>
+        </div>
+      </DataContext.Provider>
+    );
+  }
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };

@@ -1,65 +1,83 @@
-# NIS 2 Enterprise Architecture Ramverk och Metamodell
+# Enterprise Architecture Framework (ArchiMate 3.1)
 
 ## Översikt
 
-Detta ramverk tillhandahåller en strukturerad metamodell för att dokumentera system och komponenter i enlighet med NIS 2-direktivets krav, baserat på etablerade EA-principer (Enterprise Architecture).
+Detta ramverk tillhandahåller ett komplett Enterprise Architecture-verktyg baserat på ArchiMate 3.1-standarden. Det möjliggör strukturerad dokumentation, visualisering och analys av organisationens arkitektur över alla skikt.
 
 ## Syfte
 
 Ramverket säkerställer att organisationer kan:
-- Dokumentera sina system och komponenter systematiskt
-- Uppfylla NIS 2:s dokumentationskrav
-- Skapa en helhetsbild över IT-landskapet
-- Hantera risker och säkerhet strukturerat
-- Stödja kontinuerlig compliance och förbättring
+- Dokumentera sin enterprise-arkitektur systematiskt enligt ArchiMate 3.1
+- Visualisera arkitekturen i olika perspektiv och vyer
+- Analysera relationer och beroenden mellan komponenter
+- Hantera arkitekturförändringar och projekt
+- Stödja beslutsfattande genom strukturerad dokumentation
+- Följa etablerade EA best practices
 
-## NIS 2 Kärnkrav
+## Kärnelement
 
-NIS 2-direktivet ställer krav på:
-1. **Riskhantering** - Identifiera och hantera risker systematiskt
-2. **Systemdokumentation** - Fullständig dokumentation av IT-system och komponenter
-3. **Säkerhetsåtgärder** - Implementera och dokumentera säkerhetskontroller
-4. **Incident Management** - Kapacitet att hantera och rapportera incidenter
-5. **Business Continuity** - Säkerställa verksamhetskontinuitet
-6. **Supply Chain Security** - Hantera leverantörsrisker
-7. **Säkerhetsåtgärder för anskaffning** - Säkerhet i utveckling och inköp
-8. **Policies och processer** - Dokumenterade policyer för cybersäkerhet
+Ramverket baseras på ArchiMate 3.1 och omfattar:
+1. **Business Layer** - Verksamhetsarkitektur (processer, roller, tjänster)
+2. **Application Layer** - Applikationsarkitektur (system, komponenter, gränssnitt)
+3. **Technology Layer** - Teknologiarkitektur (infrastruktur, plattformar, nätverk)
+4. **Motivation Layer** - Mål, drivkrafter, krav och principer
+5. **Strategy Layer** - Kapabiliteter, resurser och värdeströmmar
+6. **Physical Layer** - Fysisk utrustning och faciliteter
+7. **Implementation & Migration** - Projekt, arbetspaket och gap-analys
 
 ## Ramverkets Struktur
 
 ### 1. Metamodell
-Kärnmetamodellen definierar de grundläggande koncepten och deras relationer. Se `metamodel/core-metamodel.yaml`
+Kärnmetamodellen följer ArchiMate 3.1-standarden med fullständig uppsättning elementtyper och relationstyper. Se `metamodel/archimate-metamodel.yaml`
 
 ### 2. Perspektiv (Views)
-Ramverket använder fem huvudperspektiv:
-- **Business Architecture** - Verksamhetsperspektivet
-- **Application Architecture** - Applikationsperspektivet
-- **Technology Architecture** - Teknologiperspektivet
-- **Security Architecture** - Säkerhetsperspektivet
-- **Data Architecture** - Dataperspektivet
+Ramverket använder ArchiMate-perspektiv:
+- **Business Architecture** - Verksamhetsperspektivet (roller, processer, tjänster)
+- **Application Architecture** - Applikationsperspektivet (system, komponenter, gränssnitt)
+- **Technology Architecture** - Teknologiperspektivet (infrastruktur, plattformar, nätverk)
+- **Motivation Architecture** - Mål, krav, intressenter och principer
+- **Strategy Architecture** - Kapabiliteter, resurser och värdeströmmar
+- **Physical Architecture** - Fysisk infrastruktur och utrustning
+- **Implementation & Migration** - Projekt, arbetspaket och gap-analys
 
-### 3. NIS 2 Mappings
-Direkt mappning mellan metamodellens element och NIS 2-krav. Se `metamodel/nis2-mappings.yaml`
+### 3. Visualisering
+Interaktiva grafer och hierarkiska vyer för att utforska arkitekturen:
+- Nätverksvy med Cytoscape
+- Hierarkiska trädvyer per skikt
+- Projektportföljöversikt med roadmap
+- Resursplanering och allokering
 
 ### 4. Dokumentationsmallar
-Färdiga mallar för att dokumentera olika typer av komponenter. Se `templates/`
+Färdiga mallar för att dokumentera olika typer av komponenter enligt ArchiMate. Se `templates/`
 
 ## Quick Start
 
-1. Börja med att identifiera dina kritiska tillgångar (Business Capabilities)
-2. Dokumentera applikationer och system som stödjer dessa
-3. Dokumentera den underliggande tekniska infrastrukturen
-4. Komplettera med säkerhetskontroller och risker
-5. Dokumentera dataflöden och dataskydd
-6. Länka samman alla perspektiv
+1. **Installera och starta**:
+   ```bash
+   cd webapp
+   npm install
+   npm run dev
+   ```
+
+2. **Utforska arkitekturen**:
+   - Börja på Dashboard för översikt
+   - Använd Visualisering för att se relationer
+   - Bläddra bland Entiteter för detaljer
+   - Utforska olika Arkitekturperspektiv
+
+3. **Dokumentera din arkitektur**:
+   - Lägg till entiteter i varje skikt
+   - Definiera relationer mellan komponenter
+   - Skapa projekt och roadmap
+   - Allokera resurser till initiativ
 
 ## Mappning till Etablerade EA-Ramverk
 
-Detta ramverk är kompatibelt med:
+Detta ramverk är fullt kompatibelt med:
+- **ArchiMate 3.1** (The Open Group modelleringsspråk)
 - **TOGAF** (The Open Group Architecture Framework)
-- **ArchiMate** (modelleringsspråk)
-- **COBIT** (IT Governance)
 - **ISO/IEC 27001** (Informationssäkerhet)
+- **COBIT** (IT Governance)
 
 ## Struktur
 
@@ -67,27 +85,52 @@ Detta ramverk är kompatibelt med:
 /
 ├── README.md                          # Denna fil
 ├── metamodel/
-│   ├── core-metamodel.yaml           # Kärnmetamodell
-│   ├── nis2-mappings.yaml            # NIS 2 mappningar
-│   └── relationships.yaml            # Relationstyper
+│   ├── archimate-metamodel.yaml      # ArchiMate 3.1 metamodell
+│   └── core-metamodel.yaml           # Kärnmetamodell
 ├── perspectives/
 │   ├── business-architecture.md      # Verksamhetsperspektiv
 │   ├── application-architecture.md   # Applikationsperspektiv
 │   ├── technology-architecture.md    # Teknologiperspektiv
-│   ├── security-architecture.md      # Säkerhetsperspektiv
-│   └── data-architecture.md          # Dataperspektiv
+│   ├── data-architecture.md          # Dataperspektiv
+│   └── security-architecture.md      # Säkerhetsperspektiv
 ├── templates/
-│   ├── system-documentation.yaml     # Mall för systemdokumentation
-│   ├── component-documentation.yaml  # Mall för komponentdokumentation
-│   └── risk-assessment.yaml          # Mall för riskbedömning
-└── examples/
-    └── sample-system.yaml            # Exempel på komplett systemdokumentation
+│   └── system-documentation.yaml     # Mall för systemdokumentation
+├── examples/
+│   └── sample-system.yaml            # Exempel på systemdokumentation
+└── webapp/
+    ├── src/                          # React-applikation
+    ├── package.json                  # Dependencies
+    └── vite.config.js                # Vite configuration
 ```
+
+## Funktioner
+
+### Interaktiv Webbapplikation
+- **Dashboard** - Översikt över hela arkitekturen
+- **Visualisering** - Interaktiv nätverksvy med Cytoscape
+- **Entitetshantering** - CRUD-operationer för alla ArchiMate-element
+- **Relationshantering** - Skapa och hantera relationer mellan entiteter
+- **Projektportfölj** - Hantera projekt, milstolpar, budget och impact
+- **Resursplanering** - Allokera resurser över projekt på månadsnivå
+- **Roadmap** - Visualisera tidslinje för projekt och initiativ
+- **Perspektivvyer** - Filtrera och utforska per arkitekturskikt
+
+### Datahantering
+- Lokal lagring med localStorage
+- Import/export av data i JSON-format
+- Versionhantering av data
+- Sample data för demonstration
 
 ## Användning
 
-Se respektive perspektiv-dokumentation i `perspectives/` för detaljerad vägledning om hur varje perspektiv ska dokumenteras.
+Se respektive perspektiv-dokumentation i `perspectives/` för detaljerad vägledning om hur varje perspektiv ska dokumenteras enligt ArchiMate 3.1.
 
-## Compliance-rapportering
+## Teknologi
 
-Ramverket inkluderar mallar för att generera compliance-rapporter som visar hur NIS 2-kraven uppfylls genom dokumenterade element i metamodellen.
+- **React 18** - UI framework
+- **Vite** - Build tool
+- **Cytoscape.js** - Grafvisualisering
+- **Recharts** - Diagrambibliotek
+- **TailwindCSS** - Styling
+- **React Router** - Navigation
+- **Lucide React** - Ikoner
