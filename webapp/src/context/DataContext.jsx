@@ -40,7 +40,7 @@ const initialRelationships = sampleData.relationships;
 const initialResourceAllocations = sampleData.resourceAllocations || [];
 
 // Data version for cache invalidation
-const DATA_VERSION = '9.0'; // EA portfolio: Gap/Plateau entities, capability maturity, strategic alignment relations
+const DATA_VERSION = '10.0'; // Added business_value + technical_health to all 72 ApplicationComponents
 
 export const DataProvider = ({ children }) => {
   const [metamodel, setMetamodel] = useState(initialMetamodel);
