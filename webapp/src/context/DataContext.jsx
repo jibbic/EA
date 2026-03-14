@@ -40,7 +40,7 @@ const initialRelationships = sampleData.relationships;
 const initialResourceAllocations = sampleData.resourceAllocations || [];
 
 // Data version for cache invalidation
-const DATA_VERSION = '5.0'; // Livsmedelsverket sample data
+const DATA_VERSION = '9.0'; // EA portfolio: Gap/Plateau entities, capability maturity, strategic alignment relations
 
 export const DataProvider = ({ children }) => {
   const [metamodel, setMetamodel] = useState(initialMetamodel);
@@ -49,44 +49,6 @@ export const DataProvider = ({ children }) => {
   const [resourceAllocations, setResourceAllocations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dbInitialized, setDbInitialized] = useState(false);
-
-  // Initialize database and load data
-  useEffect(() => {
-    async function initializeData() {
-      try {
-        setIsLoading(true);
-        
-        // Initialize SQLite database
-        await db.initDatabase();
-        setDbInitialized(true);
-
-        // Check if database is empty (first run)
-        const stats = db.getDatabaseStats();
-        
-        if (stats.totalEntities === 0) {
-          // First run - import sample data
-          console.log('📦 First run - importing sample data...');
-          db.importData({
-            version: DATA_VERSION,
-            entities: sampleData.entities,
-            relationships: sampleData.relationships,
-            resourceAllocations: sampleData.resourceAllocations
-          });
-        }
-
-        // Load data from database
-        refreshData();
-        
-        console.log('✅ Data loaded from SQLite');
-      } catch (error) {
-        console.error('❌ Failed to initialize data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    initializeData();
-  }, []);
 
   // Refresh data from database
   const refreshData = () => {
@@ -103,6 +65,47 @@ export const DataProvider = ({ children }) => {
       console.error('Failed to refresh data:', error);
     }
   };
+
+  // Initialize database and load data
+  useEffect(() => {
+    async function initializeData() {
+      try {
+        setIsLoading(true);
+        
+        // Initialize SQLite database
+        await db.initDatabase();
+        setDbInitialized(true);
+
+        // Check version or if database is empty (first run / version change)
+        const stats = db.getDatabaseStats();
+        const storedVersion = localStorage.getItem('nis2-ea-version');
+        
+        if (stats.totalEntities === 0 || storedVersion !== DATA_VERSION) {
+          // First run or version mismatch - (re)import sample data
+          console.log(`📦 Importing sample data (version ${DATA_VERSION})...`);
+          db.clearAllData();
+          db.importData({
+            version: DATA_VERSION,
+            entities: sampleData.entities,
+            relationships: sampleData.relationships,
+            resourceAllocations: sampleData.resourceAllocations
+          });
+          localStorage.setItem('nis2-ea-version', DATA_VERSION);
+        }
+
+        // Load data from database
+        refreshData();
+        
+        console.log('✅ Data loaded from SQLite');
+      } catch (error) {
+        console.error('❌ Failed to initialize data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    initializeData();
+  }, []);
 
   const addEntity = (entityType, entity) => {
     try {
@@ -227,33 +230,6 @@ export const DataProvider = ({ children }) => {
     );
   };
 
-  const getComplianceStatus = () => {
-    // Generic compliance status based on entity coverage
-    const status = {};
-    const layers = metamodel.layers;
-    
-    layers.forEach(layer => {
-      const layerTypes = metamodel.entityTypes
-        .filter(et => et.layer === layer.id)
-        .map(et => et.id);
-      
-      const existingEntities = layerTypes.filter(
-        entityType => entities[entityType] && entities[entityType].length > 0
-      );
-      
-      status[layer.name] = {
-        title: layer.name,
-        covered: existingEntities.length,
-        total: layerTypes.length,
-        percentage: layerTypes.length > 0 
-          ? Math.round((existingEntities.length / layerTypes.length) * 100)
-          : 100
-      };
-    });
-    
-    return status;
-  };
-
   // Export all data as JSON
   const exportData = () => {
     try {
@@ -371,7 +347,6 @@ export const DataProvider = ({ children }) => {
     getAllEntities,
     getEntityById,
     getRelationshipsForEntity,
-    getComplianceStatus,
     getValidRelationshipTypes,
     isRelationshipValid,
     exportData,
@@ -399,7 +374,7 @@ export const DataProvider = ({ children }) => {
           gap: '1rem'
         }}>
           <div style={{ fontSize: '2rem' }}>⏳</div>
-          <div>Laddar data från SQLite...</div>
+          <div>Laddar arkitekturdata...</div>
         </div>
       </DataContext.Provider>
     );

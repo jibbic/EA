@@ -13,6 +13,7 @@ import ImpactAnalysis from './pages/ImpactAnalysis';
 import ApplicationPortfolio from './pages/ApplicationPortfolio';
 import TechnologyLifecycle from './pages/TechnologyLifecycle';
 import HeatMaps from './pages/HeatMaps';
+import Models from './pages/Models';
 import { DataProvider } from './context/DataContext';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
             <Route path="/roadmap" element={<Roadmap />} />
             <Route path="/projects" element={<ProjectPortfolio />} />
             <Route path="/relationships" element={<RelationshipManager />} />
+            <Route path="/models" element={<Models />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
         </Layout>

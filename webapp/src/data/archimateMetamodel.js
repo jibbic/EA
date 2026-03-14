@@ -74,8 +74,6 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "User",
       description: "Organizational entity capable of performing behavior",
-      nis2_required: false,
-      nis2_mappings: ["Article 6 - Governance"],
       attributes: ["name", "description", "responsibilities", "contact"]
     },
     {
@@ -86,10 +84,7 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "UserCog",
       description: "Named specific behavior of a business actor",
-      nis2_required: true,
-      nis2_mappings: ["Article 20 - Governance", "Article 21 - Risk management roles"],
       attributes: ["name", "description", "responsibilities", "required_competencies"],
-      required_for_nis2: ["CISO", "Data Protection Officer", "Incident Response Lead"]
     },
     
     // Business Layer - Behavior
@@ -101,10 +96,7 @@ export const archimateMetamodel = {
       shape: "round-rectangle",
       icon: "Activity",
       description: "Sequence of business behaviors",
-      nis2_required: true,
-      nis2_mappings: ["Article 21 - Critical processes", "Article 21.2 - Business continuity"],
       attributes: ["name", "description", "owner", "criticality", "rto", "rpo", "status"],
-      required_attributes_nis2: ["criticality", "rto", "rpo", "owner"]
     },
     {
       id: "BusinessFunction",
@@ -114,7 +106,6 @@ export const archimateMetamodel = {
       shape: "round-rectangle",
       icon: "Box",
       description: "Collection of business behavior based on criteria",
-      nis2_required: false,
       attributes: ["name", "description", "owner"]
     },
     {
@@ -125,7 +116,6 @@ export const archimateMetamodel = {
       shape: "round-rectangle",
       icon: "CloudCheckIcon",
       description: "Explicitly defined behavior exposed to environment",
-      nis2_required: false,
       attributes: ["name", "description", "sla", "availability"]
     },
     
@@ -138,7 +128,6 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "FileText",
       description: "Concept used within a particular business domain",
-      nis2_required: false,
       attributes: ["name", "description", "classification"]
     },
     {
@@ -149,10 +138,7 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "FileSignature",
       description: "Formal or informal specification of agreement",
-      nis2_required: true,
-      nis2_mappings: ["Article 21 - Supply chain security", "Article 28 - Supplier contracts"],
       attributes: ["name", "description", "supplier", "criticality", "valid_from", "valid_until", "review_date", "security_requirements"],
-      required_attributes_nis2: ["supplier", "criticality", "security_requirements", "review_date"]
     },
     
     // Application Layer - Active Structure
@@ -164,10 +150,7 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "Package",
       description: "Modular, deployable, and replaceable part",
-      nis2_required: true,
-      nis2_mappings: ["Article 21 - IT systems inventory", "Article 23 - Asset register"],
       attributes: ["name", "description", "criticality", "owner", "status", "version", "vendor", "data_classification", "lifecycle_phase", "users"],
-      required_attributes_nis2: ["criticality", "owner", "data_classification", "version"]
     },
     {
       id: "ApplicationInterface",
@@ -177,7 +160,6 @@ export const archimateMetamodel = {
       shape: "circle",
       icon: "Plug",
       description: "Point of access for application services",
-      nis2_required: false,
       attributes: ["name", "protocol", "authentication_required", "encryption"]
     },
     
@@ -190,7 +172,6 @@ export const archimateMetamodel = {
       shape: "round-rectangle",
       icon: "Cpu",
       description: "Automated behavior performed by component",
-      nis2_required: false,
       attributes: ["name", "description", "criticality"]
     },
     {
@@ -201,7 +182,6 @@ export const archimateMetamodel = {
       shape: "round-rectangle",
       icon: "Cloud",
       description: "Explicitly defined application behavior",
-      nis2_required: false,
       attributes: ["name", "description", "sla", "availability", "authentication_method"]
     },
     
@@ -214,10 +194,7 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "Database",
       description: "Data structured for automated processing",
-      nis2_required: true,
-      nis2_mappings: ["Article 21 - Data protection", "Article 32 - GDPR alignment"],
       attributes: ["name", "description", "classification", "gdpr_relevant", "encryption_required", "retention_period", "backup_frequency"],
-      required_attributes_nis2: ["classification", "gdpr_relevant", "encryption_required"]
     },
     
     // Technology Layer - Active Structure
@@ -229,10 +206,7 @@ export const archimateMetamodel = {
       shape: "cube",
       icon: "Server",
       description: "Computational or physical resource",
-      nis2_required: true,
-      nis2_mappings: ["Article 21 - Infrastructure security", "Article 23 - Configuration management"],
       attributes: ["name", "description", "type", "criticality", "location", "ip_address", "os", "patching_status", "last_patch_date", "monitoring_enabled"],
-      required_attributes_nis2: ["criticality", "location", "patching_status", "monitoring_enabled"]
     },
     {
       id: "Device",
@@ -242,7 +216,6 @@ export const archimateMetamodel = {
       shape: "cube",
       icon: "Smartphone",
       description: "Physical IT resource",
-      nis2_required: false,
       attributes: ["name", "type", "location", "owner"]
     },
     {
@@ -253,10 +226,7 @@ export const archimateMetamodel = {
       shape: "cube",
       icon: "HardDrive",
       description: "Software environment for specific types of components",
-      nis2_required: true,
-      nis2_mappings: ["Article 21 - System hardening", "Article 21.2.e - Patch management"],
       attributes: ["name", "description", "vendor", "version", "patch_level", "eol_date", "license", "criticality"],
-      required_attributes_nis2: ["version", "patch_level", "eol_date"]
     },
     {
       id: "CommunicationNetwork",
@@ -266,10 +236,7 @@ export const archimateMetamodel = {
       shape: "line",
       icon: "Wifi",
       description: "Physical communication medium",
-      nis2_required: true,
-      nis2_mappings: ["Article 21 - Network security", "Article 21.2.c - Network segmentation"],
       attributes: ["name", "description", "type", "security_zone", "encryption", "monitoring", "firewall_enabled", "ids_ips_enabled"],
-      required_attributes_nis2: ["security_zone", "encryption", "monitoring"]
     },
     
     // Technology Layer - Behavior
@@ -281,7 +248,6 @@ export const archimateMetamodel = {
       shape: "round-rectangle",
       icon: "Settings",
       description: "Explicitly defined technology behavior",
-      nis2_required: false,
       attributes: ["name", "description", "availability", "sla"]
     },
     
@@ -294,7 +260,6 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "FileCode",
       description: "Physical piece of data",
-      nis2_required: false,
       attributes: ["name", "type", "format", "location"]
     },
     
@@ -307,7 +272,6 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "UserCheck",
       description: "Role of individual, team, or organization",
-      nis2_required: false,
       attributes: ["name", "description", "concerns", "influence"]
     },
     {
@@ -318,7 +282,6 @@ export const archimateMetamodel = {
       shape: "ellipse",
       icon: "Target",
       description: "High-level statement of intent",
-      nis2_required: false,
       attributes: ["name", "description", "target_date", "status"]
     },
     {
@@ -329,10 +292,7 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "Shield",
       description: "Normative property of implementation",
-      nis2_required: true,
-      nis2_mappings: ["Article 21 - Security policies", "Article 20 - Governance framework"],
       attributes: ["name", "description", "rationale", "implications", "status"],
-      required_for_nis2: ["Least Privilege", "Defense in Depth", "Zero Trust"]
     },
     {
       id: "Requirement",
@@ -342,10 +302,6 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "ListChecks",
       description: "Statement of need",
-      nis2_required: true,
-      nis2_mappings: ["Article 21 - Cybersecurity requirements", "NIS2 Compliance requirements"],
-      attributes: ["name", "description", "nis2_article", "compliance_status", "evidence", "priority", "implementation_status"],
-      required_attributes_nis2: ["nis2_article", "compliance_status"]
     },
     
     // Strategy Layer
@@ -357,10 +313,7 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "Zap",
       description: "Ability that organization possesses",
-      nis2_required: true,
-      nis2_mappings: ["Article 21 - Security capabilities", "Business continuity capabilities"],
       attributes: ["name", "description", "maturity_level", "criticality", "owner"],
-      required_attributes_nis2: ["maturity_level", "criticality"]
     },
     {
       id: "Resource",
@@ -370,7 +323,6 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "Box",
       description: "Asset owned or controlled",
-      nis2_required: false,
       attributes: ["name", "description", "type", "value"]
     },
     
@@ -383,10 +335,7 @@ export const archimateMetamodel = {
       shape: "cube",
       icon: "Box",
       description: "Physical machine, tool or other equipment",
-      nis2_required: true,
-      nis2_mappings: ["Article 23 - Asset inventory"],
       attributes: ["name", "description", "location", "owner", "criticality", "serial_number", "purchase_date"],
-      required_attributes_nis2: ["location", "owner", "criticality"]
     },
     {
       id: "Facility",
@@ -396,10 +345,7 @@ export const archimateMetamodel = {
       shape: "cube",
       icon: "Building",
       description: "Physical location or environment",
-      nis2_required: true,
-      nis2_mappings: ["Article 21 - Physical security", "Data center locations"],
       attributes: ["name", "description", "address", "security_level", "access_control", "monitoring_24_7", "backup_power"],
-      required_attributes_nis2: ["security_level", "access_control"]
     },
     
     // Implementation & Migration Layer
@@ -411,7 +357,6 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "Folder",
       description: "Series of actions for achieving goal",
-      nis2_required: false,
       attributes: ["name", "description", "start_date", "end_date", "status", "budget", "progress", "priority", "project_manager", "team_size", "risk_level", "category", "phase", "sponsor"]
     },
     {
@@ -422,7 +367,6 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "Package",
       description: "Precisely defined result of a work package",
-      nis2_required: false,
       attributes: ["name", "description", "target_date", "actual_date", "status", "milestone"]
     },
     {
@@ -433,7 +377,6 @@ export const archimateMetamodel = {
       shape: "rectangle",
       icon: "AlertCircle",
       description: "Difference between two plateaus",
-      nis2_required: false,
       attributes: ["name", "description", "current_state", "target_state", "priority"]
     }
   ],
@@ -451,8 +394,6 @@ export const archimateMetamodel = {
       arrow: "filled-diamond",
       description: "Part-of relationship, dependent lifecycle",
       color: "#374151",
-      nis2_usage: "Critical for system decomposition and impact analysis",
-      nis2_required: false,
       validFrom: ["*"],
       validTo: ["*"]
     },
@@ -464,8 +405,6 @@ export const archimateMetamodel = {
       arrow: "hollow-diamond",
       description: "Part-of relationship, independent lifecycle",
       color: "#374151",
-      nis2_usage: "Group related components",
-      nis2_required: false,
       validFrom: ["*"],
       validTo: ["*"]
     },
@@ -477,8 +416,6 @@ export const archimateMetamodel = {
       arrow: "filled-circle",
       description: "Allocation of responsibility",
       color: "#374151",
-      nis2_usage: "Map ownership and accountability (NIS2 Article 20)",
-      nis2_required: true,
       validFrom: ["BusinessActor", "BusinessRole", "ApplicationComponent"],
       validTo: ["BusinessProcess", "ApplicationComponent", "Node"]
     },
@@ -490,8 +427,6 @@ export const archimateMetamodel = {
       arrow: "dashed",
       description: "Implementation relationship",
       color: "#374151",
-      nis2_usage: "Link requirements to implementation",
-      nis2_required: true,
       validFrom: ["ApplicationComponent", "Node", "BusinessProcess"],
       validTo: ["Requirement", "Goal", "Capability"]
     },
@@ -505,8 +440,6 @@ export const archimateMetamodel = {
       arrow: "solid",
       description: "Service provision",
       color: "#3B82F6",
-      nis2_usage: "Map service dependencies for availability analysis",
-      nis2_required: true,
       validFrom: ["ApplicationComponent", "ApplicationService", "TechnologyService", "Node"],
       validTo: ["ApplicationComponent", "BusinessProcess", "ApplicationService"]
     },
@@ -519,8 +452,6 @@ export const archimateMetamodel = {
       description: "Read or write access",
       color: "#10B981",
       access_types: ["read", "write", "read-write"],
-      nis2_usage: "Data flow and access control (Article 21.2.a - Access control)",
-      nis2_required: true,
       validFrom: ["ApplicationComponent", "BusinessProcess", "BusinessActor"],
       validTo: ["DataObject", "BusinessObject"]
     },
@@ -532,8 +463,6 @@ export const archimateMetamodel = {
       arrow: "dashed",
       description: "Effect without dependency",
       color: "#F59E0B",
-      nis2_usage: "Risk and impact relationships",
-      nis2_required: false,
       validFrom: ["*"],
       validTo: ["*"]
     },
@@ -547,8 +476,6 @@ export const archimateMetamodel = {
       arrow: "solid",
       description: "Transfer or exchange",
       color: "#EC4899",
-      nis2_usage: "Data flows, information exchange (GDPR Article 32)",
-      nis2_required: true,
       validFrom: ["BusinessProcess", "ApplicationComponent", "ApplicationFunction"],
       validTo: ["BusinessProcess", "ApplicationComponent", "DataObject"]
     },
@@ -560,8 +487,6 @@ export const archimateMetamodel = {
       arrow: "solid",
       description: "Temporal or causal relationship",
       color: "#8B5CF6",
-      nis2_usage: "Incident response workflows, process orchestration",
-      nis2_required: false,
       validFrom: ["BusinessProcess", "ApplicationService"],
       validTo: ["BusinessProcess", "ApplicationService"]
     },
@@ -575,8 +500,6 @@ export const archimateMetamodel = {
       arrow: "hollow-triangle",
       description: "Generalization relationship",
       color: "#6B7280",
-      nis2_usage: "Classify entity types",
-      nis2_required: false,
       validFrom: ["*"],
       validTo: ["*"]
     },

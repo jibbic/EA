@@ -7,5 +7,9 @@ export default defineConfig({
     port: 5173,
     open: true
   },
-  base: './'
+  base: './',
+  assetsInclude: ['**/*.wasm'],
+  optimizeDeps: {
+    exclude: ['sql.js']
+  }
 })

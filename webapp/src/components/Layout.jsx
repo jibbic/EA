@@ -19,7 +19,8 @@ import {
   Home,
   Box,
   FolderKanban,
-  HelpCircle
+  HelpCircle,
+  LayoutTemplate
 } from 'lucide-react';
 import { useState } from 'react';
 import { useData } from '../context/DataContext';
@@ -61,6 +62,12 @@ const Layout = ({ children }) => {
           href: '/visualizer', 
           icon: Network,
           tooltip: 'Interaktiv visualisering av alla komponenter och relationer'
+        },
+        { 
+          name: 'Modeller', 
+          href: '/models', 
+          icon: LayoutTemplate,
+          tooltip: 'ArchiMate-vyer och diagrammodeller'
         },
         { 
           name: 'Perspektiv', 
